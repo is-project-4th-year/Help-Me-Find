@@ -3,6 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>Item Recognition</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      max-width: 400px;
+    }
+    .color-box {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #000;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+  </style>
 </head>
 <body>
   <h2>Upload an Image</h2>
@@ -11,17 +32,24 @@
     <input type="submit" value="Predict">
   </form>
 
-  {% if item_prediction %}
-    <h3>Item Prediction: {{ item_prediction }}</h3>
-  {% endif %}
+  {% if prediction %}
+  <div class="result">
+    <h3>Prediction Result</h3>
+    <p><strong>{{ prediction }}</strong></p>
 
-  {% if color_prediction %}
-    <h3>Color Prediction: {{ color_prediction }}</h3>
-  {% endif %}
+    {% if image_url %}
+      <h4>Uploaded Image:</h4>
+      <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 300px;">
+    {% endif %}
 
-  {% if image_url %}
-    <h4>Uploaded Image:</h4>
-    <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 300px;">
+    {% if "Color:" in prediction %}
+      <h4>Detected Color:</h4>
+      <p>
+        {{ prediction.split('Color:')[1].strip() }}
+        <span class="color-box" style="background-color: {{ prediction.split('Color:')[1].strip().lower() }}"></span>
+      </p>
+    {% endif %}
+  </div>
   {% endif %}
 </body>
 </html>
