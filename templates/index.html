@@ -10,11 +10,18 @@
     <input type="file" name="file">
     <input type="submit" value="Predict">
   </form>
-  <h3>{{ prediction }}</h3>
 
-  
+  {% if item_prediction %}
+    <h3>Item Prediction: {{ item_prediction }}</h3>
+  {% endif %}
+
+  {% if color_prediction %}
+    <h3>Color Prediction: {{ color_prediction }}</h3>
+  {% endif %}
+
+  {% if image_url %}
     <h4>Uploaded Image:</h4>
     <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 300px;">
-  
+  {% endif %}
 </body>
 </html>
