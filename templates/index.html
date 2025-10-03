@@ -3,53 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <title>Item Recognition</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      max-width: 400px;
-    }
-    .color-box {
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      border: 1px solid #000;
-      margin-left: 10px;
-      vertical-align: middle;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 <body>
-  <h2>Upload an Image</h2>
-  <form method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" value="Predict">
-  </form>
+  <div class="container">
+    <h2>Item Recognition</h2>
 
-  {% if prediction %}
-  <div class="result">
-    <h3>Prediction Result</h3>
-    <p><strong>{{ prediction }}</strong></p>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="Predict">
+    </form>
 
-    {% if image_url %}
-      <h4>Uploaded Image:</h4>
-      <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 300px;">
-    {% endif %}
+    {% if prediction %}
+    <div class="result">
+      <h3>Prediction Result</h3>
+      <p><strong>{{ prediction.split("Color:")[0] }}</strong></p>
 
-    {% if "Color:" in prediction %}
-      <h4>Detected Color:</h4>
-      <p>
-        {{ prediction.split('Color:')[1].strip() }}
-        <span class="color-box" style="background-color: {{ prediction.split('Color:')[1].strip().lower() }}"></span>
-      </p>
+      {% if image_url %}
+        <div class="uploaded-image">
+          <h4>Uploaded Image:</h4>
+          <img src="{{ image_url }}" alt="Uploaded Image">
+        </div>
+      {% endif %}
+
+      {% if "Color:" in prediction %}
+        <div class="color-section">
+          <h4>Detected Color:</h4>
+          <span>{{ prediction.split('Color:')[1].strip() }}</span>
+          <span class="color-box" style="background-color: {{ prediction.split('Color:')[1].strip().lower() }}"></span>
+        </div>
+      {% endif %}
+    </div>
     {% endif %}
   </div>
-  {% endif %}
 </body>
 </html>
