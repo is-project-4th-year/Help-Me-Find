@@ -8,9 +8,12 @@ from collections import Counter
 from PIL import Image
 from rembg import remove
 import io
+import json
+from datetime import datetime
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
+JSON_FILE = 'uploads.json'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Load trained model
@@ -23,7 +26,6 @@ IMG_SIZE = (224, 224)
 # ---------- COLOR DETECTION HELPERS ---------- #
 def get_dominant_item_color(image_path, k=3):
     """Remove background, then find dominant color of the item."""
-    # Open image
     with open(image_path, "rb") as f:
         input_image = f.read()
     
@@ -83,6 +85,37 @@ def get_next_filename(extension="jpg"):
     return f"{next_num}.{extension}"
 
 
+def save_to_json(image_name, item_type, color):
+    """Save upload details to a JSON file with ascending Upload_N keys."""
+    data = {}
+
+    # Load existing JSON if available
+    if os.path.exists(JSON_FILE):
+        with open(JSON_FILE, "r") as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                data = {}
+
+    # Determine next Upload_N key
+    if data:
+        existing_numbers = [int(key) for key in data.keys() if key.isdigit()]
+        next_num = max(existing_numbers) + 1
+    else:
+        next_num = 1
+
+    data[next_num] = {
+        "ImageName": image_name,
+        "ItemType": item_type,
+        "Color": color,
+        "DateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    # Save updated JSON
+    with open(JSON_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+
+
 # ---------- FLASK ROUTES ---------- #
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -122,13 +155,18 @@ def upload_file():
         dominant_rgb = get_dominant_item_color(filepath)
         color_name = rgb_to_color_name(dominant_rgb)
 
+        # -------- SAVE TO JSON -------- #
+        save_to_json(new_filename, predicted_class, color_name)
+
         prediction = f"Prediction: {predicted_class} ({confidence:.2f}%) - Color: {color_name}"
 
     return render_template('index.html', prediction=prediction, image_url=uploaded_image_url)
 
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 if __name__ == '__main__':
     os.makedirs('uploads', exist_ok=True)
