@@ -1,6 +1,7 @@
 dataset/
 unused dataset/
 uploads/
+old uploads/
 unused files/
 settings.json
 *.h5

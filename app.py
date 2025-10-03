@@ -6,7 +6,7 @@ import numpy as np
 import os
 from collections import Counter
 from PIL import Image
-from rembg import remove  # NEW: for background removal
+from rembg import remove
 import io
 
 app = Flask(__name__)
@@ -69,6 +69,20 @@ def rgb_to_color_name(rgb):
     else:
         return f"RGB{rgb}"
 
+
+def get_next_filename(extension="jpg"):
+    """Find the next available ascending number filename in uploads folder."""
+    existing_files = [f for f in os.listdir(UPLOAD_FOLDER) if f.split('.')[0].isdigit()]
+    
+    if not existing_files:
+        next_num = 1
+    else:
+        numbers = [int(f.split('.')[0]) for f in existing_files if f.split('.')[0].isdigit()]
+        next_num = max(numbers) + 1
+    
+    return f"{next_num}.{extension}"
+
+
 # ---------- FLASK ROUTES ---------- #
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -85,9 +99,14 @@ def upload_file():
             prediction = 'No selected file'
             return render_template('index.html', prediction=prediction)
 
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        # Get file extension
+        ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else 'jpg'
+        new_filename = get_next_filename(ext)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
+
+        # Save renamed file
         file.save(filepath)
-        uploaded_image_url = f'/uploads/{file.filename}'
+        uploaded_image_url = f'/uploads/{new_filename}'
 
         # -------- ITEM PREDICTION -------- #
         img = image.load_img(filepath, target_size=IMG_SIZE)
