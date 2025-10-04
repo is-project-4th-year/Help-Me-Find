@@ -78,28 +78,15 @@ def get_next_filename(extension="jpg"):
     return f"{next_num}.{extension}"
 
 
-def save_to_json(image_name, item_type, color):
-    """Save item details into a single JSON file with incremental numeric keys."""
-    if os.path.exists(JSON_FILE):
-        with open(JSON_FILE, "r") as f:
-            try:
-                data = json.load(f)
-            except json.JSONDecodeError:
-                data = {}
-    else:
-        data = {}
+def load_data():
+    if not os.path.exists(JSON_FILE):
+        return {}
+    with open(JSON_FILE, 'r') as f:
+        return json.load(f)
 
-    existing_numbers = [int(key) for key in data.keys() if key.isdigit()]
-    next_number = max(existing_numbers) + 1 if existing_numbers else 1
 
-    data[str(next_number)] = {
-        "ImageName": image_name,
-        "ItemType": item_type,
-        "Color": color,
-        "DateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }
-
-    with open(JSON_FILE, "w") as f:
+def save_data(data):
+    with open(JSON_FILE, 'w') as f:
         json.dump(data, f, indent=4)
 
 
@@ -111,16 +98,16 @@ def home():
 
 @app.route('/found', methods=['GET', 'POST'])
 def found():
-    prediction_item = ''
-    prediction_color = ''
+    prediction = ''
     uploaded_image_url = ''
 
     if request.method == 'POST':
-        if 'file' not in request.files or request.files['file'].filename == '':
-            prediction_item = 'No file uploaded'
-            return render_template('found.html', item=prediction_item, color=prediction_color)
+        file = request.files.get('file')
+        if not file or file.filename == '':
+            prediction = 'No file selected'
+            return render_template('found.html', prediction=prediction)
 
-        file = request.files['file']
+        # Rename and save file
         ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else 'jpg'
         new_filename = get_next_filename(ext)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
@@ -137,28 +124,43 @@ def found():
         score = tf.nn.softmax(predictions[0])
         predicted_class = class_names[np.argmax(score)]
         confidence = 100 * np.max(score)
-        prediction_item = f"{predicted_class} ({confidence:.2f}%)"
 
         # -------- COLOR DETECTION -------- #
         dominant_rgb = get_dominant_item_color(filepath)
-        prediction_color = rgb_to_color_name(dominant_rgb)
+        color_name = rgb_to_color_name(dominant_rgb)
 
         # -------- SAVE TO JSON -------- #
-        save_to_json(new_filename, predicted_class, prediction_color)
+        data = load_data()
+        existing_numbers = [int(key) for key in data.keys() if key.isdigit()]
+        next_id = max(existing_numbers) + 1 if existing_numbers else 1
 
-    return render_template('found.html', item=prediction_item, color=prediction_color, image_url=uploaded_image_url)
+        data[str(next_id)] = {
+            "ImageName": new_filename,
+            "ItemType": predicted_class,
+            "Color": color_name,
+            "DateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        save_data(data)
+
+        prediction = f"Prediction: {predicted_class} ({confidence:.2f}%) - Color: {color_name}"
+
+    return render_template('found.html', prediction=prediction, image_url=uploaded_image_url)
 
 
-@app.route('/lost')
+@app.route('/lost_items')
 def lost_items():
-    items = {}
-    if os.path.exists(JSON_FILE):
-        with open(JSON_FILE, "r") as f:
-            try:
-                items = json.load(f)
-            except json.JSONDecodeError:
-                items = {}
-    return render_template('lost_items.html', items=items)
+    data = load_data()
+    return render_template('lost_items.html', items=data)
+
+
+@app.route('/item/<item_id>')
+def item_detail(item_id):
+    data = load_data()
+    item = data.get(item_id)
+    if not item:
+        return "Item not found", 404
+    return render_template('item_detail.html', item=item, item_id=item_id)
 
 
 @app.route('/uploads/<filename>')

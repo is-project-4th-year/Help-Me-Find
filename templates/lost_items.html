@@ -1,35 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Lost Items</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost Items</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='grid.css') }}">
+  
 </head>
 <body>
-    <div class="container">
+  <div class="container">
         <h1>List of Reported Items</h1>
 
-        {% if items %}
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Item Type</th>
-                <th>Color</th>
-                <th>Date & Time</th>
-            </tr>
-            {% for key, value in items.items() %}
-            <tr>
-                <td>{{ key }}</td>
-                <td><img src="{{ url_for('uploaded_file', filename=value['ImageName']) }}" width="120"></td>
-                <td>{{ value['ItemType'] }}</td>
-                <td>{{ value['Color'] }}</td>
-                <td>{{ value['DateTime'] }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% else %}
-        <p>No items found yet.</p>
-        {% endif %}
+    {% if items %}
+    <div class="grid">
+      {% for id, item in items.items() %}
+      <a href="{{ url_for('item_detail', item_id=id) }}" class="grid-item">
+        <img src="{{ url_for('uploaded_file', filename=item['ImageName']) }}" alt="Item Image">
+        {# <h4>{{ item['ItemType'] }}</h4> #}
+        {# <p>{{ item['Color'] }}</p> #}
+      </a>
+      {% endfor %}
     </div>
+    {% else %}
+    <p>No items found yet.</p>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}" class="btn">⬅ Back to Home</a>
+  </div>
 </body>
 </html>
