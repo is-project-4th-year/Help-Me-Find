@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_from_directory
+from flask import Flask, request, render_template, send_from_directory, redirect, url_for
 import tensorflow as tf
 import keras
 from keras.preprocessing import image
@@ -13,8 +13,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
-JSON_FILE = 'uploads.json'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+JSON_FILE = 'uploads.json'
 
 # Load trained model
 model = keras.models.load_model('mobilenet_item_classifier.h5')
@@ -29,21 +29,17 @@ def get_dominant_item_color(image_path, k=3):
     with open(image_path, "rb") as f:
         input_image = f.read()
     
-    # Remove background
     output = remove(input_image)  
     img_no_bg = Image.open(io.BytesIO(output)).convert("RGBA")
     
-    # Convert to RGB with transparent background turned white
     img_rgb = Image.new("RGB", img_no_bg.size, (255, 255, 255))
-    img_rgb.paste(img_no_bg, mask=img_no_bg.split()[3])  # use alpha channel as mask
+    img_rgb.paste(img_no_bg, mask=img_no_bg.split()[3])  # alpha channel as mask
 
-    img_rgb = img_rgb.resize((200, 200))  # resize for speed
+    img_rgb = img_rgb.resize((200, 200))
     pixels = list(img_rgb.getdata())
 
-    # Remove pure white pixels (background leftovers)
     filtered_pixels = [p for p in pixels if not (p[0] > 240 and p[1] > 240 and p[2] > 240)]
-
-    if not filtered_pixels:  # fallback if empty
+    if not filtered_pixels:
         filtered_pixels = pixels
 
     color_counts = Counter(filtered_pixels)
@@ -52,7 +48,6 @@ def get_dominant_item_color(image_path, k=3):
 
 
 def rgb_to_color_name(rgb):
-    """Convert RGB to simple color name."""
     r, g, b = rgb
     if r > 200 and g < 80 and b < 80:
         return "Red"
@@ -75,69 +70,61 @@ def rgb_to_color_name(rgb):
 def get_next_filename(extension="jpg"):
     """Find the next available ascending number filename in uploads folder."""
     existing_files = [f for f in os.listdir(UPLOAD_FOLDER) if f.split('.')[0].isdigit()]
-    
     if not existing_files:
         next_num = 1
     else:
         numbers = [int(f.split('.')[0]) for f in existing_files if f.split('.')[0].isdigit()]
         next_num = max(numbers) + 1
-    
     return f"{next_num}.{extension}"
 
 
 def save_to_json(image_name, item_type, color):
-    """Save upload details to a JSON file with ascending Upload_N keys."""
-    data = {}
-
-    # Load existing JSON if available
+    """Save item details into a single JSON file with incremental numeric keys."""
     if os.path.exists(JSON_FILE):
         with open(JSON_FILE, "r") as f:
             try:
                 data = json.load(f)
             except json.JSONDecodeError:
                 data = {}
-
-    # Determine next Upload_N key
-    if data:
-        existing_numbers = [int(key) for key in data.keys() if key.isdigit()]
-        next_num = max(existing_numbers) + 1
     else:
-        next_num = 1
+        data = {}
 
-    data[next_num] = {
+    existing_numbers = [int(key) for key in data.keys() if key.isdigit()]
+    next_number = max(existing_numbers) + 1 if existing_numbers else 1
+
+    data[str(next_number)] = {
         "ImageName": image_name,
         "ItemType": item_type,
         "Color": color,
         "DateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
-    # Save updated JSON
     with open(JSON_FILE, "w") as f:
         json.dump(data, f, indent=4)
 
 
-# ---------- FLASK ROUTES ---------- #
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
-    prediction = ''
+# ---------- ROUTES ---------- #
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+
+@app.route('/found', methods=['GET', 'POST'])
+def found():
+    prediction_item = ''
+    prediction_color = ''
     uploaded_image_url = ''
 
     if request.method == 'POST':
-        if 'file' not in request.files:
-            prediction = 'No file part'
-            return render_template('index.html', prediction=prediction)
+        if 'file' not in request.files or request.files['file'].filename == '':
+            prediction_item = 'No file uploaded'
+            return render_template('found.html', item=prediction_item, color=prediction_color)
 
         file = request.files['file']
-        if file.filename == '':
-            prediction = 'No selected file'
-            return render_template('index.html', prediction=prediction)
-
-        # Get file extension
         ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else 'jpg'
         new_filename = get_next_filename(ext)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
 
-        # Save renamed file
         file.save(filepath)
         uploaded_image_url = f'/uploads/{new_filename}'
 
@@ -150,17 +137,28 @@ def upload_file():
         score = tf.nn.softmax(predictions[0])
         predicted_class = class_names[np.argmax(score)]
         confidence = 100 * np.max(score)
+        prediction_item = f"{predicted_class} ({confidence:.2f}%)"
 
         # -------- COLOR DETECTION -------- #
         dominant_rgb = get_dominant_item_color(filepath)
-        color_name = rgb_to_color_name(dominant_rgb)
+        prediction_color = rgb_to_color_name(dominant_rgb)
 
         # -------- SAVE TO JSON -------- #
-        save_to_json(new_filename, predicted_class, color_name)
+        save_to_json(new_filename, predicted_class, prediction_color)
 
-        prediction = f"Prediction: {predicted_class} ({confidence:.2f}%) - Color: {color_name}"
+    return render_template('found.html', item=prediction_item, color=prediction_color, image_url=uploaded_image_url)
 
-    return render_template('index.html', prediction=prediction, image_url=uploaded_image_url)
+
+@app.route('/lost')
+def lost_items():
+    items = {}
+    if os.path.exists(JSON_FILE):
+        with open(JSON_FILE, "r") as f:
+            try:
+                items = json.load(f)
+            except json.JSONDecodeError:
+                items = {}
+    return render_template('lost_items.html', items=items)
 
 
 @app.route('/uploads/<filename>')
