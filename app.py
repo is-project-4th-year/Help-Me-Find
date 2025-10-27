@@ -23,64 +23,6 @@ UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 JSON_FILE = 'uploads.json'
 
-# ----------------- GEMINI API CONFIGURATION (New) -----------------
-# GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-# GEMINI_MODEL = os.getenv("GEMINI_MODEL", "")
-GEMINI_API_KEY = "AIzaSyA9l_sIxuF-UGwV8EO_4HtJaQqye889-L8"
-GEMINI_MODEL = "gemini-2.0-flash"
-
-GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
-# ----------------- END CONFIGURATION -----------------
-# Load trained model
-model = keras.models.load_model('mobilenet_item_classifier.h5')
-
-# Class names
-class_names = ['keyboard', 'keys', 'laptop', 'mouse', 'phone', 'usb', 'headphones']
-IMG_SIZE = (224, 224)
-
-# ---------- COLOR DETECTION HELPERS ---------- #
-def get_dominant_item_color(image_path, k=3):
-    """Remove background, then find dominant color of the item."""
-    with open(image_path, "rb") as f:
-        input_image = f.read()
-
-    output = remove(input_image)
-    img_no_bg = Image.open(io.BytesIO(output)).convert("RGBA")
-
-    img_rgb = Image.new("RGB", img_no_bg.size, (255, 255, 255))
-    img_rgb.paste(img_no_bg, mask=img_no_bg.split()[3])  # alpha channel as mask
-
-    img_rgb = img_rgb.resize((200, 200))
-    pixels = list(img_rgb.getdata())
-
-    filtered_pixels = [p for p in pixels if not (p[0] > 240 and p[1] > 240 and p[2] > 240)]
-    if not filtered_pixels:
-        filtered_pixels = pixels
-
-    color_counts = Counter(filtered_pixels)
-    dominant_color = color_counts.most_common(k)[0][0]
-    return dominant_color
-
-
-def rgb_to_color_name(rgb):
-    r, g, b = rgb
-    if r > 200 and g < 80 and b < 80:
-        return "Red"
-    elif g > 200 and r < 80 and b < 80:
-        return "Green"
-    elif b > 200 and r < 80 and g < 80:
-        return "Blue"
-    elif r > 200 and g > 200 and b > 200:
-        return "White"
-    elif r < 50 and g < 50 and b < 50:
-        return "Black"
-    elif r > 180 and g > 180 and b < 100:
-        return "Yellow"
-    elif r > 180 and g > 180 and b > 180:
-        return "Gray/Silver"
-    else:
-        return f"RGB{rgb}"
-
 
 def get_next_filename(extension="jpg"):
     """Find the next available ascending number filename in uploads folder."""
@@ -120,7 +62,7 @@ def generate_description_with_ai(image_path):
     try:
         client = genai.Client()
         response = client.models.generate_content(
-            model=GEMINI_MODEL, 
+            model="gemini-2.0-flash", 
             contents=[
                 types.Part.from_bytes(
                     data=image_bytes,
@@ -134,6 +76,8 @@ def generate_description_with_ai(image_path):
         return f"Automatic description failed."
         
     return response.text
+
+
 # ---------- ROUTES ---------- #
 @app.route('/')
 def home():
@@ -160,20 +104,6 @@ def found():
         file.save(filepath)
         uploaded_image_url = f'/uploads/{new_filename}'
 
-        # -------- ITEM PREDICTION -------- #
-        img = image.load_img(filepath, target_size=IMG_SIZE)
-        img_array = image.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0)
-
-        predictions = model.predict(img_array)
-        score = tf.nn.softmax(predictions[0])
-        predicted_class = class_names[np.argmax(score)]
-        confidence = 100 * np.max(score)
-
-        # -------- COLOR DETECTION -------- #
-        dominant_rgb = get_dominant_item_color(filepath)
-        color_name = rgb_to_color_name(dominant_rgb)
-
         # -------- DESCRIPTION GENERATION -------- #
         item_description = generate_description_with_ai(filepath)
 
@@ -184,15 +114,11 @@ def found():
 
         data[str(next_id)] = {
             "ImageName": new_filename,
-            "ItemType": predicted_class,
-            "Color": color_name,
-            "Description": item_description, # <-- NEW FIELD ADDED
+            "Description": item_description,
             "DateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
         save_data(data)
-
-        prediction = f"Prediction: {predicted_class} ({confidence:.2f}%) - Color: {color_name}"
 
     return render_template('found.html', prediction=prediction, image_url=uploaded_image_url, item_description=item_description)
 
