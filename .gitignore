@@ -6,3 +6,4 @@ unused files/
 settings.json
 uploads.json
 *.h5
+.env

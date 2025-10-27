@@ -10,12 +10,26 @@ from rembg import remove
 import io
 import json
 from datetime import datetime
+import base64
+# import requests # Used for making the external Gemini API call
+from google import genai
+from dotenv import load_dotenv # NEW: Import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 JSON_FILE = 'uploads.json'
 
+# ----------------- GEMINI API CONFIGURATION (New) -----------------
+# GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+# GEMINI_MODEL = os.getenv("GEMINI_MODEL", "")
+GEMINI_API_KEY = "AIzaSyA9l_sIxuF-UGwV8EO_4HtJaQqye889-L8"
+GEMINI_MODEL = "gemini-2.0-flash"
+
+GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+# ----------------- END CONFIGURATION -----------------
 # Load trained model
 model = keras.models.load_model('mobilenet_item_classifier.h5')
 
@@ -28,10 +42,10 @@ def get_dominant_item_color(image_path, k=3):
     """Remove background, then find dominant color of the item."""
     with open(image_path, "rb") as f:
         input_image = f.read()
-    
-    output = remove(input_image)  
+
+    output = remove(input_image)
     img_no_bg = Image.open(io.BytesIO(output)).convert("RGBA")
-    
+
     img_rgb = Image.new("RGB", img_no_bg.size, (255, 255, 255))
     img_rgb.paste(img_no_bg, mask=img_no_bg.split()[3])  # alpha channel as mask
 
@@ -90,6 +104,81 @@ def save_data(data):
         json.dump(data, f, indent=4)
 
 
+# ---------- NEW AI DESCRIPTION FUNCTION ---------- #
+# def generate_description_with_ai(image_path, item_type, color_name):
+#     """Calls Gemini API to generate a description based on the image and analysis."""
+#     try:
+#         # 1. Read image and encode to base64
+#         with open(image_path, "rb") as f:
+#             image_bytes = f.read()
+#         base64_image = base64.b64encode(image_bytes).decode("utf-8")
+#     except Exception as e:
+#         print(f"Error encoding image: {e}")
+#         return f"Automatic description failed. Item is a {color_name} {item_type}."
+
+#     # 2. Define prompt
+#     prompt = (
+#         f"You have found a lost item. Based on the image analysis, the item is a '{item_type}' and its "
+#         f"dominant color is '{color_name}'. "
+#         f"Write a concise, neutral, and helpful description (less than 50 words) that a finder could use to report the item. "
+#         f"Do not mention the image analysis, just describe the item clearly."
+#     )
+
+#     # 3. Construct API payload
+#     payload = {
+#         "contents": [
+#             {
+#                 "role": "user",
+#                 "parts": [
+#                     {"text": prompt},
+#                     {
+#                         "inlineData": {
+#                             # Determine mimeType based on file extension
+#                             "mimeType": f"image/{os.path.splitext(image_path)[1][1:].lower()}",
+#                             "data": base64_image
+#                         }
+#                     }
+#                 ]
+#             }
+#         ],
+#         "systemInstruction": {
+#             "parts": [
+#                 {"text": "You are a helpful assistant for a lost and found service."}
+#             ]
+#         }
+#     }
+
+#     # 4. Make the request
+#     headers = {'Content-Type': 'application/json'}
+#     try:
+#         # Using a timeout for robustness
+#         response = requests.post(f"{GEMINI_API_URL}", headers=headers, json=payload, timeout=30)
+#         response.raise_for_status()
+#         result = response.json()
+
+#         # Extract the generated text
+#         description = result.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'No description generated.')
+#         return description.strip()
+
+#     except Exception as e:
+#         print(f"Gemini API call failed: {e}")
+#         return f"Automatic description failed. Item is a {color_name} {item_type}."
+
+def generate_description_with_ai(image_path):
+
+    # 1. Define prompt
+    prompt = "Descride exactly what the item in this image is in 50 words or less. Be concise and neutral. Mention with the item is and visually identicy the color of it."
+
+    try:
+        client = genai.Client()
+        response = client.models.generate_content(
+            model=GEMINI_MODEL, contents=prompt
+        )
+    except Exception as e:
+        print(f"Gemini API call failed: {e}")
+        return f"Automatic description failed."
+        
+    return response.text
 # ---------- ROUTES ---------- #
 @app.route('/')
 def home():
@@ -100,6 +189,7 @@ def home():
 def found():
     prediction = ''
     uploaded_image_url = ''
+    item_description = '' # Initialize description
 
     if request.method == 'POST':
         file = request.files.get('file')
@@ -129,6 +219,9 @@ def found():
         dominant_rgb = get_dominant_item_color(filepath)
         color_name = rgb_to_color_name(dominant_rgb)
 
+        # -------- DESCRIPTION GENERATION -------- #
+        item_description = generate_description_with_ai(filepath)
+
         # -------- SAVE TO JSON -------- #
         data = load_data()
         existing_numbers = [int(key) for key in data.keys() if key.isdigit()]
@@ -138,6 +231,7 @@ def found():
             "ImageName": new_filename,
             "ItemType": predicted_class,
             "Color": color_name,
+            "Description": item_description, # <-- NEW FIELD ADDED
             "DateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
@@ -145,7 +239,7 @@ def found():
 
         prediction = f"Prediction: {predicted_class} ({confidence:.2f}%) - Color: {color_name}"
 
-    return render_template('found.html', prediction=prediction, image_url=uploaded_image_url)
+    return render_template('found.html', prediction=prediction, image_url=uploaded_image_url, item_description=item_description)
 
 
 @app.route('/lost_items')
