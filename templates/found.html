@@ -13,25 +13,23 @@
         <input type="submit" value="Upload">
     </form>
 
-    {% if prediction %}
+    {% if image_url or item_description %}
     <div class="result">
-      <h3>Uploaded Image:</h3>
-      <p><strong>{{ prediction }}</strong></p>
+      <h3>Upload successful</h3>
 
-        {% if item_description %}
-          <h3 class="mt-4">AI-Generated Description</h3>
-          <!-- Display the new AI-generated description -->
-          <p class="description-text">{{ item_description }}</p>
-        {% endif %}
-
-        {% if image_url %}
-          <div class="uploaded-image">
-            <h4>Uploaded Image:</h4>
-            <img src="{{ image_url }}" alt="Uploaded Image" width="300">
-          </div>
-        {% endif %}
-      </div>
+      {% if item_description %}
+        <h3 class="mt-4">AI-Generated Description</h3>
+        <p class="description-text">{{ item_description }}</p>
       {% endif %}
+
+      {% if image_url %}
+        <div class="uploaded-image">
+          <h4>Uploaded Image:</h4>
+          <img src="{{ image_url }}" alt="Uploaded Image" width="300">
+        </div>
+      {% endif %}
+    </div>
+    {% endif %}
 
       <a href="{{ url_for('lost_items') }}" class="btn">View All Found Items</a>
       <a href="{{ url_for('home') }}" class="btn">⬅ Back to Home</a>

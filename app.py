@@ -1,17 +1,7 @@
 from flask import Flask, request, render_template, send_from_directory, redirect, url_for
-import tensorflow as tf
-import keras
-from keras.preprocessing import image
-import numpy as np
 import os
-from collections import Counter
-from PIL import Image
-from rembg import remove
-import io
 import json
 from datetime import datetime
-import base64
-# import requests # Used for making the external Gemini API call
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
@@ -47,22 +37,20 @@ def save_data(data):
         json.dump(data, f, indent=4)
 
 
-# ---------- NEW AI DESCRIPTION FUNCTION ---------- #
-
+# ---------- AI DESCRIPTION FUNCTION ---------- #
 def generate_description_with_ai(image_path):
 
     # 1. Define prompt
-    prompt = "Descride exactly what the item in this image is in 50 words or less. Be concise and neutral. Mention with the item is and visually identicy the color of it."
+    prompt = "Describe exactly what the item in this image is in 50 words or less. Be concise and neutral."
 
     # 2. Read image bytes
     with open(image_path, 'rb') as f:
-      image_bytes = f.read()
-      
-      
+        image_bytes = f.read()
+
     try:
         client = genai.Client()
         response = client.models.generate_content(
-            model="gemini-2.0-flash", 
+            model="gemini-2.0-flash",
             contents=[
                 types.Part.from_bytes(
                     data=image_bytes,
@@ -73,12 +61,11 @@ def generate_description_with_ai(image_path):
         )
     except Exception as e:
         print(f"Gemini API call failed: {e}")
-        return f"Automatic description failed."
-        
+        return "Automatic description failed."
+
     return response.text
 
 
-# ---------- ROUTES ---------- #
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -86,15 +73,13 @@ def home():
 
 @app.route('/found', methods=['GET', 'POST'])
 def found():
-    prediction = ''
     uploaded_image_url = ''
-    item_description = '' # Initialize description
+    item_description = ''
 
     if request.method == 'POST':
         file = request.files.get('file')
         if not file or file.filename == '':
-            prediction = 'No file selected'
-            return render_template('found.html', prediction=prediction)
+            return render_template('found.html', error='No file selected')
 
         # Rename and save file
         ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else 'jpg'
@@ -104,10 +89,10 @@ def found():
         file.save(filepath)
         uploaded_image_url = f'/uploads/{new_filename}'
 
-        # -------- DESCRIPTION GENERATION -------- #
+        # Generate AI description (if available)
         item_description = generate_description_with_ai(filepath)
 
-        # -------- SAVE TO JSON -------- #
+        # Save minimal data to JSON (ImageName, Description, DateTime)
         data = load_data()
         existing_numbers = [int(key) for key in data.keys() if key.isdigit()]
         next_id = max(existing_numbers) + 1 if existing_numbers else 1
@@ -120,7 +105,7 @@ def found():
 
         save_data(data)
 
-    return render_template('found.html', prediction=prediction, image_url=uploaded_image_url, item_description=item_description)
+    return render_template('found.html', image_url=uploaded_image_url, item_description=item_description)
 
 
 @app.route('/lost_items')

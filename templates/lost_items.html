@@ -16,9 +16,8 @@
         <div class="grid">
             {% for id, item in items.items() %}
             <a href="{{ url_for('item_detail', item_id=id) }}" class="grid-item">
-                <img src="{{ url_for('uploaded_file', filename=item.ImageName) }}" alt="{{ item.ItemType }} Image">
+                <img src="{{ url_for('uploaded_file', filename=item.ImageName) }}" alt="Found item image">
                 <div class="item-details">
-                    <h4>{{ item.ItemType }} - {{ item.Color }}</h4>
                     <p>Found: {{ item.DateTime }}</p>
                     
                     {% if item.Description %}

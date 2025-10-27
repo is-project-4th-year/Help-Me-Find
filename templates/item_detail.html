@@ -14,12 +14,10 @@
         </div>
 
         <div class="result">
-            <p><strong>Item Type:</strong> {{ item['ItemType'] }}</p>
-            <p><strong>Color:</strong> {{ item['Color'] }}</p>
             <p><strong>Date & Time Found:</strong> {{ item['DateTime'] }}</p>
         </div>
 
-        <!-- NEW: Display AI-Generated Description -->
+        <!-- Display AI-Generated Description -->
         {% if item.Description %}
         <div class="description-box">
             <h3>AI-Generated Description</h3>
