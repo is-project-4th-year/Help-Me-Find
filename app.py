@@ -13,7 +13,8 @@ from datetime import datetime
 import base64
 # import requests # Used for making the external Gemini API call
 from google import genai
-from dotenv import load_dotenv # NEW: Import load_dotenv
+from google.genai import types
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -105,74 +106,28 @@ def save_data(data):
 
 
 # ---------- NEW AI DESCRIPTION FUNCTION ---------- #
-# def generate_description_with_ai(image_path, item_type, color_name):
-#     """Calls Gemini API to generate a description based on the image and analysis."""
-#     try:
-#         # 1. Read image and encode to base64
-#         with open(image_path, "rb") as f:
-#             image_bytes = f.read()
-#         base64_image = base64.b64encode(image_bytes).decode("utf-8")
-#     except Exception as e:
-#         print(f"Error encoding image: {e}")
-#         return f"Automatic description failed. Item is a {color_name} {item_type}."
-
-#     # 2. Define prompt
-#     prompt = (
-#         f"You have found a lost item. Based on the image analysis, the item is a '{item_type}' and its "
-#         f"dominant color is '{color_name}'. "
-#         f"Write a concise, neutral, and helpful description (less than 50 words) that a finder could use to report the item. "
-#         f"Do not mention the image analysis, just describe the item clearly."
-#     )
-
-#     # 3. Construct API payload
-#     payload = {
-#         "contents": [
-#             {
-#                 "role": "user",
-#                 "parts": [
-#                     {"text": prompt},
-#                     {
-#                         "inlineData": {
-#                             # Determine mimeType based on file extension
-#                             "mimeType": f"image/{os.path.splitext(image_path)[1][1:].lower()}",
-#                             "data": base64_image
-#                         }
-#                     }
-#                 ]
-#             }
-#         ],
-#         "systemInstruction": {
-#             "parts": [
-#                 {"text": "You are a helpful assistant for a lost and found service."}
-#             ]
-#         }
-#     }
-
-#     # 4. Make the request
-#     headers = {'Content-Type': 'application/json'}
-#     try:
-#         # Using a timeout for robustness
-#         response = requests.post(f"{GEMINI_API_URL}", headers=headers, json=payload, timeout=30)
-#         response.raise_for_status()
-#         result = response.json()
-
-#         # Extract the generated text
-#         description = result.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'No description generated.')
-#         return description.strip()
-
-#     except Exception as e:
-#         print(f"Gemini API call failed: {e}")
-#         return f"Automatic description failed. Item is a {color_name} {item_type}."
 
 def generate_description_with_ai(image_path):
 
     # 1. Define prompt
     prompt = "Descride exactly what the item in this image is in 50 words or less. Be concise and neutral. Mention with the item is and visually identicy the color of it."
 
+    # 2. Read image bytes
+    with open(image_path, 'rb') as f:
+      image_bytes = f.read()
+      
+      
     try:
         client = genai.Client()
         response = client.models.generate_content(
-            model=GEMINI_MODEL, contents=prompt
+            model=GEMINI_MODEL, 
+            contents=[
+                types.Part.from_bytes(
+                    data=image_bytes,
+                    mime_type='image/jpeg',
+                ),
+                prompt
+            ],
         )
     except Exception as e:
         print(f"Gemini API call failed: {e}")
