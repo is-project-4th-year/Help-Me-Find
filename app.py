@@ -23,14 +23,6 @@ UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 JSON_FILE = 'uploads.json'
 
-# ----------------- GEMINI API CONFIGURATION (New) -----------------
-# GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-# GEMINI_MODEL = os.getenv("GEMINI_MODEL", "")
-GEMINI_API_KEY = "AIzaSyA9l_sIxuF-UGwV8EO_4HtJaQqye889-L8"
-GEMINI_MODEL = "gemini-2.0-flash"
-
-GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
-# ----------------- END CONFIGURATION -----------------
 # Load trained model
 model = keras.models.load_model('mobilenet_item_classifier.h5')
 
@@ -120,7 +112,7 @@ def generate_description_with_ai(image_path):
     try:
         client = genai.Client()
         response = client.models.generate_content(
-            model=GEMINI_MODEL, 
+            model="gemini-2.0-flash", 
             contents=[
                 types.Part.from_bytes(
                     data=image_bytes,
