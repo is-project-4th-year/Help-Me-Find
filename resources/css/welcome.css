@@ -1,0 +1,211 @@
+@import url("root.css");
+
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--fg-color);
+    color: var(--text-color);
+    /* background-image: url('/public/images/bookArt.png'); */
+    background: linear-gradient(135deg, var(--fg-color), var(--main-card));
+
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100vh;
+    padding: 2rem 4rem;
+    animation: fadeIn 1s ease-in-out forwards;
+    opacity: 0;
+}
+
+.left, .right {
+    flex: 1;
+    padding: 2rem;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: translateX(-50px);
+    opacity: 0;
+    animation: slideInLeft 1s forwards 0.5s;
+}
+
+.right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(50px);
+    opacity: 0;
+    animation: slideInRight 1s forwards 0.7s;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--button-lighter);
+}
+
+p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 1rem;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    transition: all 0.3s ease;
+    transform: scale(1.01);
+    box-shadow: 0 4px 20px var(--glow);
+  }
+
+.btn-primary {
+    border: 1px solid transparent;
+    background-color: var(--button-lighter);
+    color: #000;
+}
+
+.btn-primary:hover {
+    color: var(--link-normal2);
+}
+
+/* .btn-primary::after {
+    content: '';
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .btn-primary:hover::after {
+    opacity: 1;
+  } */
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--button-lighter);
+    color: var(--button-lighter);
+}
+
+.btn-secondary:hover {
+    background-color: var(--button-lighter);
+    color: var(--link-normal2);
+}
+
+.image-box img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    /* box-shadow: 0 0 15px rgba(0,0,0,0.3); */
+}
+
+/* .bg-wave {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    width: 100%;
+    height: auto;
+} */
+
+/* .bg-wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    z-index: -1;
+} */
+
+.bg-wave-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    z-index: -1;
+}
+
+.bg-wave-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    z-index: -1;
+}
+
+
+
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column-reverse;
+        padding: 1.5rem;
+    }
+
+    .left, .right {
+        width: 100%;
+        padding: 1rem;
+        text-align: center;
+        transform: none;
+        opacity: 1;
+        animation: none;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto 1rem auto;
+        font-size: 1rem;
+    }
+
+    .image-box {
+        margin-top: 1.5rem;
+    }
+
+    .image-box img {
+        width: 90%;
+    }
+}
