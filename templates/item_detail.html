@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Item Details</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+    <h2>Item Details</h2>
+
+        <div class="uploaded-image">
+            <img src="{{ url_for('uploaded_file', filename=item['ImageName']) }}" alt="{{ item['ItemType'] }} Image">
+        </div>
+
+        <div class="result">
+            <p><strong>Item Type:</strong> {{ item['ItemType'] }}</p>
+            <p><strong>Color:</strong> {{ item['Color'] }}</p>
+            <p><strong>Date & Time Found:</strong> {{ item['DateTime'] }}</p>
+        </div>
+
+        <!-- NEW: Display AI-Generated Description -->
+        {% if item.Description %}
+        <div class="description-box">
+            <h3>AI-Generated Description</h3>
+            <p>{{ item.Description }}</p>
+        </div>
+        {% endif %}
+
+        <a href="{{ url_for('lost_items') }}" class="btn" style="margin-top: 20px; display: inline-block;">⬅ Back to Lost Items</a>
+    </div>
+</body>
+</html>

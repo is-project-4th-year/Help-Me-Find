@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ReportFound Item</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Upload Found Item</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <input type="submit" value="Upload">
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+      <h3>Uploaded Image:</h3>
+      <p><strong>{{ prediction }}</strong></p>
+
+        {% if item_description %}
+          <h3 class="mt-4">AI-Generated Description</h3>
+          <!-- Display the new AI-generated description -->
+          <p class="description-text">{{ item_description }}</p>
+        {% endif %}
+
+        {% if image_url %}
+          <div class="uploaded-image">
+            <h4>Uploaded Image:</h4>
+            <img src="{{ image_url }}" alt="Uploaded Image" width="300">
+          </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <a href="{{ url_for('lost_items') }}" class="btn">View All Found Items</a>
+      <a href="{{ url_for('home') }}" class="btn">⬅ Back to Home</a>
+    </div>
+</body>
+</html>

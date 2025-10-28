@@ -1,0 +1,9 @@
+dataset/
+unused dataset/
+uploads/
+old uploads/
+unused files/
+settings.json
+uploads.json
+*.h5
+.env

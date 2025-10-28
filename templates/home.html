@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome - Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Lost & Found</h1>
+        <p>Select an option:</p>
+        <div class="button-group">
+            <a href="{{ url_for('found') }}" class="btn">Report a Found Item</a>
+            <a href="{{ url_for('lost_items') }}" class="btn">List of Lost Items</a>
+        </div>
+    </div>
+</body>
+</html>
