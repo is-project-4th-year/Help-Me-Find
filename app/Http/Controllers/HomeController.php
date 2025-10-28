@@ -71,24 +71,24 @@ class HomeController extends Controller
     }
 
     // ------------------ LOST ITEMS ------------------ //
-    public function lostItems()
-    {
-        $data = $this->loadData();
-        return view('lostItems', ['items' => $data]);
-    }
+    // public function lostItems()
+    // {
+    //     $data = $this->loadData();
+    //     return view('lostItems', ['items' => $data]);
+    // }
 
     // ------------------ ITEM DETAIL ------------------ //
-    public function itemDetail($id)
-    {
-        $data = $this->loadData();
-        $item = $data[$id] ?? null;
+    // public function itemDetail($id)
+    // {
+    //     $data = $this->loadData();
+    //     $item = $data[$id] ?? null;
 
-        if (!$item) {
-            abort(404, 'Item not found');
-        }
+    //     if (!$item) {
+    //         abort(404, 'Item not found');
+    //     }
 
-        return view('itemDetail', compact('item', 'id'));
-    }
+    //     return view('itemDetail', compact('item', 'id'));
+    // }
 
     // ------------------ HELPER FUNCTIONS ------------------ //
 

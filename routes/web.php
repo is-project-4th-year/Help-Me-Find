@@ -11,6 +11,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\FinderReportController;
 use App\Http\Controllers\WelcomeController;
 
+use App\Http\Controllers\LostItemController;
+
 // use App\Http\Controllers\FoundController;
 
 use App\Http\Controllers\HomeController;
@@ -32,8 +34,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'viewPage'])->name('home'); // Form page
 
     Route::match(['get', 'post'], '/found', [HomeController::class, 'found'])->name('found');
-    Route::get('/lostItems', [HomeController::class, 'lostItems'])->name('lostItems');
-    Route::get('/item/{id}', [HomeController::class, 'itemDetail'])->name('itemDetail');
+    
+    Route::get('/lostItems', [LostItemController::class, 'lostItems'])->name('lostItems');
+    Route::get('/rag-search', [LostItemController::class, 'ragSearch'])->name('ragSearch');
+    Route::get('/item/{id}', [LostItemController::class, 'itemDetail'])->name('itemDetail');
+
 
     Route::get('/report/{token}', [FinderReportController::class, 'showReportForm'])->name('finder.report');
 });

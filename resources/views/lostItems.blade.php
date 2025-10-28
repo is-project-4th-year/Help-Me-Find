@@ -29,6 +29,20 @@
       Browse through items reported by others. Click on any image for more details about the item.
     </p>
 
+    <!-- ===== Search Bar ===== -->
+    <form action="{{ route('ragSearch') }}" method="GET" class="search-form" style="margin-bottom: 30px; text-align: center;">
+    <input
+        type="text"
+        name="query"
+        placeholder="Search lost items (e.g. 'silver keys', 'white Samsung phone')"
+        value="{{ request('query') }}"
+        style="padding: 10px 15px; width: 60%; border-radius: 6px; border: 1px solid #ccc;"
+    >
+    <button type="submit" style="padding: 10px 20px; border-radius: 6px; background: #795548; color: white; border: none;">
+        Search
+    </button>
+    </form>
+
     {{-- Check if items exist --}}
     @if(isset($items) && count($items) > 0)
       <div class="grid">
