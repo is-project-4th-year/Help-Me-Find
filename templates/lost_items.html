@@ -3,37 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lost Items</title>
+  <title>Lost Items - Lost & Found</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='grid.css') }}">
-  
 </head>
 <body>
-    <div class="container">
-        <h1>List of Reported Items</h1>
 
-        {% if items %}
-        <div class="grid">
-            {% for id, item in items.items() %}
-            <a href="{{ url_for('item_detail', item_id=id) }}" class="grid-item">
-                <img src="{{ url_for('uploaded_file', filename=item.ImageName) }}" alt="Found item image">
-                <div class="item-details">
-                    <p>Found: {{ item.DateTime }}</p>
-                    
-                    {% if item.Description %}
-                    <p class="item-description">{{ item.Description | truncate(60, true) }}</p>
-                    {% else %}
-                    <p class="item-description">Click for full details.</p>
-                    {% endif %}
-                </div>
-            </a>
-            {% endfor %}
+  <!-- ===== Navigation Bar ===== -->
+  <nav>
+    <div class="logo">Help-Me-Find</div>
+    <ul class="options">
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('found') }}">Report Found</a></li>
+      <li><a href="{{ url_for('lost_items') }}" class="active">Lost Items</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== Main Container ===== -->
+  <div class="container">
+    <h1>List of Reported Items</h1>
+    <p style="font-size: 16px; color: #5d4037; max-width: 600px; margin: 0 auto 25px;">
+      Browse through items reported by others. Click on any image for more details about the item.
+    </p>
+
+    {% if items %}
+    <div class="grid">
+      {% for id, item in items.items() %}
+      <a href="{{ url_for('item_detail', item_id=id) }}" class="grid-item">
+        <img src="{{ url_for('uploaded_file', filename=item.ImageName) }}" alt="Found item image">
+        <div class="item-details" style="padding: 10px;">
+          <p style="font-size: 14px; color: #4e342e; margin-bottom: 8px;">
+            <strong>Found:</strong> {{ item.DateTime }}
+          </p>
+          
+          {% if item.Description %}
+          <p class="item-description" style="color: #5d4037; font-size: 14px;">
+            {{ item.Description | truncate(60, true) }}
+          </p>
+          {% else %}
+          <p class="item-description" style="color: #8d6e63; font-style: italic;">Click for full details</p>
+          {% endif %}
         </div>
-        {% else %}
-        <p>No items found yet.</p>
-        {% endif %}
-
-        <a href="{{ url_for('home') }}" class="btn">⬅ Back to Home</a>
+      </a>
+      {% endfor %}
     </div>
+    {% else %}
+      <p>No items found yet.</p>
+    {% endif %}
+
+    <!-- ===== Back Button ===== -->
+    <div style="margin-top: 40px;">
+      <a href="{{ url_for('home') }}" class="btn">⬅ Back to Home</a>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    &copy; {{ current_year or "2025" }} Help-Me-Find | Designed with ❤ by Bethelhem
+  </footer>
+
 </body>
 </html>

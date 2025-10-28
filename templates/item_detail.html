@@ -2,30 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Item Details</title>
+  <title>Item Details - Lost & Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
+
+  <!-- ===== Navigation Bar ===== -->
+  <nav>
+    <div class="logo">Help-Me-Find</div>
+    <ul class="options">
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('found') }}">Report Found</a></li>
+      <li><a href="{{ url_for('lost_items') }}">Lost Items</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== Main Container ===== -->
+  <div class="container">
     <h2>Item Details</h2>
 
-        <div class="uploaded-image">
-            <img src="{{ url_for('uploaded_file', filename=item['ImageName']) }}" alt="{{ item['ItemType'] }} Image">
-        </div>
-
-        <div class="result">
-            <p><strong>Date & Time Found:</strong> {{ item['DateTime'] }}</p>
-        </div>
-
-        <!-- Display AI-Generated Description -->
-        {% if item.Description %}
-        <div class="description-box">
-            <h3>AI-Generated Description</h3>
-            <p>{{ item.Description }}</p>
-        </div>
-        {% endif %}
-
-        <a href="{{ url_for('lost_items') }}" class="btn" style="margin-top: 20px; display: inline-block;">⬅ Back to Lost Items</a>
+    <!-- Uploaded Image Section -->
+    <div class="uploaded-image" style="margin-top: 20px;">
+      <img src="{{ url_for('uploaded_file', filename=item['ImageName']) }}" alt="{{ item['ItemType'] }} Image" style="max-width: 400px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
     </div>
+
+    <!-- Item Info -->
+    <div class="result" style="margin-top: 25px;">
+      <p><strong>Item Type:</strong> {{ item['ItemType'] }}</p>
+      <p><strong>Date & Time Found:</strong> {{ item['DateTime'] }}</p>
+      {% if item['Location'] %}
+        <p><strong>Found Location:</strong> {{ item['Location'] }}</p>
+      {% endif %}
+    </div>
+
+    <!-- AI Description -->
+    {% if item.Description %}
+    <div class="result" style="margin-top: 25px;">
+      <h3>AI-Generated Description</h3>
+      <p style="font-size: 16px; line-height: 1.5; color: #4e342e;">
+        {{ item.Description }}
+      </p>
+    </div>
+    {% endif %}
+
+    <!-- Navigation Buttons -->
+    <div style="margin-top: 30px;">
+      <a href="{{ url_for('lost_items') }}" class="btn">⬅ Back to Lost Items</a>
+      <a href="{{ url_for('home') }}" class="btn">🏠 Home</a>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    &copy; {{ current_year or "2025" }} Help-Me-Find | Designed with ❤ by Bethelhem
+  </footer>
+
 </body>
 </html>

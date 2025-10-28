@@ -2,24 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ReportFound Item</title>
+  <title>Report Found Item - Lost & Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
+  <!-- ===== Navigation Bar ===== -->
+  <nav>
+    <div class="logo">Help-Me-Find</div>
+    <ul class="options">
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('found') }}">Report Found</a></li>
+      <li><a href="{{ url_for('lost_items') }}">Lost Items</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== Main Container ===== -->
   <div class="container">
-    <h1>Upload Found Item</h1>
+    <h1>Upload a Found Item</h1>
+    <p style="font-size: 16px; color: #5d4037; max-width: 600px; margin: 0 auto 25px;">
+      Upload a photo of the found item below. The system will automatically analyze and describe it using AI recognition.
+    </p>
+
+    <!-- ===== Upload Form ===== -->
     <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <input type="submit" value="Upload">
+      <input type="file" name="file" required>
+      <br><br>
+      <input type="submit" value="Upload">
     </form>
 
+    <!-- ===== AI Result Section ===== -->
     {% if image_url or item_description %}
     <div class="result">
-      <h3>Upload successful</h3>
+      <h3>Upload Successful</h3>
 
       {% if item_description %}
-        <h3 class="mt-4">AI-Generated Description</h3>
-        <p class="description-text">{{ item_description }}</p>
+        <h4 style="margin-top: 20px;">AI-Generated Description</h4>
+        <p class="description-text" style="font-size: 16px; line-height: 1.5;">{{ item_description }}</p>
       {% endif %}
 
       {% if image_url %}
@@ -31,8 +52,17 @@
     </div>
     {% endif %}
 
+    <!-- ===== Navigation Buttons ===== -->
+    <div style="margin-top: 30px;">
       <a href="{{ url_for('lost_items') }}" class="btn">View All Found Items</a>
       <a href="{{ url_for('home') }}" class="btn">⬅ Back to Home</a>
     </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    &copy; {{ current_year or "2025" }} Help-Me-Find | Designed with ❤ by Bethelhem
+  </footer>
+
 </body>
 </html>
