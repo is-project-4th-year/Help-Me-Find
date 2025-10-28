@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost Items - Help-Me-Find</title>
+
+  {{-- Include CSS --}}
+  @vite(['resources/css/style.css'])
+  @vite(['resources/css/grid.css'])
+</head>
+<body>
+
+  <!-- ===== Navigation Bar ===== -->
+  <nav>
+    <div class="logo">Help-Me-Find</div>
+    <ul class="options">
+      <li><a href="{{ route('home') }}">Home</a></li>
+      <li><a href="{{ route('found') }}">Report Found</a></li>
+      <li><a href="{{ route('lostItems') }}" class="active">Lost Items</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== Main Container ===== -->
+  <div class="container">
+    <h1>List of Reported Items</h1>
+    <p style="font-size: 16px; color: #5d4037; max-width: 600px; margin: 0 auto 25px;">
+      Browse through items reported by others. Click on any image for more details about the item.
+    </p>
+
+    {{-- Check if items exist --}}
+    @if(isset($items) && count($items) > 0)
+      <div class="grid">
+        @foreach($items as $id => $item)
+          <a href="{{ route('itemDetail', ['id' => $id]) }}" class="grid-item">
+            <img src="{{ asset('uploads/' . data_get($item, 'ImageName')) }}" alt="Found item image">
+            <div class="item-details" style="padding: 10px;">
+              <p style="font-size: 14px; color: #4e342e; margin-bottom: 8px;">
+                <strong>Found:</strong> {{ data_get($item, 'DateTime') }}
+              </p>
+
+              @if(!empty(data_get($item, 'Description')))
+                <p class="item-description" style="color: #5d4037; font-size: 14px;">
+                  {{ Str::limit(data_get($item, 'Description'), 60) }}
+                </p>
+              @else
+                <p class="item-description" style="color: #8d6e63; font-style: italic;">Click for full details</p>
+              @endif
+            </div>
+          </a>
+        @endforeach
+      </div>
+    @else
+      <p>No items found yet.</p>
+    @endif
+
+    <!-- ===== Back Button ===== -->
+    <div style="margin-top: 40px;">
+      <a href="{{ route('home') }}" class="btn">⬅ Back to Home</a>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    &copy; {{ date('Y') }} Help-Me-Find | Designed with ❤ by Bethelhem
+  </footer>
+
+</body>
+</html>

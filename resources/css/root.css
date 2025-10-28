@@ -1,0 +1,82 @@
+:root {
+    /* transition: 0.3s; */
+
+    --bg-color: #121212;
+    --fg-color: #292421;
+    --text-color: #e0e0e0;
+    --text-color-2: #b3b3b3;
+    --dr-color: #25211f;
+    --empty-bar: #00000033;
+    --profile: #e7cca5;
+
+    --shadow-color: #0000001a;
+    --link-normal: #836844;
+    --link-dark: #412f19;
+
+    --brown: #aa9476a0;
+    --cover-color-2: #895f2ddf;
+    --cover-color-1: #8b5d25;
+    --spine-color-1: #5c4121;
+    --spine-color-2: #5f4526df;
+    --main-card: #533f27 !important;
+    --main-card-darker: #3d2f1d !important;
+    --book-hover: rgba(128, 128, 128);
+
+    --text-area: #3a342f;
+    --text-placeholder: #ffffff80;
+
+    --link-normal2: #f0d9ba;
+    --link-dark2: #d2ad79;
+
+    --button-lighter: #a07841;
+    --button-darker: #7f633b;
+
+    --glow: #ff7f114d;
+
+}
+
+body.light-mode {
+    --bg-color: #c0b9b1;
+    --fg-color: #e0d8d1;
+    --text-color: #323232;
+    --text-color-2: #585858;
+    --dr-color: #cfc9c1;
+    --empty-bar: #ffffff33;
+    --profile: #946e40;
+
+
+    --brown: #987748;
+    --cover-color-1: #c2a076;
+    --cover-color-2: #8b5d2580;
+    --spine-color-1: #8b683d;
+    --spine-color-2: #5f452680;
+    --main-card: #b39672 !important;
+    --main-card-darker: #9e8567 !important;
+    --book-hover: rgba(128, 128, 128, 0.3);
+
+    --text-area: #eeeeee;
+    --text-placeholder: #808080;
+
+    --link-normal2: #836844;
+    --link-dark2: #412f19;
+
+    --button-lighter: #b8915a;
+    --button-darker: #9b7b4f;
+}
+
+/* Global Styles */
+body {
+    margin: 0;
+    /* font-family: Arial, sans-serif; */
+    /* font-family: 'Century Gothic', sans-serif; */
+    /* font-family: 'helvetica', sans-serif; */
+    /* font-family: 'Segoe UI Variable', system-ui, sans-serif; */
+    /* font-family: ui-sans-serif, system-ui, sans-serif; */
+    min-width: 350px;
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+
+
