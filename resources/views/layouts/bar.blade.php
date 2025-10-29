@@ -1,0 +1,51 @@
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">
+            <button class="menu-btn" id="menu-btn" onclick="toggleDrawer()"><i class="fa fa-navicon"></i></button>
+            Help Me Find
+        </div>
+        <ul class="options">
+            <li><a href="/">Home</a></li>
+            <li><a href="{{ route('found') }}">Report Found</a></li>
+            <li><a href="{{ route('lostItems') }}">Lost Items</a></li>
+            <button id="profileDisplay" class="profile-btn">
+                <i class="fa fa-user"></i>
+            </button>
+        </ul>
+    </nav>
+
+    <!-- Sidebar Drawer -->
+    <aside class="drawer" id="drawer">
+        <ul>
+            <hr style="border: 0.5px solid rgba(167, 124, 67, 0.2); width: 90%; margin: 10px;">
+
+            <li>
+                <button id="light-mode-btn" onclick="toggleLightMode()">
+                    <i class="fa fa-moon-o"></i> Light Mode
+                </button>
+            </li>
+
+            <li>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </aside>
+
+    {{-- Profile Sideview --}}
+    <aside id="profilePopup" class="profile-popup">
+        <div class="profile-content">
+            <span class="close-btn" id="closeProfilePopupBtn">&times;</span>
+            <div class="profile-header">
+
+                <img src="{{ asset('images/profile.png') }}" alt="Profile Picture" class="profile-img">
+                <h3>{{ auth()->user()->firstName }}</h3>
+                {{-- <p>{{ '@'.auth()->user()->username }}</p> --}}
+            </div>
+        </div>
+    </aside>

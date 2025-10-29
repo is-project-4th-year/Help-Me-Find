@@ -1,23 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Report Found Item - Lost & Found</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  @vite(['resources/css/style.css'])
-</head>
-<body>
+@include('layouts.header')
 
-  <!-- ===== Navigation Bar ===== -->
-  <nav>
-    <div class="logo">Help-Me-Find</div>
-    <ul class="options">
-      <li><a href="{{ route('home') }}">Home</a></li>
-      <li><a href="{{ route('found') }}">Report Found</a></li>
-      <li><a href="{{ route('lostItems') }}">Lost Items</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-  </nav>
+<body>
+  <!-- ===== Bar ===== -->
+    @include('layouts.bar')
 
   <!-- ===== Main Container ===== -->
   <div class="container">

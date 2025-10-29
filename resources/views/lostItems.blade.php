@@ -1,26 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lost Items - Help-Me-Find</title>
+@include('layouts.header')
 
-  {{-- Include CSS --}}
-  @vite(['resources/css/style.css'])
-  @vite(['resources/css/grid.css'])
-</head>
 <body>
-
-  <!-- ===== Navigation Bar ===== -->
-  <nav>
-    <div class="logo">Help-Me-Find</div>
-    <ul class="options">
-      <li><a href="{{ route('home') }}">Home</a></li>
-      <li><a href="{{ route('found') }}">Report Found</a></li>
-      <li><a href="{{ route('lostItems') }}" class="active">Lost Items</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-  </nav>
+  <!-- ===== Bar ===== -->
+    @include('layouts.bar')
 
   <!-- ===== Main Container ===== -->
   <div class="container">
