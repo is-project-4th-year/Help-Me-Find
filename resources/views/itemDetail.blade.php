@@ -3,14 +3,11 @@
 @include('layouts.header')
 
 <body>
-  <!-- ===== Bar ===== -->
-    @include('layouts.bar')
+  @include('layouts.bar')
 
-  <!-- ===== Main Container ===== -->
   <div class="container">
     <h2>Item Details</h2>
 
-    <!-- Uploaded Image Section -->
     <div class="uploaded-image" style="margin-top: 20px;">
       <img
         src="{{ asset('uploads/' . $item['ImageName']) }}"
@@ -19,7 +16,6 @@
       >
     </div>
 
-    <!-- Item Info -->
     <div class="result" style="margin-top: 25px;">
       <p><strong>Item Type:</strong> {{ $item['ItemType'] ?? 'Unspecified' }}</p>
       <p><strong>Date & Time Found:</strong> {{ $item['DateTime'] ?? 'Unknown' }}</p>
@@ -29,7 +25,6 @@
       @endif
     </div>
 
-    <!-- AI Description -->
     @if(!empty($item['Description']))
     <div class="result" style="margin-top: 25px;">
       <h3>AI-Generated Description</h3>
@@ -39,14 +34,12 @@
     </div>
     @endif
 
-    <!-- Navigation Buttons -->
     <div style="margin-top: 30px;">
-      <a href="{{ route('lostItems') }}" class="btn">⬅ Back to Lost Items</a>
+      <a href="{{ route('lostItems') }}" class="btn btn-secondary">⬅ Back to Lost Items</a>
       <a href="{{ route('home') }}" class="btn">🏠 Home</a>
     </div>
   </div>
 
-  <!-- ===== Footer ===== -->
   <footer>
     &copy; {{ now()->year }} Help-Me-Find | Designed with ❤ by Bethelhem
   </footer>

@@ -1,15 +1,14 @@
-
+/* New professional, clean style matching the main app. */
 
 * {
     box-sizing: border-box;
 }
 
 body {
-    background-color: #292421;
-    color: #e0e0e0;
-    /* background-image: url('/public/images/bookArt.png'); */
-    background: linear-gradient(135deg, #292421, #533f27);
-
+    background-color: #c3afa5; /* Soft beige, matching main app body */
+    color: #3e2723; /* Main app text color */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
 }
 
 .container {
@@ -18,6 +17,8 @@ body {
     align-items: center;
     justify-content: space-between;
     min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 2rem 4rem;
     animation: fadeIn 1s ease-in-out forwards;
     opacity: 0;
@@ -49,12 +50,13 @@ body {
 h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
-    color: #a07841;
+    color: #5d4037; /* Main app heading color */
 }
 
 p {
     font-size: 1.2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    color: #4e342e; /* Slightly darker text for contrast */
 }
 
 .btn {
@@ -64,80 +66,49 @@ p {
     cursor: pointer;
     border: none;
     margin-bottom: 1rem;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .btn:hover {
-    transition: all 0.3s ease;
     transform: scale(1.01);
-    box-shadow: 0 4px 20px #ff7f114d;
-  }
+    box-shadow: 0 4px 10px rgba(62, 39, 35, 0.1);
+}
 
 .btn-primary {
-    border: 1px solid transparent;
-    background-color: #a07841;
-    color: #000;
+    background-color: #8d6e63; /* Main app primary button color */
+    color: #fff;
 }
 
 .btn-primary:hover {
-    color: #f0d9ba;
+    background-color: #6d4c41;
+    color: #fff;
 }
 
 .btn-secondary {
     background: transparent;
-    border: 1px solid #a07841;
-    color: #a07841;
+    border: 1px solid #8d6e63;
+    color: #8d6e63;
 }
 
 .btn-secondary:hover {
-    background-color: #a07841;
-    color: #f0d9ba;
+    background-color: #f8f5f4; /* Used the new card color for subtle hover effect */
+    color: #5d4037;
 }
 
 .image-box img {
     width: 100%;
     height: auto;
-    border-radius: 12px;
-    /* box-shadow: 0 0 15px rgba(0,0,0,0.3); */
+    max-width: 500px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(62, 39, 35, 0.15);
 }
 
-/* .bg-wave {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: -1;
-    width: 100%;
-    height: auto;
-} */
-
-/* .bg-wave {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 150px;
-    z-index: -1;
-} */
-
-.bg-wave-top {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 150px;
-    z-index: -1;
+/* Remove decorative wave styles as they don't match the new aesthetic */
+.bg-wave-top, .bg-wave-bottom {
+    display: none;
 }
-
-.bg-wave-bottom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 150px;
-    z-index: -1;
-}
-
-
 
 
 @keyframes fadeIn {

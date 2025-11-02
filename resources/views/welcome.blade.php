@@ -16,8 +16,8 @@
             <h1>"Help Me Find!"</h1>
             <p style="padding-bottom: 20px">Lost something? Ask your community to help you find it!</p>
             <p style="padding-bottom: 20px">A Digital Lost-and-Found that Makes Missing Belongings to Returnable Treasures.</p>
-            <button class="btn btn-primary">Get Started</button>
-            <button class="btn btn-secondary" onclick="location.href='{{ route('login') }}'">Sign In</button>
+            <a href="{{ route('register') }}" class="btn btn-primary">Get Started</a> {{-- Converted button to anchor tag --}}
+            <a href="{{ route('login') }}" class="btn btn-secondary">Sign In</a> {{-- Converted button to anchor tag --}}
         </div>
         <div class="right image-box">
             <img src="{{ asset('images/lost-and-found.png') }}" alt="Help Me Find illustration">

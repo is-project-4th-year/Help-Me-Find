@@ -4,9 +4,8 @@ body {
     margin: 0;
     padding: 0;
     padding-top: 50px;
-    /* display: flex; */
     min-height: 100vh;
-    background-color: #fdfaf7;
+    background-color: #c3afa5;
     color: #3e2723;
 }
 
@@ -236,7 +235,7 @@ aside ul li a:hover {
     max-width: 1000px;
     margin: 40px auto;
     padding: 30px;
-    background: #fff8f1;
+    background: #f8f5f4;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(62, 39, 35, 0.15);
     text-align: center;
@@ -248,34 +247,84 @@ h1, h2, h3 {
     margin-bottom: 20px;
 }
 
-/* ===== Buttons ===== */
-.btn, input[type="submit"] {
+/* ===== Buttons (Standardized) ===== */
+.btn, input[type="submit"], button[type="submit"] {
     display: inline-block;
-    background: #8d6e63;
-    color: #fff;
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.2s ease, transform 0.1s ease;
     text-decoration: none;
     margin: 10px;
+    font-weight: 500;
 }
 
-.btn:hover, input[type="submit"]:hover {
+/* Default/Primary Button Style */
+.btn, input[type="submit"], button[type="submit"] {
+    background: #8d6e63;
+    color: #fff;
+}
+
+.btn:hover, input[type="submit"]:hover, button[type="submit"]:hover {
     background: #6d4c41;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
 }
 
-/* ===== File Input ===== */
-input[type="file"] {
+/* Secondary Button Style */
+.btn-secondary {
+    background: #efebe9;
+    color: #8d6e63;
+    border: 1px solid #8d6e63;
+}
+
+.btn-secondary:hover {
+    background: #e0d7d2;
+    color: #5d4037;
+    border-color: #5d4037;
+}
+
+/* --- QR Code Display --- */
+.qr-code-box {
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #d7ccc8;
+    border-radius: 12px;
+    display: inline-block;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.qr-code-box svg {
+    margin-bottom: 15px;
+}
+
+
+/* ===== Form Elements ===== */
+input[type="file"], input[type="text"], input[name="location"], textarea {
     border: 1px solid #d7ccc8;
     border-radius: 8px;
     padding: 10px;
     background: #fff;
-    cursor: pointer;
+    cursor: text;
     width: 100%;
-    max-width: 300px;
+    box-sizing: border-box;
+    max-width: 400px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[name="location"]:focus, textarea:focus, input[type="file"]:focus {
+    border-color: #8d6e63;
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
 }
 
 /* ===== Result Box ===== */
@@ -283,7 +332,7 @@ input[type="file"] {
     margin-top: 30px;
     padding: 20px;
     border-radius: 12px;
-    background: #efebe9;
+    background: #d7ccc8;
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
     text-align: left;
 }
@@ -410,7 +459,7 @@ footer {
         padding: 15px;
     }
 
-    input[type="submit"], .btn {
+    input[type="submit"], .btn, button[type="submit"] {
         width: 100%;
     }
 

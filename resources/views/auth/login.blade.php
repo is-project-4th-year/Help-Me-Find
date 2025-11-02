@@ -31,7 +31,7 @@
 
 {{-- @section('content') --}}
 <body class="signBody">
-    <card class="signBox">
+    <div class="signBox"> {{-- Changed <card> to <div> for semantic HTML --}}
         <text> Login </text>
 
         <form method="POST" action="{{ route('login') }}">
@@ -63,6 +63,6 @@
         <div>
             <a class="signLink" href="{{ route('register') }}"> Don't have an account? Sign up!</a>
         </div>
-    </card>
+    </div>
 </body>
 </html>

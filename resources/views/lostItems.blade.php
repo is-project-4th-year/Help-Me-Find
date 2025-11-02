@@ -3,27 +3,24 @@
 @include('layouts.header')
 
 <body>
-  <!-- ===== Bar ===== -->
-    @include('layouts.bar')
+  @include('layouts.bar')
 
-  <!-- ===== Main Container ===== -->
   <div class="container">
     <h1>List of Reported Items</h1>
     <p style="font-size: 16px; color: #5d4037; max-width: 600px; margin: 0 auto 25px;">
       Browse through items reported by others. Click on any image for more details about the item.
     </p>
 
-    <!-- ===== Search Bar ===== -->
-    <form action="{{ route('ragSearch') }}" method="GET" class="search-form" style="margin-bottom: 30px; text-align: center;">
+    <form action="{{ route('ragSearch') }}" method="GET" class="search-form" style="margin-bottom: 30px; text-align: center; display: flex; justify-content: center; gap: 10px;">
     <input
         type="text"
         name="query"
         placeholder="Search lost items (e.g. 'silver keys', 'white Samsung phone')"
         value="{{ request('query') }}"
-        style="padding: 10px 15px; width: 60%; border-radius: 6px; border: 1px solid #ccc;"
+        style="width: 70%; max-width: 500px; padding: 12px 15px; border-radius: 8px; border: 1px solid #d7ccc8;"
     >
-    <button type="submit" style="padding: 10px 20px; border-radius: 6px; background: #795548; color: white; border: none;">
-        Search
+    <button type="submit" class="btn" style="margin: 0; min-width: 100px;">
+        <i class="fa fa-search"></i> Search
     </button>
     </form>
 
@@ -53,13 +50,11 @@
       <p>No items found yet.</p>
     @endif
 
-    <!-- ===== Back Button ===== -->
     <div style="margin-top: 40px;">
-      <a href="{{ route('home') }}" class="btn">⬅ Back to Home</a>
+      <a href="{{ route('home') }}" class="btn">🏠 Home</a>
     </div>
   </div>
 
-  <!-- ===== Footer ===== -->
   <footer>
     &copy; {{ date('Y') }} Help-Me-Find | Designed with ❤ by Bethelhem
   </footer>

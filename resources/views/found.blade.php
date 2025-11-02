@@ -3,25 +3,21 @@
 @include('layouts.header')
 
 <body>
-  <!-- ===== Bar ===== -->
-    @include('layouts.bar')
+  @include('layouts.bar')
 
-  <!-- ===== Main Container ===== -->
   <div class="container">
-    <h1>Upload a Found Item</h1>
+    <h1>Report a Found Item</h1>
     <p style="font-size: 16px; color: #5d4037; max-width: 600px; margin: 0 auto 25px;">
       Upload a photo of the found item below. The system will automatically analyze and describe it using AI recognition.
     </p>
 
-    <!-- ===== Upload Form ===== -->
     <form method="POST" enctype="multipart/form-data">
       @csrf
       <input type="file" name="file" required>
-      <br><br>
-      <input type="submit" value="Upload">
+      <br>
+      <button type="submit" class="btn">Upload Item</button>
     </form>
 
-    <!-- ===== AI Result Section ===== -->
     @if(!empty($imageUrl) || !empty($description))
     <div class="result">
       <h3>Upload Successful</h3>
@@ -40,14 +36,12 @@
     </div>
     @endif
 
-    <!-- ===== Navigation Buttons ===== -->
     <div style="margin-top: 30px;">
-      <a href="{{ route('lostItems') }}" class="btn">View All Found Items</a>
-      <a href="{{ route('home') }}" class="btn">⬅ Back to Home</a>
+      <a href="{{ route('lostItems') }}" class="btn btn-secondary">View Lost Items</a>
+      <a href="{{ route('home') }}" class="btn">🏠 Home</a>
     </div>
   </div>
 
-  <!-- ===== Footer ===== -->
   <footer>
     &copy; {{ now()->year }} Help-Me-Find | Designed with ❤ by Bethelhem
   </footer>

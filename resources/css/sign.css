@@ -1,4 +1,3 @@
-@import url("root.css");
 
 .signBody{
     margin: 0;
@@ -9,8 +8,8 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color: #e0e0e0;
-    background-color: #121212;
+    color: #3e2723;
+    background-color: #c3afa5;
 
     background-image: url('/public/images/bookArt.png');
     background-size: cover;
@@ -22,12 +21,13 @@
 }
 
 .signBox{
-    background: #292421;
+    background: #f8f5f4;
     padding: 20px;
     max-width: 450px;
     width: 100%;
-    box-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
-    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(62, 39, 35, 0.15);
+    border-radius: 16px;
+    color: #3e2723;
 }
 
 .signBox text{
@@ -36,38 +36,46 @@
     padding-bottom: 15px;
     display: flex;
     justify-content: center;
+    color: #5d4037;
 }
 
 .signBox label{
     padding-left: 3px;
     height: auto;
+    font-weight: 500;
+    color: #4e342e;
 }
 
 .signTextArea{
-    background-color: #3a342f;
-    color: e0e0e0;
+    background-color: #fff;
+    color: #3e2723;
     width: 98%;
     height: 40px;
     outline: none;
     border-radius: 8px;
-    border: 1px solid gray;
+    border: 1px solid #d7ccc8;
     margin-top: 5px;
     margin-bottom: 10px;
     padding: 0 7px;
 }
 
+.signTextArea:focus {
+    border-color: #8d6e63;
+    outline: none;
+}
+
 .signTextArea::placeholder{
-    color: #ffffff80;
+    color: #a1887f;
 }
 
 .signTextArea:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #3a342f inset;
-    -webkit-text-fill-color: e0e0e0 !important;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    -webkit-text-fill-color: #3e2723 !important;
 }
 
 .signButton{
-    background-color: #7f633b;
-    color: aliceblue;
+    background-color: #8d6e63;
+    color: #fff;
     width: 100%;
     height: 40px;
     border-radius: 6px;
@@ -75,17 +83,18 @@
     margin-top: 10px;
     margin-bottom: 10px;
     cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease;
     /* margin-left: 7%; */
 }
 
 .signButton:hover{
     transition: 0.2s;
-    background-color: #a07841;
+    background-color: #6d4c41;
     /* margin-left: 7%; */
 }
 
 .signLink{
-    color: #f0d9ba;
+    color: #8d6e63;
     font-size: small;
     display: flex;
     justify-content: center;
@@ -93,6 +102,22 @@
 }
 
 .signLink:hover{
-    color: #f0d9ba;
+    color: #5d4037;
     transition: 0.2s;
+}
+
+
+
+/* Error messages style for consistency */
+.alert.alert-danger {
+    padding: 10px;
+    background-color: #fbe9e7;
+    border: 1px solid #c05746;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    color: #c05746 !important;
+}
+.alert.alert-danger p {
+    margin: 0;
+    font-size: 14px;
 }
