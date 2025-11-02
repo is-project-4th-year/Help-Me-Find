@@ -52,6 +52,9 @@ class HomeController extends Controller
             // Generate AI description
             $description = $this->generateDescriptionWithAI($filepath);
 
+            // Get the currently authenticated user (the finder)
+            $finder = auth()->user();
+
             // Save to JSON
             $data = $this->loadData();
             $nextId = empty($data) ? 1 : (max(array_map('intval', array_keys($data))) + 1);
@@ -59,7 +62,10 @@ class HomeController extends Controller
             $data[$nextId] = [
                 'ImageName' => $newFilename,
                 'Description' => $description,
-                'DateTime' => Carbon::now()->toDateTimeString()
+                'DateTime' => Carbon::now()->toDateTimeString(),
+                'FinderFirstName' => $finder->firstName, // Add finder's first name
+                'FinderLastName' => $finder->lastName,   // Add finder's last name
+                'FinderEmail' => $finder->email,         // Add finder's email
             ];
 
             $this->saveData($data);
