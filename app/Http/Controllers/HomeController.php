@@ -8,6 +8,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use App\Models\FoundItem; // <== NEW: Import the new model
 
 class HomeController extends Controller
 {
@@ -35,6 +36,7 @@ class HomeController extends Controller
     {
         $imageUrl = '';
         $description = '';
+        $now = Carbon::now();
 
         if ($request->isMethod('post')) {
 
@@ -55,17 +57,32 @@ class HomeController extends Controller
             // Get the currently authenticated user (the finder)
             $finder = auth()->user();
 
-            // Save to JSON
+            // Prepare data array for both storage types
+            $dataToSave = [
+                'image_name' => $newFilename,
+                'description' => $description,
+                'finder_first_name' => $finder->firstName,
+                'finder_last_name' => $finder->lastName,
+                'finder_email' => $finder->email,
+                'found_at' => $now->toDateTimeString(),
+            ];
+
+
+            // === 1. Save to MySQL Database using Eloquent ===
+            FoundItem::create($dataToSave);
+
+
+            // === 2. Save to JSON File (keeping the original functionality) ===
             $data = $this->loadData();
             $nextId = empty($data) ? 1 : (max(array_map('intval', array_keys($data))) + 1);
 
             $data[$nextId] = [
                 'ImageName' => $newFilename,
                 'Description' => $description,
-                'DateTime' => Carbon::now()->toDateTimeString(),
-                'FinderFirstName' => $finder->firstName, // Add finder's first name
-                'FinderLastName' => $finder->lastName,   // Add finder's last name
-                'FinderEmail' => $finder->email,         // Add finder's email
+                'DateTime' => $now->toDateTimeString(),
+                'FinderFirstName' => $finder->firstName,
+                'FinderLastName' => $finder->lastName,
+                'FinderEmail' => $finder->email,
             ];
 
             $this->saveData($data);
