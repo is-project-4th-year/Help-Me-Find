@@ -5,6 +5,7 @@
     <title>Help Me Find</title>
 
     @vite(['resources/css/style.css'])
+    @vite(['resources/css/grid.css'])
     @vite(['resources/js/script.js'])
 
     {{-- <script src="http://192.168.100.10:8000/js/script.js"></script> --}}

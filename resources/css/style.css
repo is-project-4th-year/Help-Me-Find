@@ -26,19 +26,32 @@ nav {
     z-index: 1000;
 }
 
-.options {
-    margin: 0px 40px;
+nav .options {
+    margin: 0px 20px;
     padding: 0;
     align-items: center;
 }
 
 nav .logo {
-    margin: 0px 40px;
+    margin: 0px 20px;
     font-size: 20px;
     font-weight: 600;
     letter-spacing: 1px;
     display: flex;
     flex-direction: row;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+}
+
+nav a:hover {
+    cursor: pointer;
+    color: #fbe9e7;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
 nav .menu-btn {
@@ -71,6 +84,35 @@ nav ul li a:hover {
     color: #fbe9e7;
 }
 
+aside ul {
+    list-style: none;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+aside ul li{
+    text-decoration: none;
+}
+
+aside ul li a {
+    color: #fff;
+    /* T R B L*/
+    width: 210px;
+    display: block;
+    padding: 15px 10px 15px 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+aside ul li a:hover {
+    color: #fbe9e7;
+    background-color: #856156;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
 .below-navbar {
     padding-top: 50px;
     height: 100%;
@@ -90,30 +132,6 @@ nav ul li a:hover {
 
 .drawer.open {
     left: 0;
-}
-
-.drawer ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-}
-
-.drawer ul li button:hover{
-    background-color: #8d6e63
-}
-
-.drawer ul li button {
-    transition: 0.3s;
-    cursor: pointer;
-    width: 100%;
-    height: 45px;
-    text-align: left;
-    background: none;
-    border: none;
-    outline: none;
-    text-decoration: none;
-    color: #fdfaf7;
-    font-size: 16px;
 }
 
 .drawer ul li button i{
@@ -183,11 +201,25 @@ nav ul li a:hover {
     margin-top: 10px;
     margin-bottom: 0;
     font-size: 18px;
+    color: #fdfaf7;
 }
 
 .profile-header p {
     font-size: 14px;
     color: #777;
+}
+
+.profile-header button {
+    cursor: pointer;
+    /* width: 100%; */
+    height: 45px;
+    text-align: left;
+    background: none;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    color: #fdfaf7;
+    font-size: 16px;
 }
 
 .close-btn {
