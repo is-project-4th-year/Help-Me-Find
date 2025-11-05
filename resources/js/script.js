@@ -1,25 +1,4 @@
-// Get the popup and buttons
-var profilePopup = document.getElementById('profilePopup');
-var profileDisplay = document.getElementById('profileDisplay');
-
-
-profileDisplay.onclick = function() {
-    // profilePopup.style.display = (profilePopup.style.display === 'block') ? 'none' : 'block';
-    profilePopup.classList.toggle('open');
-}
-
-// Close the popup when the close button is clicked
-closeProfilePopupBtn.onclick = function() {
-    // profilePopup.style.display = 'none'; // Hide the popup
-    profilePopup.classList.toggle('open');
-}
-
-// window.onclick = function(event) {
-//     if (event.target == profilePopup) {
-//         // profilePopup.style.display = 'none';
-//         profilePopup.classList.toggle('open');
-//     }
-// }
+// Note: DOM elements may not exist on every page. Attach handlers after DOMContentLoaded
 
 window.toggleDrawer = function() {
     var drawer = document.getElementById('drawer');
@@ -90,15 +69,36 @@ window.logTab = function() {
 
     document.getElementById('bookDetails').style.display = "none";
     document.getElementById('bookLogs').style.display = "block";
-    
+
     document.getElementById('tab1').style.zIndex = 0;
     document.getElementById('tab2').style.zIndex = 1;
 }
 
 // Check for light mode preference on page load
 document.addEventListener("DOMContentLoaded", function () {
+    // Profile popup handlers (only if elements exist on the page)
+    var profilePopup = document.getElementById('profilePopup');
+    var profileDisplay = document.getElementById('profileDisplay');
+    var closeProfilePopupBtn = document.getElementById('closeProfilePopupBtn');
+
+    if (profileDisplay && profilePopup) {
+        profileDisplay.addEventListener('click', function () {
+            profilePopup.classList.toggle('open');
+        });
+    }
+
+    if (closeProfilePopupBtn && profilePopup) {
+        closeProfilePopupBtn.addEventListener('click', function () {
+            profilePopup.classList.toggle('open');
+        });
+    }
+
+    // Light mode preference
     if (localStorage.getItem("lightMode") === "true") {
         document.body.classList.add("light-mode");
-        document.getElementById("light-mode-btn").innerHTML = `<i class="fa fa-moon-o"></i> Dark Mode`;
+        var lmBtn = document.getElementById("light-mode-btn");
+        if (lmBtn) {
+            lmBtn.innerHTML = `<i class="fa fa-moon-o"></i> Dark Mode`;
+        }
     }
 });
