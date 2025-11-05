@@ -6,6 +6,7 @@
             <a href="/">Help-Me-Find</a>
         </div>
         <ul class="options">
+            {{-- TODO: Create a notification module that shows who is texting you. When pressing the notification, take the user to the chat page.--}}
             <button id="profileDisplay" class="profile-btn">
                 <i class="fa fa-user"></i>
             </button>

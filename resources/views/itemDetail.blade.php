@@ -35,8 +35,24 @@
     @endif
 
     <div style="margin-top: 30px;">
-      <a href="{{ route('lostItems') }}" class="btn btn-secondary">⬅ Back to Lost Items</a>
-      <a href="{{ route('home') }}" class="btn">🏠 Home</a>
+        {{-- Check if item has a FinderId associated before showing chat option --}}
+        @if(isset($item['FinderId']) && $item['FinderId'] != auth()->id())
+            {{-- <a href="{{ route('chat.show', ['item_id' => $id]) }}" class="btn" style="margin-right: 15px;">
+                <i class="fa fa-comment"></i> Chat with Finder
+            </a> --}}
+        @elseif(isset($item['FinderId']) && $item['FinderId'] == auth()->id())
+            <button disabled class="btn btn-secondary" style="margin-right: 15px; cursor: not-allowed;">
+                (You Posted This Item)
+            </button>
+        @else
+            {{-- Fallback if FinderId is missing for an item --}}
+            <button disabled class="btn btn-secondary" style="margin-right: 15px; cursor: not-allowed;">
+                Cannot Contact Finder
+            </button>
+        @endif
+
+        <a href="{{ route('lostItems') }}" class="btn btn-secondary">⬅ Back to Lost Items</a>
+        <a href="{{ route('home') }}" class="btn">🏠 Home</a>
     </div>
   </div>
 
