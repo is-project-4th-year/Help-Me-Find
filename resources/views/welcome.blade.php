@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     @vite(['resources/css/welcome.css'])
+    <link href="{{ asset('build/assets/welcome.css') }}" rel="stylesheet">
 
 </head>
 <body>
@@ -20,7 +21,7 @@
             <a href="{{ route('login') }}" class="btn btn-secondary">Sign In</a> {{-- Converted button to anchor tag --}}
         </div>
         <div class="right image-box">
-            <img src="{{ asset('images/lost-and-found.png') }}" alt="Help Me Find illustration">
+            {{-- <img src="{{ asset('images/lost-and-found.png') }}" alt="Help Me Find illustration"> --}}
         </div>
     </div>
 </body>

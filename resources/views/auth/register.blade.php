@@ -11,6 +11,8 @@
     <link rel="icon" href="{{ asset('images/bookLogo.png') }}" type="image/png">
     {{-- <link rel="stylesheet" href="style.css"/> --}}
     @vite(['resources/css/sign.css'])
+    <link href="{{ asset('build/assets/sign.css') }}" rel="stylesheet">
+
 
     <title>Help Me Find</title>
     <script>
