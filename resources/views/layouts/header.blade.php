@@ -2,11 +2,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Help Me Find</title>
 
     @vite(['resources/css/style.css'])
     @vite(['resources/css/grid.css'])
     @vite(['resources/js/script.js'])
+    @vite(['resources/js/app.js'])
+
 
 
     <link href="{{ asset('build/assets/style.css') }}" rel="stylesheet">

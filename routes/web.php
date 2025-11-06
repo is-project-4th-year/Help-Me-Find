@@ -18,6 +18,8 @@ use App\Http\Controllers\ChatController;
 
 use App\Http\Controllers\HomeController;
 
+use Illuminate\Support\Facades\Broadcast;
+
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
@@ -46,4 +48,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat/item/{item_id}', [ChatController::class, 'showChat'])->name('chat.show');
     Route::get('/chat/{chat}/messages', [ChatController::class, 'getMessages'])->name('chat.messages.get');
     Route::post('/chat/{chat}/send', [ChatController::class, 'sendMessage'])->name('chat.messages.send');
+
+    Broadcast::routes(['middleware' => ['auth']]);
+
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{user}', [ChatController::class, 'withUser'])->name('chat.with');
+    Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+
 });

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('image_name');
             $table->text('description')->nullable();
             $table->string('finder_first_name');
-            $table->string('finder_last_name');
+            $table->string('finder_lastName');
             $table->string('finder_email');
             $table->timestamp('found_at')->nullable();
             $table->timestamps();
