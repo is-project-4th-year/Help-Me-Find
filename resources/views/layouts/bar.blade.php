@@ -20,6 +20,7 @@
 
             <li><a href="{{ route('found') }}">Report Found</a></li>
             <li><a href="{{ route('lostItems') }}">Lost Items</a></li>
+            <li><a href="{{ route('chat.index') }}">Chats</a></li>
 
             {{-- <li>
                 <button id="light-mode-btn" onclick="toggleLightMode()">

@@ -13,7 +13,7 @@ class ChatController extends Controller
     {
         // list all users except current user
         $users = User::where('id', '!=', Auth::id())->get(['id','firstName','lastName','email']);
-        return view('chat.index', compact('users'));
+        return view('chat.ChatList', compact('users'));
     }
 
     public function withUser(User $user)
