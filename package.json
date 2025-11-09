@@ -6,12 +6,15 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "autoprefixer": "^10.4.21",
         "axios": "^1.13.2",
         "laravel-vite-plugin": "^1.0",
+        "tailwindcss": "^4.1.17",
         "vite": "^5.0"
     },
     "dependencies": {
         "@google/genai": "^1.27.0",
+        "@tailwindcss/vite": "^4.1.17",
         "laravel-echo": "^2.2.6",
         "pusher-js": "^8.4.0"
     }

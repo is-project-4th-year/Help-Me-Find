@@ -1,3 +1,40 @@
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
+/* Import Tailwind's layers */
+@import "tailwindcss";
+
+/* Ported CSS variables from your 'Help-Me-Find Web Application/src/styles/globals.css'
+  This sets up the entire color palette and design system for Tailwind.
+*/
+@layer base {
+  :root {
+    --background: #F5F1EC;
+    --foreground: #3E2723;
+    --card: #FFFFFF;
+    --card-foreground: #3E2723;
+    --popover: #FFFFFF;
+    --popover-foreground: #3E2723;
+    --primary: #6D4C41;
+    --primary-foreground: #FFFFFF;
+    --secondary: #D7CCC8;
+    --secondary-foreground: #3E2723;
+    --muted: #EFEBE9;
+    --muted-foreground: #795548;
+    --accent: #BCAAA4;
+    --accent-foreground: #3E2723;
+    --destructive: #d4183d;
+    --destructive-foreground: #ffffff;
+    --border: rgba(109, 76, 65, 0.15);
+    --input: transparent; /* Note: 'input' in tailwind.config.js maps to --input-background */
+    --input-background: #FFFFFF;
+    --ring: #6D4C41;
+    --radius: 0.625rem;
+  }
+
+  /* You can also add your .dark variables here,
+    but that requires a bit more setup with your Blade templates to toggle the 'dark' class on the <html> element.
+    For now, we will focus on the light mode.
+  */
+
+  body {
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+}

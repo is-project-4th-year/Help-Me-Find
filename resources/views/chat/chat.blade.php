@@ -1,96 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-@include('layouts.header')
+@extends('layouts.app')
 
-    <body>
-    @include('layouts.bar')
-
-        <div class="container mx-auto p-4">
-        <div class="grid grid-cols-4 gap-4">
-            <div class="col-span-1 bg-white p-4 rounded shadow">
-            <h3 class="font-bold mb-2">Chatting with</h3>
-            <p>{{ $other->firstName }} {{ $other->lastName }}</p>
+@section('content')
+    <!--
+      This layout uses flex-col and a fixed height to make the chat area scrollable
+      while the header and footer are sticky.
+      h-[calc(100vh-10rem)] = 100% viewport height - 4rem (navbar) - 6rem (padding)
+    -->
+    <div class="flex flex-col h-[calc(100vh-10rem)] bg-card rounded-lg shadow-md border border-border">
+        <!-- Chat Header -->
+        <div class="p-4 border-b border-border flex items-center space-x-3">
+            <!-- Placeholder Avatar -->
+            <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                <span class="text-lg font-medium text-secondary-foreground">
+                    {{ $chat->otherUser->name[0] }}
+                </span>
             </div>
+            <div>
+                <h3 class="text-base font-semibold text-foreground">{{ $chat->otherUser->name }}</h3>
+                <!-- Add online/offline status here if available -->
+            </div>
+        </div>
 
-            <div class="col-span-3 bg-white p-4 rounded shadow flex flex-col h-[70vh]">
-            <div id="messages" class="flex-1 overflow-auto mb-4 p-3" style="background:#f9fafb;">
-                @foreach($messages as $m)
-                <div class="mb-2">
-                    <strong>{{ $m->sender_id == auth()->id() ? 'You' : $other->firstName }}</strong>:
-                    <span>{{ $m->body }}</span>
-                    <div><small class="text-gray-400">{{ $m->created_at }}</small></div>
+        <!-- Chat Messages -->
+        <div id="chat-box" class="flex-1 overflow-y-auto p-6 space-y-4">
+            @foreach ($messages as $message)
+                <div class="flex {{ $message->user_id == auth()->id() ? 'justify-end' : 'justify-start' }}">
+                    <div class_name_to_replace="p-3 rounded-lg max-w-md {{ $message->user_id == auth()->id() ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground' }}">
+                        <p class="text-sm">{{ $message->message }}</p>
+                        <span class="text-xs opacity-70 block text-right mt-1">
+                            {{ $message->created_at->format('h:i A') }}
+                        </span>
+                    </div>
                 </div>
-                @endforeach
-            </div>
+            @endforeach
+        </div>
 
-            <form id="message-form" class="flex" onsubmit="return false;">
+        <!-- Message Input Form -->
+        <div class="p-4 border-t border-border bg-background rounded-b-lg">
+            <form id="message-form" action="{{ route('chat.send', $chat->id) }}" method="POST" class="flex space-x-3">
                 @csrf
-                <input type="hidden" id="receiver_id" value="{{ $other->id }}">
-                <input type="hidden" id="chatId" value="{{ $chatId }}">
-                <input id="body" class="flex-1 border rounded p-2 mr-2" placeholder="Type a message..." autocomplete="off" />
-                <button id="sendBtn" class="btn btn-primary p-2 rounded">Send</button>
+                <input type="hidden" name="chat_id" value="{{ $chat->id }}">
+                <input
+                    type="text"
+                    id="message-input"
+                    name="message"
+                    placeholder="Type a message..."
+                    autocomplete="off"
+                    class="flex h-9 w-full rounded-md border border-border bg-input px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                >
+                <button type_name_to_replace="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2">
+                    Send
+                </button>
             </form>
-            </div>
         </div>
-        </div>
+    </div>
+@endsection
 
-        <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        const userId = {{ auth()->id() }};
-        const receiverId = document.getElementById('receiver_id').value;
-        const chatId = document.getElementById('chatId').value;
-        const messagesDiv = document.getElementById('messages');
-        const bodyInput = document.getElementById('body');
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatBox = document.getElementById('chat-box');
+        // Scroll to the bottom
+        chatBox.scrollTop = chatBox.scrollHeight;
 
-        function appendMessage(data, me=false){
-            const el = document.createElement('div');
-            el.classList.add('mb-2');
-            el.innerHTML = `<strong>${me ? 'You' : (data.sender.firstName || 'Other')}</strong>: ${data.body} <div><small class="text-gray-400">${data.created_at}</small></div>`;
-            messagesDiv.appendChild(el);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        const form = document.getElementById('message-form');
+        const input = document.getElementById('message-input');
+
+        // Pusher/Echo integration
+        if (typeof Echo !== 'undefined') {
+            Echo.private('chat.{{ $chat->id }}')
+                .listen('MessageSent', (e) => {
+                    const messageEl = document.createElement('div');
+                    const isAuthUser = e.message.user_id == {{ auth()->id() }};
+
+                    messageEl.classList.add('flex', isAuthUser ? 'justify-end' : 'justify-start');
+
+                    const innerHtml = `
+                        <div class="p-3 rounded-lg max-w-md ${isAuthUser ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'}">
+                            <p class="text-sm">${e.message.message}</p>
+                            <span class="text-xs opacity-70 block text-right mt-1">
+                                ${new Date(e.message.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        </div>
+                    `;
+                    messageEl.innerHTML = innerHtml;
+
+                    chatBox.appendChild(messageEl);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                });
         }
 
-        // Send message
-        document.getElementById('sendBtn').addEventListener('click', async () => {
-            const body = bodyInput.value.trim();
-            if(!body) return;
-            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        // Prevent page reload on form submit
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
 
-            try {
-            const res = await axios.post("{{ route('chat.send') }}", {
-                receiver_id: receiverId,
-                body: body,
-                chatId: chatId
-            }, {
-                headers: {'X-CSRF-TOKEN': token}
-            });
-
-            appendMessage({
-                sender: {firstName: 'You'},
-                body: body,
-                created_at: res.data.message.created_at
-            }, true);
-
-            bodyInput.value = '';
-            } catch (err) {
-            console.error(err);
-            alert('Message failed to send');
-            }
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    input.value = ''; // Clear input
+                } else {
+                    // Handle error (e.g., show a small error message)
+                    console.error('Failed to send message');
+                }
+            })
+            .catch(error => console.error('Error:', error));
         });
-
-        // Setup Echo to listen for incoming messages for this chat
-        // Echo is available via resources/js/bootstrap.js compiled into app.js
-        window.Echo.private('chat.' + chatId)
-            .listen('MessageSent', (e) => {
-            // don't duplicate if this is our own message (you can check sender id)
-            if(e.sender_id === userId) return;
-            appendMessage({
-                sender: e.sender,
-                body: e.body,
-                created_at: e.created_at
-            }, false);
-            });
-        });
-        </script>
-    </body>
-</html>
+    });
+</script>
+@endpush

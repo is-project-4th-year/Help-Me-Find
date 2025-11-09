@@ -1,50 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-@include('layouts.header')
+@extends('layouts.app')
 
-<body>
-  @include('layouts.bar')
-
-  <div class="container">
-    <h1>Report a Found Item</h1>
-    <p style="font-size: 16px; color: #5d4037; max-width: 600px; margin: 0 auto 25px;">
-      Upload a photo of the found item below. The system will automatically analyze and describe it using AI recognition.
-    </p>
-
-    <form method="POST" enctype="multipart/form-data">
-      @csrf
-      <input type="file" name="file" required>
-      <br>
-      <button type="submit" class="btn">Upload Item</button>
-    </form>
-
-    @if(!empty($imageUrl) || !empty($description))
-    <div class="result">
-      <h3>Upload Successful</h3>
-
-      @if(!empty($description))
-        <h4 style="margin-top: 20px;">AI-Generated Description</h4>
-        <p class="description-text" style="font-size: 16px; line-height: 1.5;">{{ $description }}</p>
-      @endif
-
-      @if(!empty($imageUrl))
-        <div class="uploaded-image">
-          <h4>Uploaded Image:</h4>
-          <img src="{{ $imageUrl }}" alt="Uploaded Image" width="300">
-        </div>
-      @endif
+@section('content')
+    <!-- Page Header -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-foreground">Found Items</h2>
+        <a href="{{ route('report') }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2">
+            Report a Found Item
+        </a>
     </div>
-    @endif
 
-    <div style="margin-top: 30px;">
-      <a href="{{ route('lostItems') }}" class="btn btn-secondary">View Lost Items</a>
-      <a href="{{ route('home') }}" class="btn">🏠 Home</a>
+    <!-- Item Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {{--
+          Note: I am assuming the variable passed to this view is $foundItems.
+          If it's different (e.g., $items), you'll need to update the variable name below.
+        --}}
+        @forelse ($foundItems as $item)
+            <div class="bg-card rounded-lg shadow-md overflow-hidden border border-border">
+                <!-- Item Image -->
+                <img src="{{ $item->image_url ? asset('storage/' . $item->image_url) : asset('images/lost-and-found.png') }}"
+                     alt="{{ $item->item_name }}"
+                     class="w-full h-48 object-cover">
+
+                <!-- Card Content -->
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-card-foreground mb-1">{{ $item->item_name }}</h3>
+                    <p class="text-sm text-muted-foreground mb-3 truncate">
+                        {{ $item->description }}
+                    </p>
+                    <a href="{{ route('item.detail', $item->id) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 px-4 py-2 w-full">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        @empty
+            <div class="col-span-full text-center py-12">
+                <p class="text-muted-foreground">No found items have been reported yet.</p>
+            </div>
+        @endforelse
     </div>
-  </div>
 
-  <footer>
-    &copy; {{ now()->year }} Help-Me-Find | Designed with ❤ by Bethelhem
-  </footer>
-
-</body>
-</html>
+    <!-- Pagination Links -->
+    <div class="mt-8">
+        {{-- This assumes pagination is being used on the $foundItems collection --}}
+        @if ($foundItems instanceof \Illuminate\Pagination\LengthAwarePaginator)
+            {{ $foundItems->links() }}
+        @endif
+    </div>
+@endsection

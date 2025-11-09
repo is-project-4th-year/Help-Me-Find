@@ -56,3 +56,41 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
 
 });
+
+
+
+// // Authentication Routes
+// Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+// Route::post('/login', [LoginController::class, 'login']);
+
+// // Point 'GET /register' to the login form, which now includes the register tab
+// Route::get('/register', [LoginController::class, 'showLoginForm'])->name('register');
+// // The POST route for registration remains the same, pointing to the RegisterController
+// Route::post('/register', [RegisterController::class, 'register']);
+
+// Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+
+
+// // Routes protected by authentication
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+//     // Lost Item Routes
+//     Route::get('/lost-items', [LostItemController::class, 'index'])->name('lost-items');
+//     Route::get('/lost-items/{id}', [LostItemController::class, 'show'])->name('item.detail');
+
+//     // Finder Report Routes
+//     Route::get('/report', [FinderReportController::class, 'create'])->name('report');
+//     Route::post('/report', [FinderReportController::class, 'store'])->name('report.store');
+
+//     // Chat Routes
+//     Route::get('/chat', [ChatController::class, 'index'])->name('chat.list');
+//     Route::get('/chat/{chatId}', [ChatController::class, 'show'])->name('chat.show');
+//     Route::post('/chat/{chatId}/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+
+//     // Route to start a chat with a user (e.g., from an item page)
+//     Route::get('/chat/with/{userId}', [ChatController::class, 'startChat'])->name('chat.start');
+// });
+
+// // Welcome/Landing Page
+// Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
