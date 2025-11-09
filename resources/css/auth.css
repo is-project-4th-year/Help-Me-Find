@@ -1,0 +1,156 @@
+/* resources/css/auth.css */
+
+/* Import the shared color palette */
+@import url("app.css");
+
+/* General Body Styles */
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: sans-serif;
+    margin: 0;
+    font-size: var(--font-size);
+}
+
+/* Auth Page Container */
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
+    background-image: linear-gradient(to bottom, rgba(109, 76, 65, 0.05), var(--background));
+}
+
+/* Auth Card */
+.auth-card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    width: 100%;
+    max-width: 450px; /* max-w-md */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Card Header */
+.auth-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.auth-title {
+    font-size: 1.875rem; /* 30px */
+    font-weight: 600;
+    color: var(--foreground);
+    letter-spacing: -0.025em;
+}
+
+.auth-description {
+    font-size: 1rem; /* 16px */
+    color: var(--muted-foreground);
+    margin-top: 0.5rem;
+}
+
+/* Form Styling */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* space-y-4 */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* space-y-2 */
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--foreground);
+}
+
+.form-input {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--input-background);
+    color: var(--foreground);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--ring);
+}
+
+/* Button (Adapted from welcome.css) */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-full {
+    width: 100%;
+    margin-top: 0.5rem; /* Add some space above the button */
+}
+
+/* Auth Footer (for login/register links) */
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+}
+
+.auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Error Message Styling */
+.form-error {
+    color: var(--destructive);
+    font-size: 0.875rem;
+}
+
+/* This is the new error block style */
+.alert-danger {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--destructive);
+    background-color: rgba(212, 24, 61, 0.05);
+    border-radius: var(--radius);
+    color: var(--destructive);
+}
+.alert-danger p {
+    margin: 0;
+    font-size: 0.875rem;
+}
