@@ -36,7 +36,7 @@ nav .options {
 
 nav .logo {
     margin: 0px 20px;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
     letter-spacing: 1px;
     display: flex;
@@ -50,10 +50,9 @@ nav a {
 
 nav a:hover {
     cursor: pointer;
-    color: var(--secondary); /* Lighter color for hover */
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
+    color: var(--muted-foreground); /* Lighter color for hover */
+    /* font-size: 23px; */
+    transition: 0.3s ease;
 }
 
 nav .menu-btn {

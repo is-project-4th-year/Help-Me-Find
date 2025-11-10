@@ -20,11 +20,11 @@
             <li><a href="{{ route('chat.index') }}">Chats</a></li>
 
             {{-- This block has been uncommented and updated --}}
-            <li>
+            {{-- <li>
                 <button id="light-mode-btn" onclick="toggleLightMode()">
                     <i class="fa fa-sun-o"></i> Light Mode
                 </button>
-            </li>
+            </li> --}}
 
         </ul>
     </aside>

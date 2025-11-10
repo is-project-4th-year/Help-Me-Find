@@ -1,0 +1,226 @@
+/* Color Palette */
+@import url("app.css");
+
+/* General Body Styles */
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: sans-serif;
+    font-size: var(--font-size);
+    margin: 0;
+}
+
+/* Layout */
+.container {
+    max-width: 900px; /* Max-w-3xl from figma */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem 1rem 4rem 1rem; /* Added bottom padding */
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+/* Utility */
+.space-y-2 > * + * { margin-top: 0.5rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-y-6 > * + * { margin-top: 1.5rem; }
+.w-full { width: 100%; }
+
+/* Page Header */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    font-size: 2.25rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--foreground);
+}
+
+.page-header p {
+    font-size: 1.125rem;
+    color: var(--muted-foreground);
+    margin-top: 0.5rem;
+}
+
+/* Card Styles (Inspired by welcome.css) */
+.card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card-description {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-top: 0.25rem;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--card-foreground);
+}
+
+.form-input,
+.form-textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--border);
+    background-color: var(--input-background);
+    border-radius: var(--radius-md); /* Slightly smaller radius for inputs */
+    padding: 0.75rem 1rem;
+    color: var(--foreground);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Input with Icon */
+.input-icon-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted-foreground);
+    pointer-events: none;
+}
+
+.form-input.has-icon {
+    padding-left: 3rem;
+}
+
+/* Buttons (from welcome.css) */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s, opacity 0.3s;
+    border: 1px solid transparent; /* Added for outline */
+    cursor: pointer;
+}
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+.btn-primary:hover {
+    opacity: 0.9;
+}
+.btn-outline {
+    border-color: var(--border);
+    color: var(--foreground);
+    background-color: var(--card);
+}
+.btn-outline:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+}
+
+.btn .icon {
+    margin-right: 0.5rem; /* Icon before text */
+}
+
+/* Upload Zone */
+.upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background-color: var(--background);
+}
+
+.upload-zone .upload-icon {
+    font-size: 3rem;
+    color: var(--muted-foreground);
+    margin-bottom: 1rem;
+}
+
+.upload-zone .upload-label {
+    color: var(--primary);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.upload-zone .upload-label:hover {
+    text-decoration: underline;
+}
+
+.upload-input {
+    display: none;
+}
+
+/* Image Preview */
+.image-preview-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: var(--muted);
+    margin-bottom: 1rem;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* AI Description Box */
+.ai-description-box {
+    background-color: var(--muted);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    color: var(--muted-foreground);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
