@@ -1,6 +1,4 @@
-
-    <!-- Navbar -->
-    <nav>
+<nav>
         <div class="logo">
             <button class="menu-btn" id="menu-btn" onclick="toggleDrawer()"><i class="fa fa-navicon"></i></button>
             <a href="/">Help-Me-Find</a>
@@ -13,7 +11,6 @@
         </ul>
     </nav>
 
-    <!-- Sidebar Drawer -->
     <aside class="drawer" id="drawer">
         <ul class="options">
             <hr style="border: 0.5px solid rgba(167, 124, 67, 0.2); width: 90%; margin: 10px;">
@@ -22,11 +19,12 @@
             <li><a href="{{ route('lostItems') }}">Lost Items</a></li>
             <li><a href="{{ route('chat.index') }}">Chats</a></li>
 
-            {{-- <li>
+            {{-- This block has been uncommented and updated --}}
+            <li>
                 <button id="light-mode-btn" onclick="toggleLightMode()">
-                    <i class="fa fa-moon-o"></i> Light Mode
+                    <i class="fa fa-sun-o"></i> Light Mode
                 </button>
-            </li> --}}
+            </li>
 
         </ul>
     </aside>
@@ -38,7 +36,7 @@
             <div class="profile-header">
 
                 <img src="{{ asset('images/profile.png') }}" alt="Profile Picture" class="profile-img">
-                <h3>{{ auth()->user()->firstName }}</h3>
+                <h3>{{ auth()->user()->firstName }} {{ auth()->user()->lastName }}</h3>
                 {{-- <p>{{ '@'.auth()->user()->username }}</p> --}}
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf

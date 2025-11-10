@@ -5,7 +5,7 @@
 <body>
   @include('layouts.bar')
 
-  <div class_alias="container" style="max-width: 1280px; background: none; box-shadow: none; border-radius: 0; text-align: left; padding-bottom: 0;">
+  <div class="container" style="max-width: 1280px; background: none; box-shadow: none; border-radius: 0; text-align: left; padding-bottom: 0;">
     <div class="space-y-6">
 
         <div class="text-center space-y-2" style="margin-bottom: 2.5rem;">

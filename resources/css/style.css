@@ -115,6 +115,31 @@ aside ul li a:hover {
     cursor: pointer;
 }
 
+/* ===== NEW STYLES FOR SIDEBAR BUTTON ===== */
+aside ul li button {
+    color: var(--card-foreground);
+    background-color: transparent;
+    border: none;
+    width: 210px;
+    display: block;
+    padding: 15px 10px 15px 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    font-size: 16px; /* Ensure consistent font size */
+    text-align: left; /* Align text like the 'a' tags */
+    font-family: inherit; /* Use the body's font */
+}
+
+aside ul li button:hover {
+    color: var(--card-foreground);
+    background-color: var(--muted); /* Use a related theme color for hover */
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+/* ===== END NEW STYLES ===== */
+
+
 .below-navbar {
     padding-top: 50px;
     height: 100%;
@@ -169,14 +194,14 @@ aside ul li a:hover {
     top: -400px;
     right: 0;
     width: 230px;
-    height: 400px;
+    height: 300px;
     background-color: var(--card);
     border: 1px solid var(--card-foreground);
     border-right: transparent;
     border-top: transparent;
     border-radius: 0 0 0 7px;
     padding: 30px 0 0 0;
-    box-shadow: 0 4px 6px -1px #000000, 0 2px 4px -2px #000000;
+    box-shadow: 0 4px 6px -1px #00000050, 0 2px 4px -2px #00000050;
     transition: top 0.3s;
     z-index: 500;
 }
@@ -232,9 +257,11 @@ aside ul li a:hover {
 
 /* ===== Container ===== */
 .container {
-    max-width: 1000px;
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;    /* Centers vertically */
     margin: 40px auto;
-    padding: 30px;
+    padding-bottom: 20px;
 }
 
 /* ===== Headings ===== */
@@ -531,6 +558,7 @@ footer {
 .qr-image-wrapper {
     display: flex;
     justify-content: center;
+    padding-bottom: 15px;
 }
 
 .qr-code-inner-box {
@@ -542,8 +570,8 @@ footer {
 }
 
 .qr-code-inner-box svg {
-    width: 256px; /* w-64 */
-    height: 256px; /* h-64 */
+    width: 225px; /* w-64 */
+    height: 225px; /* h-64 */
     display: block;
 }
 
@@ -598,6 +626,8 @@ footer {
     grid-template-columns: 1fr; /* 1 column on mobile (default) */
     gap: 1.5rem; /* 24px */
     align-items: start; /* Align cards to the top of their grid cell */
+    margin-bottom: 20px;
+
 }
 
 /* Tablet-sized and up */
