@@ -10,7 +10,7 @@ class FoundItem extends Model
     use HasFactory;
 
     // Define the table name explicitly
-    protected $table = 'found_items';
+    protected $table = 'items';
 
     // Define the fields that can be mass assigned
     protected $fillable = [
@@ -19,6 +19,10 @@ class FoundItem extends Model
         'finder_first_name',
         'finder_last_name',
         'finder_email',
-        'found_at',
+        'owner_first_name',
+        'owner_last_name',
+        'owner_email',
+        'found_date',
+        'found_location',
     ];
 }
