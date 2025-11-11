@@ -62,15 +62,15 @@
                     </div>
                     <div class="card-content space-y-4">
                         <div class="step-item">
-                            <div class="step-number"><i class="fa fa-print"></i></div>
+                            <div class="step-number"><i class="fa fa-print" style="margin: 0;"></i></div>
                             <p>Print and attach your QR code to valuables.</p>
                         </div>
                         <div class="step-item">
-                            <div class="step-number"><i class="fa fa-mobile"></i></div>
+                            <div class="step-number"><i class="fa fa-mobile" style="margin: 0;"></i></div>
                             <p>If found, someone scans the code to get your report link.</p>
                         </div>
                         <div class="step-item">
-                            <div class="step-number"><i class="fa fa-comments-o"></i></div>
+                            <div class="step-number"><i class="fa fa-comments-o" style="margin: 0;"></i></div>
                             <p>They can message you via the app to arrange a return.</p>
                         </div>
                     </div>
