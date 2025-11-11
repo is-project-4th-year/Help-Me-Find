@@ -10,7 +10,8 @@ export default defineConfig({
                 'resources/css/style.css',
                 'resources/css/welcome.css',
                 'resources/js/app.js',
-                'resources/js/script.js'
+                'resources/js/script.js',
+                'resources/js/chat.js'
             ],
             refresh: true,
         }),
