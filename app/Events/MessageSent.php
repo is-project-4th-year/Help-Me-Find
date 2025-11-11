@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Events;
 
 use App\Models\Message;
@@ -26,18 +27,37 @@ class MessageSent implements ShouldBroadcast
         return new PrivateChannel('chat.' . $this->chatId);
     }
 
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    // This MUST be wrapped in a 'message' key to match chat.js
     public function broadcastWith()
     {
         return [
-            'id' => $this->message->id,
-            'sender_id' => $this->message->sender_id,
-            'receiver_id' => $this->message->receiver_id,
-            'body' => $this->message->body,
-            'created_at' => $this->message->created_at->toDateTimeString(),
-            'sender' => [
-                'id' => $this->message->sender->id,
-                'firstName' => $this->message->sender->firstName ?? $this->message->sender->name,
-            ],
+            'message' => [
+                'id' => $this->message->id,
+                'sender_id' => $this->message->sender_id,
+                'receiver_id' => $this->message->receiver_id,
+                'body' => $this->message->body,
+                'created_at' => $this->message->created_at->toDateTimeString(),
+                'sender' => [
+                    'id' => $this->message->sender->id,
+                    'firstName' => $this->message->sender->firstName ?? $this->message->sender->name,
+                ],
+            ]
         ];
+    }
+
+    /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    // This MUST be 'MessageSent' to match chat.js
+    public function broadcastAs()
+    {
+        return 'MessageSent';
     }
 }

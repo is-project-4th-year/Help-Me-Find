@@ -1,113 +1,3 @@
-// // Wait for the DOM to be fully loaded
-// document.addEventListener('DOMContentLoaded', function () {
-//     // Find the message form, which now holds our data
-//     const messageForm = document.getElementById('message-form');
-//     if (!messageForm) {
-//         return; // Exit if the form isn't on the page
-//     }
-
-//     // Read data from the form's data-* attributes
-//     const userId = parseInt(messageForm.dataset.userId, 10);
-//     const chatId = messageForm.dataset.chatId;
-//     const sendRoute = messageForm.dataset.sendRoute;
-
-//     // Get other elements
-//     const receiverId = document.getElementById('receiver_id').value;
-//     const messagesDiv = document.getElementById('messages');
-//     const bodyInput = document.getElementById('body');
-//     const sendBtn = document.getElementById('sendBtn');
-//     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-//     // Scroll to the bottom of the messages
-//     if (messagesDiv) {
-//         messagesDiv.scrollTop = messagesDiv.scrollHeight;
-//     }
-
-//     /**
-//      * Appends a message to the chat window.
-//      * @param {object} data - The message data.
-//      * @param {boolean} [me=false] - True if the message is from the current user.
-//      */
-//     function appendMessage(data, me = false) {
-//         if (!messagesDiv) return;
-
-//         const el = document.createElement('div');
-//         el.classList.add('mb-2');
-
-//         // Use data.sender.firstName if it exists, otherwise default to 'Other'
-//         const senderName = me ? 'You' : (data.sender?.firstName || 'Other');
-
-//         el.innerHTML = `<strong>${senderName}</strong>: ${data.body} <div><small class="text-gray-400">${data.created_at}</small></div>`;
-//         messagesDiv.appendChild(el);
-//         messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to new message
-//     }
-
-//     /**
-//      * Handles sending a message.
-//      */
-//     async function sendMessage() {
-//         const body = bodyInput.value.trim();
-//         if (!body) return;
-
-//         try {
-//             const res = await axios.post(sendRoute, {
-//                 receiver_id: receiverId,
-//                 body: body,
-//                 chatId: chatId
-//             }, {
-//                 headers: {'X-CSRF-TOKEN': csrfToken}
-//             });
-
-//             // Append our own message immediately
-//             appendMessage({
-//                 sender: {firstName: 'You'}, // We know this is 'You'
-//                 body: body,
-//                 created_at: res.data.message.created_at
-//             }, true);
-
-//             bodyInput.value = ''; // Clear input
-//         } catch (err) {
-//             console.error('Message failed to send:', err);
-//             alert('Message failed to send. Please try again.');
-//         }
-//     }
-
-//     // --- Event Listeners ---
-
-//     // Send message on button click
-//     if (sendBtn) {
-//         sendBtn.addEventListener('click', sendMessage);
-//     }
-
-//     // Send message on Enter key press in the input field
-//     if (bodyInput) {
-//         bodyInput.addEventListener('keypress', function (e) {
-//             if (e.key === 'Enter') {
-//                 e.preventDefault(); // Prevent default form submission
-//                 sendMessage();
-//             }
-//         });
-//     }
-
-//     // Setup Echo to listen for incoming messages
-//     // Echo is available via resources/js/bootstrap.js which is imported by app.js
-//     if (window.Echo) {
-//         window.Echo.private('chat.' + chatId)
-//             .listen('MessageSent', (e) => {
-//                 // Don't duplicate our own messages
-//                 if (e.sender_id === userId) return;
-
-//                 appendMessage({
-//                     sender: e.sender,
-//                     body: e.body,
-//                     created_at: e.created_at
-//                 }, false);
-//             });
-//     } else {
-//         console.error('Laravel Echo not found. Real-time messages will not work.');
-//     }
-// });
-
 document.addEventListener('DOMContentLoaded', () => {
     const messageForm = document.getElementById('message-form');
     if (!messageForm) {
@@ -132,34 +22,73 @@ document.addEventListener('DOMContentLoaded', () => {
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
+    /**
+     * Reusable function to append a message to the chat window.
+     * @param {object} message - The message object (from axios or echo)
+     * @param {boolean} isMe - True if this is the authenticated user
+     */
+    const appendMessage = (message, isMe) => {
+        // Create new message elements based on the new structure
+        const bubbleEl = document.createElement('div');
+        bubbleEl.className = `message-bubble ${isMe ? 'sender-me' : 'sender-other'}`;
+
+        const contentEl = document.createElement('div');
+        contentEl.className = `message-content ${isMe ? 'sender-me' : 'sender-other'}`;
+
+        const textEl = document.createElement('p');
+        textEl.textContent = message.body;
+
+        const timeEl = document.createElement('p');
+        timeEl.className = `message-timestamp ${isMe ? 'sender-me' : 'sender-other'}`;
+
+        // Format timestamp (e.g., 10:30 AM)
+        const messageDate = new Date(message.created_at);
+        timeEl.textContent = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // Assemble the message
+        contentEl.appendChild(textEl);
+        contentEl.appendChild(timeEl);
+        bubbleEl.appendChild(contentEl);
+
+        // Add to container and scroll
+        messagesEl.appendChild(bubbleEl);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+    };
+
+
     const handleSend = () => {
-        if (messageBody.value.trim() === '') {
+        const body = messageBody.value.trim();
+        if (body === '') {
             return;
         }
+
+        const messageText = body;
+        messageBody.value = '';
+
+        console.log('Sending message via Axios...');
 
         axios.post(sendUrl, {
             _token: csrfToken,
             receiver_id: receiverId,
-            body: messageBody.value,
+            body: messageText,
             chatId: chatId,
         })
         .then(response => {
-            console.log('Message sent');
+            console.log('Axios success. Appending own message:', response.data.message);
+            // On success, immediately append our own message.
+            appendMessage(response.data.message, true);
         })
         .catch(error => {
             console.error('Error sending message:', error);
+            messageBody.value = messageText;
+            alert('Error sending message.');
         });
-
-        messageBody.value = '';
     };
 
     // Handle form submit
-    messageForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        handleSend();
-    });
+    messageForm.addEventListener('submit', (e) => e.preventDefault());
 
-    // Handle button click
+    // Handle button click (it's type="button" so it won't submit form)
     sendBtn.addEventListener('click', handleSend);
 
     // Handle 'Enter' key press
@@ -172,35 +101,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Listen for messages
     if (typeof Echo !== 'undefined' && chatId) {
+        console.log(`Echo: Subscribing to private channel: chat.${chatId}`);
+
         Echo.private('chat.' + chatId)
             .listen('MessageSent', (e) => {
-                const isMe = e.message.sender_id == authId; // Use authId from data attribute
+                // This is the most important log!
+                console.log('Echo: Received "MessageSent" event:', e);
 
-                // Create new message elements based on the new structure
-                const bubbleEl = document.createElement('div');
-                bubbleEl.className = `message-bubble ${isMe ? 'sender-me' : 'sender-other'}`;
+                const isMe = e.message.sender_id == authId;
+                console.log(`Echo: Message sender_id is ${e.message.sender_id}, my authId is ${authId}. Is this me? ${isMe}`);
 
-                const contentEl = document.createElement('div');
-                contentEl.className = `message-content ${isMe ? 'sender-me' : 'sender-other'}`;
-
-                const textEl = document.createElement('p');
-                textEl.textContent = e.message.body;
-
-                const timeEl = document.createElement('p');
-                timeEl.className = `message-timestamp ${isMe ? 'sender-me' : 'sender-other'}`;
-
-                // Format timestamp (e.g., 10:30 AM)
-                const messageDate = new Date(e.message.created_at);
-                timeEl.textContent = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                // Assemble the message
-                contentEl.appendChild(textEl);
-                contentEl.appendChild(timeEl);
-                bubbleEl.appendChild(contentEl);
-
-                // Add to container and scroll
-                messagesEl.appendChild(bubbleEl);
-                messagesEl.scrollTop = messagesEl.scrollHeight;
+                if (!isMe) {
+                    console.log('Echo: Appending message from other user.');
+                    appendMessage(e.message, false);
+                } else {
+                    console.log('Echo: Ignoring my own message (already appended by Axios).');
+                }
+            })
+            // ADDED: Listen for subscription success
+            .listenToAll((eventName, data) => {
+                if (eventName.includes('subscription_succeeded')) {
+                    console.log(`Echo: Successfully subscribed to channel: chat.${chatId}`);
+                }
+                if (eventName.includes('subscription_error')) {
+                    console.error(`Echo: FAILED to subscribe to channel: chat.${chatId}`, data);
+                }
             });
+
+    } else {
+        console.error('Echo or chatId not found. Real-time messages will not work.');
     }
 });
