@@ -6,7 +6,8 @@
   @include('layouts.bar')
 
   <div class="container">
-    <h2>Item Details</h2>
+    {{-- UPDATED --}}
+    <h2><i class="fa fa-info-circle"></i> Item Details</h2>
 
     <div class="uploaded-image" style="margin-top: 20px;">
       <img
@@ -17,17 +18,21 @@
     </div>
 
     <div class="result" style="margin-top: 25px;">
-      <p><strong>Item Type:</strong> {{ $item['ItemType'] ?? 'Unspecified' }}</p>
-      <p><strong>Date & Time Found:</strong> {{ $item['DateTime'] ?? 'Unknown' }}</p>
+      {{-- UPDATED --}}
+      <p><i class="fa fa-tag fa-fw"></i> <strong>Item Type:</strong> {{ $item['ItemType'] ?? 'Unspecified' }}</p>
+      {{-- UPDATED --}}
+      <p><i class="fa fa-calendar fa-fw"></i> <strong>Date & Time Found:</strong> {{ $item['DateTime'] ?? 'Unknown' }}</p>
 
       @if(!empty($item['Location']))
-        <p><strong>Found Location:</strong> {{ $item['Location'] }}</p>
+        {{-- UPDATED --}}
+        <p><i class="fa fa-map-marker fa-fw"></i> <strong>Found Location:</strong> {{ $item['Location'] }}</p>
       @endif
     </div>
 
     @if(!empty($item['Description']))
     <div class="result" style="margin-top: 25px;">
-      <h3>AI-Generated Description</h3>
+      {{-- UPDATED --}}
+      <h3><i class="fa fa-commenting-o"></i> AI-Generated Description</h3>
       <p style="font-size: 16px; line-height: 1.5; color: #4e342e;">
         {{ $item['Description'] }}
       </p>
@@ -41,18 +46,20 @@
                 <i class="fa fa-comment"></i> Chat with Finder
             </a> --}}
         @elseif(isset($item['FinderId']) && $item['FinderId'] == auth()->id())
+            {{-- UPDATED --}}
             <button disabled class="btn btn-secondary" style="margin-right: 15px; cursor: not-allowed;">
-                (You Posted This Item)
+                <i class="fa fa-user-circle"></i> (You Posted This Item)
             </button>
         @else
-            {{-- Fallback if FinderId is missing for an item --}}
+            {{-- UPDATED --}}
             <button disabled class="btn btn-secondary" style="margin-right: 15px; cursor: not-allowed;">
-                Cannot Contact Finder
+                <i class="fa fa-exclamation-triangle"></i> Cannot Contact Finder
             </button>
         @endif
 
-        <a href="{{ route('lostItems') }}" class="btn btn-secondary">⬅ Back to Lost Items</a>
-        <a href="{{ route('home') }}" class="btn">🏠 Home</a>
+        {{-- UPDATED --}}
+        <a href="{{ route('lostItems') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Lost Items</a>
+        <a href="{{ route('home') }}" class="btn"><i class="fa fa-home"></i> Home</a>
     </div>
   </div>
 
