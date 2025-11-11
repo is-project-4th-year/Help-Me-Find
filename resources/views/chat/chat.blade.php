@@ -1,50 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('layouts.header')
+@vite(['resources/css/chat.css'])
+@vite(['resources/js/chat.js'])
 
-    <body>
+<body style="background-color: var(--background);">
     @include('layouts.bar')
 
-        <div class="container mx-auto p-4">
-        <div class="grid grid-cols-4 gap-4">
-            <div class="col-span-1 bg-white p-4 rounded shadow">
-            <h3 class="font-bold mb-2">Chatting with</h3>
-            <p>{{ $other->firstName }} {{ $other->lastName }}</p>
-            </div>
+    <div class="chat-container">
 
-            <div class="col-span-3 bg-white p-4 rounded shadow flex flex-col h-[70vh]">
-            <div id="messages" class="flex-1 overflow-auto mb-4 p-3" style="background:#f9fafb;">
-                @foreach($messages as $m)
-                <div class="mb-2">
-                    <strong>{{ $m->sender_id == auth()->id() ? 'You' : $other->firstName }}</strong>:
-                    <span>{{ $m->body }}</span>
-                    <div><small class="text-gray-400">{{ $m->created_at }}</small></div>
+        <div class="chat-header">
+            <div class="chat-header-content">
+                <div class="chat-header-user">
+                    {{-- <a href="{{ route('chat.list') }}" class="btn-icon" style="text-decoration: none;">
+                        <i class="fa fa-arrow-left"></i>
+                    </a> --}}
+                    <div class="chat-avatar-fallback">
+                        {{ strtoupper(substr($other->firstName, 0, 1) . substr($other->lastName, 0, 1)) }}
+                    </div>
+                    <div class="chat-user-info">
+                        <h4>{{ $other->firstName }} {{ $other->lastName }}</h4>
+                        <p>Active now</p>
+                    </div>
                 </div>
-                @endforeach
+                <div class="chat-header-actions">
+                    <button class="btn-icon"><i class="fa fa-phone"></i></button>
+                    <button class="btn-icon"><i class="fa fa-video"></i></button>
+                </div>
             </div>
+        </div>
 
+        <div id="messages" class="chat-messages">
+            @foreach($messages as $m)
+                @php
+                    $isMe = $m->sender_id == auth()->id();
+                @endphp
+                <div class="message-bubble {{ $isMe ? 'sender-me' : 'sender-other' }}">
+                    <div class="message-content {{ $isMe ? 'sender-me' : 'sender-other' }}">
+                        <p>{{ $m->body }}</p>
+                        <p class="message-timestamp {{ $isMe ? 'sender-me' : 'sender-other' }}">
+                            {{ $m->created_at->format('h:i A') }}
+                        </p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="chat-input-form">
             {{--
-              - Add data-* attributes to pass server-side data to our JS file.
-              - Change onsubmit to return true to allow Enter key submission (handled in JS).
+              UPDATED: Added data-* attributes to pass values to chat.js
             --}}
-            <form id="message-form" class="flex"
+            <form id="message-form"
+                  class="flex"
                   onsubmit="return false;"
-                  data-user-id="{{ auth()->id() }}"
-                  data-chat-id="{{ $chatId }}"
-                  data-send-route="{{ route('chat.send') }}">
+                  data-send-url="{{ route('chat.send') }}"
+                  data-csrf-token="{{ csrf_token() }}"
+                  data-auth-id="{{ auth()->id() }}"
+            >
                 @csrf
                 <input type="hidden" id="receiver_id" value="{{ $other->id }}">
-                <input id="body" class="flex-1 border rounded p-2 mr-2" placeholder="Type a message..." autocomplete="off" />
-                <button id="sendBtn" type="button" class="btn btn-primary p-2 rounded">Send</button> {{-- Changed type to "button" --}}
-            </form>
-            </div>
-        </div>
-        </div>
+                <input type="hidden" id="chatId" value="{{ $chatId }}">
 
-        {{--
-          - Load app.js (for Bootstrap, Echo, Axios) and our new chat.js
-          - This replaces the old inline <script> block
-        --}}
-        @vite(['resources/js/app.js', 'resources/js/chat.js'])
-    </body>
+                <input id="body" class="input-field" placeholder="Type a message..." autocomplete="off" />
+
+                <button id="sendBtn" class="btn-icon-send">
+                    <i class="fa fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {{-- REMOVED: Inline script block is gone --}}
+
+    {{--
+      ADDED: Load the new external chat.js file.
+      The 'defer' attribute ensures it runs after the HTML is parsed.
+    --}}
+    {{-- <script src="{{ asset('js/chat.js') }}" defer></script> --}}
+</body>
 </html>
