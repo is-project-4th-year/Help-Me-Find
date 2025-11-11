@@ -40,28 +40,29 @@
             @if(!empty($imageUrl) || !empty($description))
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">Upload Successful</h2>
+                        <h2 class="card-title"> Upload Successful</h2>
                         <p class="card-description">Here is the result of your upload.</p>
                     </div>
 
                     <div class="card-content space-y-6">
+                        @if(!empty($imageUrl))
+                            <div>
+                                {{-- <h3 class="form-label"><i class="fa-solid fa-image"></i> Uploaded Image</h3> --}}
+                                <div class="image-preview-wrapper" style="display: block; margin-bottom: 0; border: 1px solid rgb(172, 172, 172);">
+                                    <img src="{{ $imageUrl }}" alt="Uploaded Image" class="image-preview">
+                                 </div>
+                            </div>
+                        @endif
                         @if(!empty($description))
                             <div>
-                                <h3 class="form-label">AI-Generated Description</h3>
+                                {{-- UPDATED --}}
+                                <h3 class="form-label"><i class="fa-solid fa-wand-magic-sparkles"></i> AI-Generated Description</h3>
                                 <div class="ai-description-box" style="display: block;">
                                     <p>{{ $description }}</p>
                                 </div>
                             </div>
                         @endif
 
-                        @if(!empty($imageUrl))
-                            <div>
-                                <h3 class="form-label">Uploaded Image</h3>
-                                <div class="image-preview-wrapper" style="display: block; margin-bottom: 0;">
-                                    <img src="{{ $imageUrl }}" alt="Uploaded Image" class="image-preview">
-                                 </div>
-                            </div>
-                        @endif
                     </div>
                 </div>
 
@@ -75,7 +76,7 @@
 
             @else
                 <div class="page-header">
-                    <h1>Report a Found Item</h1>
+                    <h1> Report a Found Item</h1>
                     <p>Upload a photo to get an AI-generated description.</p>
                 </div>
 
@@ -83,7 +84,8 @@
                     @csrf
                     <div class="card">
                         <div class="card-header">
-                            <h2 class="card-title">Upload Item Photo</h2>
+                            {{-- UPDATED --}}
+                            <h2 class="card-title"><i class="fa-solid fa-camera-retro"></i> Upload Item Photo</h2>
                             <p class="card-description">
                                 The system will automatically analyze and describe it using AI recognition.
                             </p>
@@ -99,8 +101,9 @@
                         </div>
                     </div>
 
+                    {{-- UPDATED --}}
                     <button type="submit" class="btn btn-primary w-full" style="padding-top: 1rem; padding-bottom: 1rem; font-size: 1.125rem; margin: 10px 0px;">
-                        Upload and Analyze Item
+                        <i class="fa-solid fa-cloud-upload"></i> Upload and Analyze Item
                     </button>
                 </form>
             @endif

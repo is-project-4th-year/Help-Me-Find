@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{-- Import the new auth.css file via Vite --}}
     @vite(['resources/css/auth.css'])
+    {{-- Add Font Awesome --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
 <body>
     <div class="auth-container">
@@ -14,7 +16,7 @@
 
             <div class="auth-header">
                 <h1 class="auth-title">Help-Me-Find</h1>
-                <p class="auth-description">Sign in to your account</p>
+                <p class="auth-description"><i class="fa fa-sign-in"></i> Sign in to your account</p>
             </div>
 
             <div class="auth-content">
@@ -48,7 +50,7 @@
                 </form>
 
                 <div class="auth-footer">
-                    <a href="{{ route('register') }}">Don't have an account? Register</a>
+                    <a href="{{ route('register') }}"><i class="fa fa-user-plus"></i> Don't have an account? Register</a>
                 </div>
             </div>
 

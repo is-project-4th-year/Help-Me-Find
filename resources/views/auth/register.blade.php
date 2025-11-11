@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{-- Import the new auth.css file via Vite --}}
     @vite(['resources/css/auth.css'])
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
 <body>
     <div class="auth-container">
@@ -14,7 +15,7 @@
 
             <div class="auth-header">
                 <h1 class="auth-title">Help-Me-Find</h1>
-                <p class="auth-description">Create your new account</p>
+                <p class="auth-description"><i class="fa fa-user-plus"></i> Create your new account</p>
             </div>
 
             <div class="auth-content">
@@ -33,7 +34,6 @@
                     <div class="form-group">
                         <label for="firstName" class="form-label">First Name</label>
                         <input id="firstName" class="form-input" type="text" name="firstName" value="{{ old('firstName') }}" required autofocus placeholder="Enter your first name" />
-                        {{-- Inline errors are removed, handled by the block above --}}
                     </div>
 
                     <div class="form-group">
@@ -64,7 +64,8 @@
                 </form>
 
                 <div class="auth-footer">
-                    <a href="{{ route('login') }}">Already have an account? Login</a>
+                    {{-- UPDATED --}}
+                    <a href="{{ route('login') }}"><i class="fa fa-sign-in"></i> Already have an account? Login</a>
                 </div>
             </div>
 

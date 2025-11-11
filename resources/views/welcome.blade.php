@@ -6,8 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     @vite(['resources/css/welcome.css'])
+    @vite(['resources/css/bar.css'])
+
 </head>
 <body>
+    <nav>
+    <div class="logo">
+        <a href="/">Help-Me-Find</a>
+    </div>
+    <ul class="options">
+        <a href="{{ route('login') }}"> Login </a>
+        <a href="{{ route('register') }}"> Register </a>
+    </ul>
+    </nav>
     <div class="min-h-screen">
         <div class="hero-section">
             <div class="container">
@@ -20,7 +31,10 @@
                     </div> --}}
                     <div class="space-y-4">
                         <h1 class="hero-title">
-                            <span>Help-Me-Find!</span>
+                                {{-- UPDATED --}}
+                            <span><i class="fa-solid fa-hand-paper-o"></i> Help-Me-Find!</span>
+
+                            {{-- <span>Help-Me-Find!</span> --}}
                         </h1>
                         <h2 class="hero-title" style="font-size: 30px">
                             Never Lose Your
@@ -167,10 +181,8 @@
         </div> --}}
     </div>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2025 Help-Me-Find. All rights reserved.</p>
-        </div>
+    <footer>
+        &copy; {{ date('Y') }} Help-Me-Find | Designed with ❤ by Bethelhem
     </footer>
 </body>
 </html>

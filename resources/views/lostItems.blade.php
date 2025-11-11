@@ -9,7 +9,8 @@
 
     {{-- Page Header --}}
     <div>
-      <h1>Lost & Found Items</h1>
+      {{-- UPDATED --}}
+      <h1><i class="fa fa-search"></i> Lost & Found Items</h1>
       <p class="text-muted-foreground">
         Browse through items reported by others. Click on any item for more details.
       </p>
@@ -97,7 +98,8 @@
       </a>
     </div>
 
-  </div> <footer>
+  </div>
+  <footer>
     &copy; {{ date('Y') }} Help-Me-Find | Designed with ❤ by Bethelhem
   </footer>
 

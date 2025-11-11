@@ -9,7 +9,7 @@
     <div class="space-y-6">
 
         <div class="text-center space-y-2" style="margin-bottom: 2.5rem;">
-            <h1>Welcome Back, {{ auth()->user()->firstName }}</h1>
+            <h1 style="color: black;"> Welcome Back, <span class="text-primary">{{ auth()->user()->firstName }}</span> </h1>
             <p class="text-muted-foreground" style="font-size: 1.1rem; max-width: 550px; margin: 0 auto;">
                 Your personal QR code for lost item recovery.
             </p>
@@ -58,19 +58,19 @@
                 {{-- How It Works Card --}}
                 <div class="card" style="margin-bottom: 0;"> {{-- Remove card's default margin --}}
                     <div class="card-header">
-                        <h3 class="card-title" style="margin-bottom: 0;">How It Works</h3>
+                        <h3 class="card-title" style="margin-bottom: 10px;"><i class="fa fa-info-circle fa-fw"></i> How It Works</h3>
                     </div>
                     <div class="card-content space-y-4">
                         <div class="step-item">
-                            <div class="step-number">1</div>
+                            <div class="step-number"><i class="fa fa-print"></i></div>
                             <p>Print and attach your QR code to valuables.</p>
                         </div>
                         <div class="step-item">
-                            <div class="step-number">2</div>
+                            <div class="step-number"><i class="fa fa-mobile"></i></div>
                             <p>If found, someone scans the code to get your report link.</p>
                         </div>
                         <div class="step-item">
-                            <div class="step-number">3</div>
+                            <div class="step-number"><i class="fa fa-comments-o"></i></div>
                             <p>They can message you via the app to arrange a return.</p>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                 {{-- Quick Actions Card --}}
                 <div class="card" style="margin-bottom: 0;"> {{-- Remove card's default margin --}}
                     <div class="card-header">
-                        <h3 class="card-title" style="margin-bottom: 0;">Quick Actions</h3>
+                        <h3 class="card-title" style="margin-bottom: 10px;"><i class="fa fa-bolt fa-fw"></i> Quick Actions</h3>
                     </div>
                     <div class="card-content space-y-4">
                         <p class="text-muted-foreground" style="margin: 0 0 1rem 0;">
@@ -89,8 +89,10 @@
                             Lost something? Browse through found items or search for your lost item.
                         </p>
                          <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                            <a href="{{ route('found') }}" class="btn" style="margin: 0;">Report Found Item</a>
-                            <a href="{{ route('lostItems') }}" class="btn btn-secondary" style="margin: 0;">Browse Lost Items</a>
+                            {{-- UPDATED --}}
+                            <a href="{{ route('found') }}" class="btn" style="margin: 0;"><i class="fa fa-bullhorn"></i> Report Found Item</a>
+                            {{-- UPDATED --}}
+                            <a href="{{ route('lostItems') }}" class="btn btn-secondary" style="margin: 0;"><i class="fa fa-search"></i> Browse Lost Items</a>
                         </div>
                     </div>
                 </div>
