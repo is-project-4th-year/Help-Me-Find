@@ -1,76 +1,74 @@
-<?php
-    $message = isset($_GET['message']) ? htmlspecialchars($_GET['message']) : '';
-    // echo $message
-?>
-
+{{-- resources/views/auth/register.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Register - Help Me Find</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ asset('images/bookLogo.png') }}" type="image/png">
-    {{-- <link rel="stylesheet" href="style.css"/> --}}
-    @vite(['resources/css/sign.css'])
-    <link href="{{ asset('build/assets/sign.css') }}" rel="stylesheet">
-
-
-    <title>Help Me Find</title>
-    <script>
-        window.onload = function() {
-            const message = "<?php echo $message; ?>";
-            if (message) {
-                alert(message);
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            if (localStorage.getItem("lightMode") === "true") {
-                document.body.classList.add("light-mode");
-            }
-        });
-    </script>
+    {{-- Import the new auth.css file via Vite --}}
+    @vite(['resources/css/auth.css'])
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
-<body class="signBody">
-    <div class="signBox">
-        <text> Register </text>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+            <div class="auth-header">
+                <h1 class="auth-title">Help-Me-Find</h1>
+                <p class="auth-description"><i class="fa fa-user-plus"></i> Create your new account</p>
+            </div>
 
-            <label> First Name</label> <br>
-            <input type="text" placeholder="Please enter your First Name." class="signTextArea" id="firstName" name="firstName" value="{{ old('firstName') }}" required> <br>
-
-            <label> Last Name</label> <br>
-            <input type="text" placeholder="Please enter your Last Name." class="signTextArea" id="lastName" name="lastName" value="{{ old('lastName') }}" required> <br>
-
-            {{-- <label> Username </label> <br>
-            <input type="text" placeholder="Please enter a Username" class="signTextArea" id="username" name="username" value="{{ old('username') }}" required> <br> --}}
-
-            <label> Email</label> <br>
-            <input type="email" placeholder="Please enter your Email Address." class="signTextArea" id="email" name="email" value="{{ old('email') }}" required> <br>
-
-            <label> Password</label> <br>
-            <input type="password" placeholder="Please enter a password." class="signTextArea" id="password" name="password" required> <br>
-
-
-            <label> Confirm Password</label> <br>
-            <input type="password" placeholder="Please enter a password." class="signTextArea" id="password_confirmation" name="password_confirmation" required> <br>
-
-            @if($errors->any())
-                <div class="alert alert-danger" style="color:red; font-size: 15px;">
-                    <div>
+            <div class="auth-content">
+                {{-- Display all errors at the top --}}
+                @if($errors->any())
+                    <div class="alert alert-danger">
                         @foreach($errors->all() as $error)
-                        <p>{{ $error }}</p>
+                            <p>{{ $error }}</p>
                         @endforeach
                     </div>
-                </div>
-            @endif
+                @endif
 
-            <button type="submit" class="signButton">{{ __(key: '  Register') }}</button>
-            {{-- <input class="signButton" name="register" type="submit" value="Register"> <br> --}}
-        </form>
-        <div>
-            <a class="signLink" href="{{ route('login') }}"> Already have an account? Login!</a>
+                <form method="POST" action="{{ route('register') }}" class="auth-form">
+                    @csrf
+
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input id="firstName" class="form-input" type="text" name="firstName" value="{{ old('firstName') }}" required autofocus placeholder="Enter your first name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input id="lastName" class="form-input" type="text" name="lastName" value="{{ old('lastName') }}" required placeholder="Enter your last name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" class="form-input" type="email" name="email" value="{{ old('email') }}" required placeholder="Enter your email" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input id="password" class="form-input" type="password" name="password" required placeholder="Create a password" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirmation" class="form-label">Confirm Password</label>
+                        <input id="password_confirmation" class="form-input" type="password" name="password_confirmation" required placeholder="Confirm your password" />
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+
+                <div class="auth-footer">
+                    {{-- UPDATED --}}
+                    <a href="{{ route('login') }}"><i class="fa fa-sign-in"></i> Already have an account? Login</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </body>

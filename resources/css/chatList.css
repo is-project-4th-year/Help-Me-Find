@@ -1,0 +1,188 @@
+@import url("app.css");
+
+/* * Main page container for the chat list
+* This replaces the old sidebar-style container
+*/
+.chat-page-container {
+    max-width: 900px; /* Equivalent to max-w-4xl */
+    margin: 1.5rem auto; /* Centers the content and adds top/bottom margin */
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Provides spacing between header, search, and list */
+}
+
+/* Header section ("Messages") */
+.chat-list-header h1 {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--foreground); /* Use main foreground color */
+    margin: 0;
+}
+
+.chat-list-header p {
+    color: var(--muted-foreground);
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0 0;
+}
+
+/* Card wrapper for the search bar */
+.chat-list-search-card {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}
+
+/* Search bar wrapper */
+.chat-list-search {
+    position: relative;
+}
+
+/* Search icon */
+.chat-list-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted-foreground);
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Search input field */
+.chat-list-search input {
+    width: 100%;
+    border: 1px solid var(--border);
+    background-color: var(--input-background);
+    color: var(--foreground);
+    padding: 0.75rem;
+    padding-left: 2.25rem; /* Space for the icon */
+    border-radius: var(--radius-md);
+    box-sizing: border-box;
+}
+
+.chat-list-search input::placeholder {
+    color: var(--muted-foreground);
+}
+
+/* Wrapper for the list of chat items */
+.chat-list-items-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* space-y-2 from figma */
+}
+
+/* Individual chat item card (as a link) */
+.chat-list-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    color: inherit;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+}
+
+.chat-list-card:hover {
+    background-color: var(--muted);
+}
+
+/* Avatar circle */
+.chat-list-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-medium);
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+/* Middle content (name, message) */
+.chat-list-content {
+    flex: 1;
+    min-width: 0; /* Important for text truncation */
+}
+
+/* Top row of the content (name + timestamp) */
+.chat-list-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chat-list-header-row h4 {
+    font-weight: var(--font-weight-medium);
+    color: var(--card-foreground);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-list-header-row .timestamp {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Last message text */
+.chat-list-message {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-top: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Unread count badge */
+.chat-list-badge {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-medium);
+    border-radius: 9999px;
+    padding: 0.15rem 0.5rem;
+    margin-left: auto;
+    align-self: center;
+    flex-shrink: 0;
+}
+
+/* "No conversations" state card */
+.chat-list-empty-card {
+    text-align: center;
+    padding: 3rem;
+    color: var(--muted-foreground);
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.chat-list-empty-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0 auto 1rem auto;
+    stroke-width: 1.5;
+}
+
+.chat-list-empty-card h3 {
+    font-weight: var(--font-weight-medium);
+    color: var(--card-foreground);
+    margin: 0;
+}
+
+.chat-list-empty-card p {
+    margin: 0.25rem 0 0 0;
+}

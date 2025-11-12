@@ -5,56 +5,100 @@
 <body>
   @include('layouts.bar')
 
-  <div class="container">
-    <h1>List of Reported Items</h1>
-    <p style="font-size: 16px; color: #5d4037; max-width: 600px; margin: 0 auto 25px;">
-      Browse through items reported by others. Click on any image for more details about the item.
-    </p>
+  <div class="container space-y-6">
 
-    <form action="{{ route('ragSearch') }}" method="GET" class="search-form" style="margin-bottom: 30px; text-align: center; display: flex; justify-content: center; gap: 10px;">
-    <input
-        type="text"
-        name="query"
-        placeholder="Search lost items (e.g. 'silver keys', 'white Samsung phone')"
-        value="{{ request('query') }}"
-        style="width: 70%; max-width: 500px; padding: 12px 15px; border-radius: 8px; border: 1px solid #d7ccc8;"
-    >
-    <button type="submit" class="btn" style="margin: 0; min-width: 100px;">
-        <i class="fa fa-search"></i> Search
-    </button>
-    </form>
+    {{-- Page Header --}}
+    <div>
+      {{-- UPDATED --}}
+      <h1><i class="fa fa-search"></i> Lost & Found Items</h1>
+      <p class="text-muted-foreground">
+        Browse through items reported by others. Click on any item for more details.
+      </p>
+    </div>
 
-    {{-- Check if items exist --}}
+    {{-- Search Card --}}
+    <div class="card card-search-content">
+      <form action="{{ route('ragSearch') }}" method="GET" class="search-form-flex">
+        <div class="search-wrapper">
+            <i class="fa fa-search search-icon"></i>
+            <input
+                type="text"
+                name="query"
+                placeholder="Search lost items (e.g. 'silver keys', 'white Samsung phone')"
+                value="{{ request('query') }}"
+                class="search-input"
+            >
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <i class="fa fa-search icon"></i> Search
+        </button>
+      </form>
+    </div>
+
+    {{-- Items Grid --}}
     @if(isset($items) && count($items) > 0)
-      <div class="grid">
+      <div class="items-grid">
         @foreach($items as $id => $item)
-          <a href="{{ route('itemDetail', ['id' => $id]) }}" class="grid-item">
-            <img src="{{ asset('uploads/' . data_get($item, 'ImageName')) }}" alt="Found item image">
-            <div class="item-details" style="padding: 10px;">
-              <p style="font-size: 14px; color: #4e342e; margin-bottom: 8px;">
-                <strong>Found:</strong> {{ data_get($item, 'DateTime') }}
-              </p>
+          <a href="{{ route('itemDetail', ['id' => $id]) }}" class="card item-card">
+            <div>
+              {{-- Image Section --}}
+              <div class="item-image-wrapper">
+                <img src="{{ asset('uploads/' . data_get($item, 'ImageName')) }}"
+                     alt="Item image"
+                     class="item-image"
+                     {{-- Fallback image --}}
+                     onerror="this.src='https://source.unsplash.com/400x300/?object,lost&grayscale'; this.onerror=null;">
+              </div>
 
-              @if(!empty(data_get($item, 'Description')))
-                <p class="item-description" style="color: #5d4037; font-size: 14px;">
-                  {{ Str::limit(data_get($item, 'Description'), 60) }}
-                </p>
-              @else
-                <p class="item-description" style="color: #8d6e63; font-style: italic;">Click for full details</p>
-              @endif
+              {{-- Card Header: Title & Description --}}
+              <div class="card-header">
+                @if(!empty(data_get($item, 'Description')))
+                  {{-- Create a "title" from the description --}}
+                  <h3 class="item-card-title">{{ Str::limit(data_get($item, 'Description'), 50) }}</h3>
+                  <p class="item-card-description">
+                      {{ Str::limit(data_get($item, 'Description'), 120) }}
+                  </p>
+                @else
+                  <h3 class="item-card-title">Item Reported</h3>
+                  <p class="item-card-description" style="font-style: italic;">
+                      Click for full details
+                  </p>
+                @endif
+              </div>
+            </div>
+
+            {{-- Card Content: Date --}}
+            <div class="card-content" style="padding-top: 1rem;">
+              <div class="item-info-line">
+                  <i class="fa fa-calendar icon"></i>
+                  <span><strong>Found:</strong> {{ \Carbon\Carbon::parse(data_get($item, 'DateTime'))->format('F j, Y') }}</span>
+              </div>
+
+              {{-- REMOVED BUTTON --}}
+
             </div>
           </a>
         @endforeach
       </div>
     @else
-      <p>No items found yet.</p>
+      {{-- No Items Found Card --}}
+      <div class="card no-items-card">
+          <i class="fa fa-search icon"></i>
+          <h3>No items found</h3>
+          <p class="text-muted-foreground" style="font-size: 1rem; max-width: 400px; margin: 0.5rem auto 0;">
+              No items match your search at this time. Try different keywords or check back later.
+          </p>
+      </div>
     @endif
 
-    <div style="margin-top: 40px;">
-      <a href="{{ route('home') }}" class="btn">🏠 Home</a>
+    {{-- Home Button --}}
+    <div style="text-align: center; margin-top: 2.5rem;">
+      <a href="{{ route('home') }}" class="btn btn-primary" style="min-width: 150px;">
+          <i class="fa fa-home icon"></i> Go to Home
+      </a>
     </div>
-  </div>
 
+  </div>
   <footer>
     &copy; {{ date('Y') }} Help-Me-Find | Designed with ❤ by Bethelhem
   </footer>

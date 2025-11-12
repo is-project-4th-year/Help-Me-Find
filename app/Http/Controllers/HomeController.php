@@ -64,7 +64,7 @@ class HomeController extends Controller
                 'finder_first_name' => $finder->firstName,
                 'finder_last_name' => $finder->lastName,
                 'finder_email' => $finder->email,
-                'found_at' => $now->toDateTimeString(),
+                'found_date' => $now->toDateTimeString(),
             ];
 
 
@@ -80,9 +80,13 @@ class HomeController extends Controller
                 'ImageName' => $newFilename,
                 'Description' => $description,
                 'DateTime' => $now->toDateTimeString(),
+                'Location' => '',
                 'FinderFirstName' => $finder->firstName,
                 'FinderLastName' => $finder->lastName,
                 'FinderEmail' => $finder->email,
+                'OwnerFirstName' => "",
+                'OwnerLastName' => "",
+                'OwnerEmail' => "",
             ];
 
             $this->saveData($data);

@@ -1,12 +1,15 @@
+/* Import the color palette and variables */
+@import url("app.css");
+
 /* ===== Base Styles ===== */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     padding-top: 50px;
-    min-height: 100vh;
-    background-color: #c3afa5;
-    color: #3e2723;
+    /* min-height: 100vh; */
+    background-color: var(--background);
+    color: var(--foreground);
 }
 
 /* ===== Navigation Bar ===== */
@@ -15,8 +18,8 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #8d6e63;
-    color: white;
+    background-color: var(--card);
+    color: var(--card-foreground);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,7 +36,7 @@ nav .options {
 
 nav .logo {
     margin: 0px 20px;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
     letter-spacing: 1px;
     display: flex;
@@ -42,15 +45,14 @@ nav .logo {
 
 nav a {
     text-decoration: none;
-    color: #fff;
+    color: var(--card-foreground);
 }
 
 nav a:hover {
     cursor: pointer;
-    color: #fbe9e7;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
+    color: var(--muted-foreground); /* Lighter color for hover */
+    /* font-size: 23px; */
+    transition: 0.3s ease;
 }
 
 nav .menu-btn {
@@ -59,7 +61,7 @@ nav .menu-btn {
     background: none;
     border: none;
     outline: none;
-    color: #fdfaf7;
+    color: var(--card-foreground);
     margin-right: 25px;
     width: 10px;
 }
@@ -73,14 +75,14 @@ nav ul {
 }
 
 nav ul li a {
-    color: #fff;
+    color: var(--card-foreground);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
 nav ul li a:hover {
-    color: #fbe9e7;
+    color: var(--secondary); /* Lighter color for hover */
 }
 
 aside ul {
@@ -95,7 +97,7 @@ aside ul li{
 }
 
 aside ul li a {
-    color: #fff;
+    color: var(--card-foreground);
     /* T R B L*/
     width: 210px;
     display: block;
@@ -106,11 +108,36 @@ aside ul li a {
 }
 
 aside ul li a:hover {
-    color: #fbe9e7;
-    background-color: #856156;
+    color: var(--card-foreground);
+    background-color: var(--muted); /* Use a related theme color for hover */
     transition: 0.3s ease;
     cursor: pointer;
 }
+
+/* ===== NEW STYLES FOR SIDEBAR BUTTON ===== */
+aside ul li button {
+    color: var(--card-foreground);
+    background-color: transparent;
+    border: none;
+    width: 210px;
+    display: block;
+    padding: 15px 10px 15px 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    font-size: 16px; /* Ensure consistent font size */
+    text-align: left; /* Align text like the 'a' tags */
+    font-family: inherit; /* Use the body's font */
+}
+
+aside ul li button:hover {
+    color: var(--card-foreground);
+    background-color: var(--muted); /* Use a related theme color for hover */
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+/* ===== END NEW STYLES ===== */
+
 
 .below-navbar {
     padding-top: 50px;
@@ -123,7 +150,7 @@ aside ul li a:hover {
     left: -300px;
     width: 230px;
     height: 100%;
-    background: #8d6e63;
+    background: var(--card);
     box-shadow: 0 4px 6px -1px #000000;
     transition: left 0.3s ease-in-out;
     z-index: 500;
@@ -143,23 +170,21 @@ aside ul li a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-
     border-radius: 20px;
     font-size: 16px;
     cursor: pointer;
     height: 35px;
     width: 35px;
-
     background-color: transparent;
-    border: solid 1px #fdfaf7;
-    color: #fdfaf7;
+    border: solid 1px var(--card-foreground);
+    color: var(--card-foreground);
     transition: left 0.3s ease-in-out;
 }
 
 .profile-btn:hover {
     transition: 0.2s;
-    border: solid 1px #fdfaf7;
-    color: #fdfaf7;
+    border: solid 1px var(--secondary);
+    color: var(--secondary);
 }
 
 /* Profile Popup Style */
@@ -168,14 +193,14 @@ aside ul li a:hover {
     top: -400px;
     right: 0;
     width: 230px;
-    height: 400px;
-    background-color: #8d6e63;
-    border: 1px solid #fdfaf7;
+    height: 300px;
+    background-color: var(--card);
+    border: 1px solid var(--card-foreground);
     border-right: transparent;
     border-top: transparent;
     border-radius: 0 0 0 7px;
     padding: 30px 0 0 0;
-    box-shadow: 0 4px 6px -1px #000000, 0 2px 4px -2px #000000;
+    box-shadow: 0 4px 6px -1px #00000050, 0 2px 4px -2px #00000050;
     transition: top 0.3s;
     z-index: 500;
 }
@@ -192,7 +217,7 @@ aside ul li a:hover {
     width: 75px;
     height: 75px;
     border-radius: 50%;
-    border: 3px solid #8d6e63;
+    border: 3px solid var(--primary);
     object-fit: cover;
 }
 
@@ -200,12 +225,12 @@ aside ul li a:hover {
     margin-top: 10px;
     margin-bottom: 0;
     font-size: 18px;
-    color: #fdfaf7;
+    color: var(--card-foreground);
 }
 
 .profile-header p {
     font-size: 14px;
-    color: #777;
+    color: var(--muted); /* Use muted for less important text */
 }
 
 .profile-header button {
@@ -217,7 +242,7 @@ aside ul li a:hover {
     border: none;
     outline: none;
     text-decoration: none;
-    color: #fdfaf7;
+    color: var(--card-foreground);
     font-size: 16px;
 }
 
@@ -231,21 +256,34 @@ aside ul li a:hover {
 
 /* ===== Container ===== */
 .container {
-    flex: 1;
-    max-width: 1000px;
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;    /* Centers vertically */
     margin: 40px auto;
-    padding: 30px;
-    background: #f8f5f4;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(62, 39, 35, 0.15);
-    text-align: center;
+    padding-bottom: 20px;
 }
 
+.text-primary { color: var(--primary); }
+
+i {
+    margin-right: 7px;
+}
 /* ===== Headings ===== */
 h1, h2, h3 {
-    color: #5d4037;
+    color: var(--card-foreground);
     margin-bottom: 20px;
 }
+h1 {
+    font-size: 2.25rem;
+    letter-spacing: -0.025em;
+}
+h2 {
+    font-size: 1.875rem;
+}
+h3 {
+    font-size: 1.5rem;
+}
+
 
 /* ===== Buttons (Standardized) ===== */
 .btn, input[type="submit"], button[type="submit"] {
@@ -263,37 +301,37 @@ h1, h2, h3 {
 
 /* Default/Primary Button Style */
 .btn, input[type="submit"], button[type="submit"] {
-    background: #8d6e63;
-    color: #fff;
+    background: var(--primary);
+    color: var(--primary-foreground);
 }
 
 .btn:hover, input[type="submit"]:hover, button[type="submit"]:hover {
-    background: #6d4c41;
+    background: var(--foreground); /* Use darkest brown for hover */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
 }
 
 /* Secondary Button Style */
 .btn-secondary {
-    background: #efebe9;
-    color: #8d6e63;
-    border: 1px solid #8d6e63;
+    background: var(--muted);
+    color: var(--primary);
+    border: 1px solid var(--primary);
 }
 
 .btn-secondary:hover {
-    background: #e0d7d2;
-    color: #5d4037;
-    border-color: #5d4037;
+    background: var(--secondary);
+    color: var(--foreground);
+    border-color: var(--foreground);
 }
 
-/* --- QR Code Display --- */
+/* --- QR Code Display (Old) --- */
 .qr-code-box {
     padding: 20px;
     margin-top: 20px;
-    border: 1px solid #d7ccc8;
+    border: 1px solid var(--border);
     border-radius: 12px;
     display: inline-block;
-    background: #fff;
+    background: var(--card);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -304,10 +342,10 @@ h1, h2, h3 {
 
 /* ===== Form Elements ===== */
 input[type="file"], input[type="text"], input[name="location"], textarea {
-    border: 1px solid #d7ccc8;
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 10px;
-    background: #fff;
+    background: var(--input-background);
     cursor: text;
     width: 100%;
     box-sizing: border-box;
@@ -317,7 +355,7 @@ input[type="file"], input[type="text"], input[name="location"], textarea {
 }
 
 input[type="text"]:focus, input[name="location"]:focus, textarea:focus, input[type="file"]:focus {
-    border-color: #8d6e63;
+    border-color: var(--primary);
     outline: none;
 }
 
@@ -332,19 +370,19 @@ textarea {
     margin-top: 30px;
     padding: 20px;
     border-radius: 12px;
-    background: #d7ccc8;
+    background: var(--secondary);
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
     text-align: left;
 }
 
 .result h3, .prediction h3 {
     margin-top: 0;
-    color: #4e342e;
+    color: var(--secondary-foreground);
 }
 
 .result strong {
     font-size: 18px;
-    color: #3e2723;
+    color: var(--foreground);
 }
 
 /* ===== Uploaded Image Preview ===== */
@@ -371,7 +409,7 @@ textarea {
     display: inline-block;
     width: 35px;
     height: 35px;
-    border: 2px solid #5d4037;
+    border: 2px solid var(--primary);
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
@@ -385,23 +423,23 @@ table {
 }
 
 th, td {
-    border: 1px solid #d7ccc8;
+    border: 1px solid var(--secondary);
     padding: 12px;
     text-align: center;
 }
 
 th {
-    background: #8d6e63;
-    color: #fff;
+    background: var(--primary);
+    color: var(--primary-foreground);
     font-weight: 600;
 }
 
 tr:nth-child(even) {
-    background: #fdfaf7;
+    background: var(--muted);
 }
 
 tr:hover {
-    background: #f5ebe3;
+    background: var(--accent);
 }
 
 /* ===== Footer ===== */
@@ -410,8 +448,8 @@ footer {
     width: 100%;
     bottom: 0px;
     margin-top: auto;
-    background-color: #8d6e63;
-    color: #fff8f1;
+    background-color: var(--card);
+    color: var(--card-foreground);
     text-align: center;
     padding: 12px 0;
     font-size: 14px;
@@ -466,4 +504,156 @@ footer {
     table, th, td {
         font-size: 13px;
     }
+}
+
+
+/* ===== NEW STYLES (Inspired by Figma & welcome.css) ===== */
+/* These styles were already using the variables */
+
+.text-center { text-align: center; }
+.text-muted-foreground { color: var(--muted-foreground); }
+
+.space-y-2 > * + * { margin-top: 0.5rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-y-6 > * + * { margin-top: 1.5rem; }
+
+.card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl); /* ~10-12px */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    /* margin-bottom: 2rem; */ /* REMOVED */
+    overflow: hidden; /* Ensure border-radius clips content */
+}
+
+.card-header {
+    padding: 1.5rem; /* 24px */
+    border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-description {
+    font-size: 0.9rem; /* 14px */
+    color: var(--muted-foreground);
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+.card-content {
+    padding: 1.5rem; /* 24px */
+}
+
+/* Specific for QR card */
+.qr-card {
+    max-width: 448px; /* max-w-md */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.qr-image-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 15px;
+}
+
+.qr-code-inner-box {
+     padding: 1rem; /* 16px */
+     background-color: #ffffff;
+     border-radius: var(--radius-lg);
+     box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* shadow-md */
+     display: inline-block; /* To fit content */
+}
+
+.qr-code-inner-box svg {
+    width: 225px; /* w-64 */
+    height: 225px; /* h-64 */
+    display: block;
+}
+
+.btn.btn-outline {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+.btn.btn-outline:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+    border-color: var(--accent);
+}
+.btn .icon {
+    margin-right: 0.5rem;
+}
+.w-full {
+    width: 100%;
+    box-sizing: border-box; /* ensure padding doesn't break it */
+}
+
+/* How it works card */
+.step-item {
+    display: flex;
+    gap: 0.75rem; /* 12px */
+    align-items: flex-start;
+}
+.step-number {
+    flex-shrink: 0;
+    width: 1.5rem; /* 24px */
+    height: 1.5rem; /* 24px */
+    border-radius: 9999px; /* rounded-full */
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+}
+.step-item p {
+    margin: 0;
+    padding-top: 2px; /* Align text nicely */
+    color: var(--card-foreground);
+}
+
+
+/* ===== NEW STYLES FOR HOME PAGE 2-COLUMN LAYOUT ===== */
+
+.home-grid-container {
+    display: grid;
+    grid-template-columns: 1fr; /* 1 column on mobile (default) */
+    gap: 1.5rem; /* 24px */
+    align-items: start; /* Align cards to the top of their grid cell */
+    margin-bottom: 20px;
+
+}
+
+/* Tablet-sized and up */
+@media (min-width: 768px) {
+    .grid-col-main {
+        /* Center the QR card on tablets when it's still 1-col */
+        display: flex;
+        justify-content: center;
+    }
+    .card.qr-card {
+        width: 100%;
+        max-width: 448px; /* Maintain max-width for tablet */
+    }
+}
+
+/* Desktop-sized and up */
+@media (min-width: 1024px) {
+    .home-grid-container {
+        /* 2 equal columns on desktop */
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* grid-col-main properties from tablet are fine */
+    /* card.qr-card properties from tablet are fine */
 }
