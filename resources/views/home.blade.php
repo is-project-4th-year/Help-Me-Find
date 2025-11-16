@@ -10,9 +10,9 @@
 
         <div class="text-center space-y-2" style="margin-bottom: 2.5rem;">
             <h1 style="color: black;"> Welcome Back, <span class="text-primary">{{ auth()->user()->firstName }}</span> </h1>
-            <p class="text-muted-foreground" style="font-size: 1.1rem; max-width: 550px; margin: 0 auto;">
+            {{-- <p class="text-muted-foreground" style="font-size: 1.1rem; max-width: 550px; margin: 0 auto;">
                 Your personal QR code for lost item recovery.
-            </p>
+            </p> --}}
         </div>
 
         {{-- NEW: Main Grid Layout --}}
