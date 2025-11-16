@@ -7,6 +7,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/css/chat.css',
+                'resources/css/chat-list.css',
                 'resources/css/list.css',
                 'resources/css/style.css',
                 'resources/css/welcome.css',

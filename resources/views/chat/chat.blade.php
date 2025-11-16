@@ -23,10 +23,6 @@
                         <p>Active now</p>
                     </div>
                 </div>
-                <div class="chat-header-actions">
-                    <button class="btn-icon"><i class="fa fa-phone"></i></button>
-                    <button class="btn-icon"><i class="fa fa-video"></i></button>
-                </div>
             </div>
         </div>
 

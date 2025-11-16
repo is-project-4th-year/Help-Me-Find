@@ -88,11 +88,11 @@
           </div>
         </div>
 
-        {{-- CONTACT BUTTON LOGIC (Preserved from your original file) --}}
+        {{-- CONTACT BUTTON LOGIC (FIXED) --}}
         <div class="contact-buttons">
           @if(isset($item['FinderId']) && $item['FinderId'] != auth()->id())
-            {{-- The $id variable needs to be passed from your controller for this route --}}
-            <a href="{{ route('chat.show', ['item_id' => $id]) }}" class="btn btn-primary btn-full">
+            {{-- FIX: Using the working 'chat.with' route and passing the FinderId as the 'user' parameter --}}
+            <a href="{{ route('chat.with', ['user' => $item['FinderId']]) }}" class="btn btn-primary btn-full">
                 <i class="fa fa-comment"></i> Chat with Finder
             </a>
           @elseif(isset($item['FinderId']) && $item['FinderId'] == auth()->id())

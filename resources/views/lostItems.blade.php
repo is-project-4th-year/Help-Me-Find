@@ -54,9 +54,9 @@
               <div class="card-header">
                 @if(!empty(data_get($item, 'Description')))
                   {{-- Create a "title" from the description --}}
-                  <h3 class="item-card-title">{{ Str::limit(data_get($item, 'Description'), 50) }}</h3>
+                  {{-- <h3 class="item-card-title">{{ Str::limit(data_get($item, 'Description'), 50) }}</h3> --}}
                   <p class="item-card-description">
-                      {{ Str::limit(data_get($item, 'Description'), 120) }}
+                      {{ Str::limit(data_get($item, 'Description'), 160) }}
                   </p>
                 @else
                   <h3 class="item-card-title">Item Reported</h3>
