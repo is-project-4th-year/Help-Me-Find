@@ -15,6 +15,14 @@
       Back to Lost Items
     </a>
 
+    {{-- ** NEW: Show error if redirected from map ** --}}
+    @if(session('error'))
+        <div class="card" style="background-color: #ffcccc; color: #a00; border: 1px solid #a00; margin-bottom: 1rem; padding: 1rem;">
+            {{ session('error') }}
+        </div>
+    @endif
+
+
     {{-- MAIN 2-COLUMN GRID --}}
     <div class="grid-container">
 
@@ -58,29 +66,36 @@
               </div>
             </div>
 
-            {{-- Location Info Block --}}
-            @if(!empty($item['Location']))
+            {{-- *** MODIFIED LOCATION BLOCK *** --}}
+            {{-- Check if text location OR map location exists --}}
+            @if(!empty($item['Location']) || (!empty($item['Latitude']) && !empty($item['Longitude'])))
               <div class="separator-small"></div>
               <div class="info-block">
                 <i class="fa fa-map-marker fa-fw info-icon"></i>
                 <div class="info-text">
                   <p class="info-label">Found Location</p>
-                  <p>{{ $item['Location'] }}</p>
+
+                  {{-- Check if latitude and longitude exist (using JSON keys) --}}
+                  @if(!empty($item['Latitude']) && !empty($item['Longitude']))
+                    {{-- Create a link to the new map route, using the $id (JSON key) --}}
+                    <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px;">
+                        <i class="fa fa-map-location-dot"></i> View on Map
+                    </a>
+                  @else
+                    {{-- Fallback if no map data but text location exists --}}
+                    <p>{{ $item['Location'] }}</p>
+                  @endif
                 </div>
               </div>
             @endif
 
+
             {{-- Finder Info Block (from your logic) --}}
-            {{-- This assumes you have $item['FinderName'] or similar.
-                 If not, the button logic below is the main contact point.
-                 I've added a placeholder for 'Reported By' based on the Figma. --}}
             <div class="separator-small"></div>
             <div class="info-block">
               <i class="fa fa-user fa-fw info-icon"></i>
               <div class="info-text">
                 <p class="info-label">Posted By</p>
-                {{-- You'll need to pass the finder's name in your controller to show it here --}}
-                {{-- <p>{{ $item['FinderName'] ?? 'Anonymous Finder' }}</p> --}}
                 <p class="text-muted"><i>Please use the chat to connect with the finder.</i></p>
               </div>
             </div>
@@ -90,8 +105,10 @@
 
         {{-- CONTACT BUTTON LOGIC (FIXED) --}}
         <div class="contact-buttons">
+            {{-- Note: Your JSON doesn't seem to save 'FinderId'. You'll need to add that
+                 in HomeController for this chat button to work.
+                 Assuming you add 'FinderId' to the JSON save... --}}
           @if(isset($item['FinderId']) && $item['FinderId'] != auth()->id())
-            {{-- FIX: Using the working 'chat.with' route and passing the FinderId as the 'user' parameter --}}
             <a href="{{ route('chat.with', ['user' => $item['FinderId']]) }}" class="btn btn-primary btn-full">
                 <i class="fa fa-comment"></i> Chat with Finder
             </a>

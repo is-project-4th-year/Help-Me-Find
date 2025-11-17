@@ -36,13 +36,18 @@ class HomeController extends Controller
     {
         $imageUrl = '';
         $description = '';
+
+        $latitude = null;
+        $longitude = null;
         $now = Carbon::now();
 
         if ($request->isMethod('post')) {
 
-            if (!$request->hasFile('file')) {
-                return view('found', ['error' => 'No file selected']);
-            }
+            $request->validate([
+                'file' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+                'latitude' => 'nullable|numeric',
+                'longitude' => 'nullable|numeric',
+            ]);
 
             $file = $request->file('file');
             $ext = $file->getClientOriginalExtension() ?: 'jpg';
@@ -57,14 +62,22 @@ class HomeController extends Controller
             // Get the currently authenticated user (the finder)
             $finder = auth()->user();
 
+            // Get location data from request
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
             // Prepare data array for both storage types
             $dataToSave = [
                 'image_name' => $newFilename,
                 'description' => $description,
+                // 'finder_id' => $finder->id,
                 'finder_first_name' => $finder->firstName,
                 'finder_last_name' => $finder->lastName,
                 'finder_email' => $finder->email,
                 'found_date' => $now->toDateTimeString(),
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'found_location' => $request->input('found_location', 'Location captured') // Optional text location
             ];
 
 
@@ -80,7 +93,12 @@ class HomeController extends Controller
                 'ImageName' => $newFilename,
                 'Description' => $description,
                 'DateTime' => $now->toDateTimeString(),
-                'Location' => '',
+                'Location' => '', // You can use this for a text-based location if you add one
+                // ** NEW: Add location to JSON array **
+                'Latitude' => $latitude,
+                'Longitude' => $longitude,
+                // ---
+                'FinderId' => $finder->id,
                 'FinderFirstName' => $finder->firstName,
                 'FinderLastName' => $finder->lastName,
                 'FinderEmail' => $finder->email,
@@ -94,7 +112,8 @@ class HomeController extends Controller
             $imageUrl = asset("uploads/{$newFilename}");
         }
 
-        return view('found', compact('imageUrl', 'description'));
+        // ** NEW: Pass location variables to the view **
+        return view('found', compact('imageUrl', 'description', 'latitude', 'longitude'));
     }
 
     // ------------------ LOST ITEMS ------------------ //
@@ -153,6 +172,7 @@ class HomeController extends Controller
     private function generateDescriptionWithAI($imagePath)
     {
         $apiKey = env('GEMINI_API_KEY');
+        // Note: Using v1beta as in your original file
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
 
         $imageData = base64_encode(file_get_contents($imagePath));

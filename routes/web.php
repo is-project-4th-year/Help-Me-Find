@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-
-
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -41,6 +39,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lostItems', [LostItemController::class, 'lostItems'])->name('lostItems');
     Route::get('/rag-search', [LostItemController::class, 'ragSearch'])->name('ragSearch');
     Route::get('/item/{id}', [LostItemController::class, 'itemDetail'])->name('itemDetail');
+
+    // ** ADD THIS NEW ROUTE **
+    Route::get('/item/{id}/map', [LostItemController::class, 'showItemMap'])->name('item.map');
 
 
     Route::get('/report/{token}', [FinderReportController::class, 'showReportForm'])->name('finder.report');
