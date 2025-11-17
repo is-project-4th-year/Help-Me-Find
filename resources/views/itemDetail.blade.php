@@ -33,9 +33,7 @@
             src="{{ asset('uploads/' . $item['ImageName']) }}"
             alt="{{ $item['ItemType'] ?? 'Found Item' }}"
           >
-          {{-- This assumes items in this view are 'Found'.
-               You can replace 'Found' with a variable if you have one (e.g., $item['status']) --}}
-          <span class="badge">Found</span>
+          {{-- <span class="badge">Found</span> --}}
         </div>
       </div>
 
@@ -61,8 +59,9 @@
             <div class="info-block">
               <i class="fa fa-calendar fa-fw info-icon"></i>
               <div class="info-text">
-                <p class="info-label">Date & Time Found</p>
-                <p>{{ $item['DateTime'] ?? 'Unknown' }}</p>
+                <p class="info-label">Date & Time Found:
+                    <br> <b> {{ $item['DateTime'] ?? 'Unknown' }} </b>
+                </p>
               </div>
             </div>
 
@@ -73,14 +72,16 @@
               <div class="info-block">
                 <i class="fa fa-map-marker fa-fw info-icon"></i>
                 <div class="info-text">
-                  <p class="info-label">Found Location</p>
+                  <p class="info-label">Location</p>
 
                   {{-- Check if latitude and longitude exist (using JSON keys) --}}
                   @if(!empty($item['Latitude']) && !empty($item['Longitude']))
                     {{-- Create a link to the new map route, using the $id (JSON key) --}}
-                    <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px;">
-                        <i class="fa fa-map-location-dot"></i> View on Map
+                    <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
+                        {{-- <i class="fa fa-map"></i>  --}}
+                        View on Map
                     </a>
+
                   @else
                     {{-- Fallback if no map data but text location exists --}}
                     <p>{{ $item['Location'] }}</p>
@@ -95,33 +96,38 @@
             <div class="info-block">
               <i class="fa fa-user fa-fw info-icon"></i>
               <div class="info-text">
-                <p class="info-label">Posted By</p>
-                <p class="text-muted"><i>Please use the chat to connect with the finder.</i></p>
+                @php
+                    $firstName = $item['FinderFirstName'] ?? '';
+                    $lastName = $item['FinderLastName'] ?? '';
+                    $finderName = trim($firstName . ' ' . $lastName);
+                @endphp
+                <p class="info-label">Found by: <br> <b>{{ !empty($finderName) ? $finderName : 'Anonymous Finder' }}</b></p>
+                <div class="contact-buttons">
+                    @if(isset($item['FinderId']) && $item['FinderId'] != auth()->id())
+                        <a href="{{ route('chat.with', ['user' => $item['FinderId']]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
+                            {{-- <i class="fa fa-comment"></i>  --}}
+                            Chat with Finder
+                        </a>
+                    @elseif(isset($item['FinderId']) && $item['FinderId'] == auth()->id())
+                        <button disabled class="btn btn-secondary btn-full">
+                            {{-- <i class="fa fa-user-circle"></i>  --}}
+                            (You Posted This Item)
+                        </button>
+                    @else
+                        <button disabled class="btn btn-secondary btn-full">
+                            {{-- <i class="fa fa-exclamation-triangle"></i>  --}}
+                            Cannot Contact Finder
+                        </button>
+                    @endif
+                </div>
+                {{-- <p class="text-muted"><i>Please use the chat to connect with the finder.</i></p> --}}
               </div>
             </div>
 
           </div>
         </div>
 
-        {{-- CONTACT BUTTON LOGIC (FIXED) --}}
-        <div class="contact-buttons">
-            {{-- Note: Your JSON doesn't seem to save 'FinderId'. You'll need to add that
-                 in HomeController for this chat button to work.
-                 Assuming you add 'FinderId' to the JSON save... --}}
-          @if(isset($item['FinderId']) && $item['FinderId'] != auth()->id())
-            <a href="{{ route('chat.with', ['user' => $item['FinderId']]) }}" class="btn btn-primary btn-full">
-                <i class="fa fa-comment"></i> Chat with Finder
-            </a>
-          @elseif(isset($item['FinderId']) && $item['FinderId'] == auth()->id())
-            <button disabled class="btn btn-secondary btn-full">
-                <i class="fa fa-user-circle"></i> (You Posted This Item)
-            </button>
-          @else
-            <button disabled class="btn btn-secondary btn-full">
-                <i class="fa fa-exclamation-triangle"></i> Cannot Contact Finder
-            </button>
-          @endif
-        </div>
+
       </div>
     </div> {{-- End Grid --}}
 
