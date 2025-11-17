@@ -7,7 +7,7 @@ body {
 }
 
 .item-detail-container {
-  max-width: 64rem; /* 1024px, similar to max-w-4xl */
+  max-width: 75rem; /* 1024px, similar to max-w-4xl */
   margin: 2rem auto;
   padding: 1rem;
   display: flex;
@@ -83,6 +83,7 @@ body {
 /* Image Card */
 .image-card {
   position: relative;
+  /* margin-top: 20px; */
   width: 100%;
   aspect-ratio: 1 / 1; /* Square aspect ratio */
 }
@@ -148,6 +149,7 @@ body {
 }
 .info-text {
   flex: 1;
+  justify-content: space-between;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
@@ -157,7 +159,7 @@ body {
   line-height: 1.5;
 }
 .info-label {
-  width: 200px;
+  /* width: 260px; */
   font-size: 0.875rem; /* 14px */
   color: var(--muted-foreground);
   font-weight: var(--font-weight-normal);

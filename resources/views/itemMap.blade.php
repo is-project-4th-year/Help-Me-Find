@@ -39,7 +39,7 @@
         .back-button {
             position: absolute;
             top: 20px;
-            left: 20px;
+            left: 50px;
             z-index: 1001;
             background-color: white;
             color: #333;
