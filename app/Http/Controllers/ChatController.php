@@ -16,7 +16,8 @@ class ChatController extends Controller
         return view('chat.ChatList', compact('users'));
     }
 
-    public function withUser(User $user)
+    // UPDATED: Injected Request to capture query parameters
+    public function withUser(Request $request, User $user)
     {
         $me = Auth::user();
         $other = $user;
@@ -33,7 +34,11 @@ class ChatController extends Controller
             $q->where('sender_id', $other->id)->where('receiver_id', $me->id);
         })->orderBy('created_at')->get();
 
-        return view('chat.chat', compact('other','messages','chatId'));
+        // UPDATED: Get the 'message' query param (default to empty string)
+        $defaultMessage = $request->query('message', '');
+
+        // UPDATED: Passed $defaultMessage to the view
+        return view('chat.chat', compact('other','messages','chatId', 'defaultMessage'));
     }
 
     public function send(Request $request)
@@ -52,9 +57,6 @@ class ChatController extends Controller
             'receiver_id' => $receiver,
             'body' => $request->input('body')
         ]);
-
-        // Build chat id server side the same way (optional)
-        // $chatId = $request->chatId;
 
         // Fire event
         event(new MessageSent($message, $request->input('chatId')));

@@ -12,9 +12,6 @@
         <div class="chat-header">
             <div class="chat-header-content">
                 <div class="chat-header-user">
-                    {{-- <a href="{{ route('chat.list') }}" class="btn-icon" style="text-decoration: none;">
-                        <i class="fa fa-arrow-left"></i>
-                    </a> --}}
                     <div class="chat-avatar-fallback">
                         {{ strtoupper(substr($other->firstName, 0, 1) . substr($other->lastName, 0, 1)) }}
                     </div>
@@ -43,9 +40,6 @@
         </div>
 
         <div class="chat-input-form">
-            {{--
-              UPDATED: Added data-* attributes to pass values to chat.js
-            --}}
             <form id="message-form"
                   class="flex"
                   onsubmit="return false;"
@@ -57,7 +51,13 @@
                 <input type="hidden" id="receiver_id" value="{{ $other->id }}">
                 <input type="hidden" id="chatId" value="{{ $chatId }}">
 
-                <input id="body" class="input-field" placeholder="Type a message..." autocomplete="off" />
+                {{-- UPDATED: Added value attribute to pre-fill message --}}
+                <input id="body"
+                       class="input-field"
+                       placeholder="Type a message..."
+                       autocomplete="off"
+                       value="{{ $defaultMessage ?? '' }}"
+                />
 
                 <button id="sendBtn" class="btn-icon-send">
                     <i class="fa fa-paper-plane"></i>
@@ -65,13 +65,5 @@
             </form>
         </div>
     </div>
-
-    {{-- REMOVED: Inline script block is gone --}}
-
-    {{--
-      ADDED: Load the new external chat.js file.
-      The 'defer' attribute ensures it runs after the HTML is parsed.
-    --}}
-    {{-- <script src="{{ asset('js/chat.js') }}" defer></script> --}}
 </body>
 </html>

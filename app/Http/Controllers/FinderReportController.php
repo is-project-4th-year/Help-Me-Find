@@ -50,7 +50,7 @@ class FinderReportController extends Controller
         $locationName = $this->getLocationName($latitude, $longitude);
         $now = Carbon::now();
 
-        // 6. Prepare Data for Database (Includes Owner Info)
+        // 6. Prepare Data for Database
         $dataToSave = [
             'image_name' => $newFilename,
             'description' => $description,
@@ -60,7 +60,7 @@ class FinderReportController extends Controller
             'finder_last_name' => $finder->lastName,
             'finder_email' => $finder->email,
 
-            // Owner details (From Token)
+            // Owner details
             'owner_first_name' => $owner->firstName,
             'owner_last_name' => $owner->lastName,
             'owner_email' => $owner->email,
@@ -74,7 +74,7 @@ class FinderReportController extends Controller
         // 7. Save to MySQL Database
         FoundItem::create($dataToSave);
 
-        // 8. Save to JSON (Legacy support - Includes Owner Info)
+        // 8. Save to JSON
         $data = $this->loadData();
         $nextId = empty($data) ? 1 : (max(array_map('intval', array_keys($data))) + 1);
 
@@ -86,13 +86,11 @@ class FinderReportController extends Controller
             'Latitude' => $latitude,
             'Longitude' => $longitude,
 
-            // Finder Info
             'FinderId' => $finder->id,
             'FinderFirstName' => $finder->firstName,
             'FinderLastName' => $finder->lastName,
             'FinderEmail' => $finder->email,
 
-            // Owner Info
             'OwnerId' => $owner->id,
             'OwnerFirstName' => $owner->firstName,
             'OwnerLastName' => $owner->lastName,
@@ -101,8 +99,11 @@ class FinderReportController extends Controller
 
         $this->saveData($data);
 
-        // 9. Redirect to Chat with Owner
-        return redirect()->route('chat.with', $owner->id);
+        // 9. Redirect to Chat with Owner - UPDATED with message
+        return redirect()->route('chat.with', [
+            'user' => $owner->id,
+            'message' => 'Hello. I found this item of yours.'
+        ]);
     }
 
     // --- Helper Functions ---
