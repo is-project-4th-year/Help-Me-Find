@@ -4,27 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http; // <-- Make sure Http is imported
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
-use App\Models\FoundItem; // <== NEW: Import the new model
+use App\Models\FoundItem;
 
 class HomeController extends Controller
 {
-    // The method that retrieves and displays members
-    public function viewPage() {
-        $owner = auth()->user();
-        $link = route('finder.report', $owner->qr_code_token);
-        $qrCode = QrCode::size(200)->generate($link);
-
-        return view('home', compact('qrCode', 'link'));
-    }
-
-    // --------------------- //
-
     private $uploadDir = 'uploads';
     private $jsonFile = 'uploads.json';
+
+    public function viewPage() {
+        $owner = auth()->user();
+        // Ensure the user is authenticated before accessing properties
+        if ($owner) {
+            $link = route('finder.report', $owner->qr_code_token);
+            $qrCode = QrCode::size(200)->generate($link);
+            return view('home', compact('qrCode', 'link'));
+        }
+        return redirect()->route('login');
+    }
 
     public function home()
     {
@@ -36,10 +35,9 @@ class HomeController extends Controller
     {
         $imageUrl = '';
         $description = '';
-
         $latitude = null;
         $longitude = null;
-        $now = Carbon::now();
+        $foundLocation = null; // Variable to hold the address name
 
         if ($request->isMethod('post')) {
 
@@ -56,43 +54,36 @@ class HomeController extends Controller
             $file->move(public_path($this->uploadDir), $newFilename);
             $filepath = public_path("{$this->uploadDir}/{$newFilename}");
 
-            // Generate AI description
+            // 1. Generate AI description
             $description = $this->generateDescriptionWithAI($filepath);
 
-            // Get the currently authenticated user (the finder)
-            $finder = auth()->user();
-
-            // Get location data from request
+            // 2. Get Location Coordinates
             $latitude = $request->input('latitude');
             $longitude = $request->input('longitude');
 
-            $locationName = $this->getLocationName($latitude, $longitude);
+            // 3. Get Human-Readable Location Name (Same logic as Report)
+            $foundLocation = $this->getLocationName($latitude, $longitude);
 
-            $finalLocation = $locationName ?? $request->input('found_location');
+            $finder = auth()->user();
+            $now = Carbon::now();
 
-            // Prepare data array for both storage types
+            // 4. Prepare Data
             $dataToSave = [
                 'image_name' => $newFilename,
                 'description' => $description,
-                // 'finder_id' => $finder->id,
                 'finder_first_name' => $finder->firstName,
                 'finder_last_name' => $finder->lastName,
                 'finder_email' => $finder->email,
                 'found_date' => $now->toDateTimeString(),
                 'latitude' => $latitude,
                 'longitude' => $longitude,
-
-                // *** MODIFIED ***
-                'found_location' => $finalLocation // Use the new location name
+                'found_location' => $foundLocation // Save the name here
             ];
 
-
-            // === 1. Save to MySQL Database using Eloquent ===
-            // This will save $finalLocation to the 'found_location' column
+            // 5. Save to MySQL
             FoundItem::create($dataToSave);
 
-
-            // === 2. Save to JSON File (keeping the original functionality) ===
+            // 6. Save to JSON (Legacy support)
             $data = $this->loadData();
             $nextId = empty($data) ? 1 : (max(array_map('intval', array_keys($data))) + 1);
 
@@ -100,21 +91,13 @@ class HomeController extends Controller
                 'ImageName' => $newFilename,
                 'Description' => $description,
                 'DateTime' => $now->toDateTimeString(),
-
-                // *** MODIFIED ***
-                'Location' => $finalLocation, // Use the new location name
-
-                // ** NEW: Add location to JSON array **
+                'Location' => $foundLocation, // Save name to JSON
                 'Latitude' => $latitude,
                 'Longitude' => $longitude,
-                // ---
                 'FinderId' => $finder->id,
                 'FinderFirstName' => $finder->firstName,
                 'FinderLastName' => $finder->lastName,
                 'FinderEmail' => $finder->email,
-                'OwnerFirstName' => "",
-                'OwnerLastName' => "",
-                'OwnerEmail' => "",
             ];
 
             $this->saveData($data);
@@ -122,17 +105,18 @@ class HomeController extends Controller
             $imageUrl = asset("uploads/{$newFilename}");
         }
 
-        // ** NEW: Pass location variables to the view **
-        return view('found', compact('imageUrl', 'description', 'latitude', 'longitude'));
+        // Pass the location name to the view so the user can see it
+        return view('found', compact('imageUrl', 'description', 'latitude', 'longitude', 'foundLocation'));
     }
-
-    // ------------------ LOST ITEMS ------------------ //
-    // ... (rest of your controller methods) ...
 
     // ------------------ HELPER FUNCTIONS ------------------ //
 
     private function getNextFilename($extension = 'jpg')
     {
+        if (!File::exists(public_path($this->uploadDir))) {
+            File::makeDirectory(public_path($this->uploadDir), 0755, true);
+        }
+
         $files = File::files(public_path($this->uploadDir));
         $numbers = [];
 
@@ -152,7 +136,6 @@ class HomeController extends Controller
         if (!File::exists($this->jsonFile)) {
             return [];
         }
-
         $json = File::get($this->jsonFile);
         return json_decode($json, true) ?? [];
     }
@@ -165,7 +148,6 @@ class HomeController extends Controller
     private function generateDescriptionWithAI($imagePath)
     {
         $apiKey = env('GEMINI_API_KEY');
-        // Note: Using v1beta as in your original file
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
 
         $imageData = base64_encode(file_get_contents($imagePath));
@@ -195,51 +177,35 @@ class HomeController extends Controller
         }
     }
 
-    // *** NEW HELPER FUNCTION ***
     /**
-     * Get a human-readable location name from coordinates using Nominatim (OpenStreetMap).
-     *
-     * @param float|null $latitude
-     * @param float|null $longitude
-     * @return string|null
+     * Get a human-readable location name from coordinates using Nominatim.
      */
     private function getLocationName($latitude, $longitude)
     {
-        // Don't run if coordinates are missing
         if (empty($latitude) || empty($longitude)) {
             return null;
         }
 
-        // The free Nominatim API endpoint
         $url = "https://nominatim.openstreetmap.org/reverse";
 
         try {
             $response = Http::withHeaders([
-                // Nominatim requires a descriptive User-Agent
-                'User-Agent' => 'Help-Me-Find App (Contact: your-email@example.com)'
+                'User-Agent' => 'Help-Me-Find App'
             ])->get($url, [
-                'format' => 'jsonv2', // Simple JSON format
+                'format' => 'jsonv2',
                 'lat' => $latitude,
                 'lon' => $longitude,
-                'zoom' => 18, // 18 is street/building level
-                'addressdetails' => 0 // We only need the 'display_name'
+                'zoom' => 18,
+                'addressdetails' => 0
             ]);
 
             if ($response->successful()) {
                 $data = $response->json();
-
-                // 'display_name' is the full, human-readable address
-                // e.g., "Block 12, Addis Ababa University, Yek'a, Addis Ababa, ..."
                 return $data['display_name'] ?? null;
             }
-
-            // API call failed or returned an error
             return null;
-
         } catch (\Exception $e) {
-            // Log::error('Nominatim reverse geocoding failed: ' . $e->getMessage());
             return null;
         }
     }
-
 }

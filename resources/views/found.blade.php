@@ -10,7 +10,7 @@
         <div class="container" @if(!empty($imageUrl) || !empty($description)) style="display: flex; flex-direction: column; min-height: calc(90vh - 100px);" @endif>
 
             @if(!empty($imageUrl) || !empty($description))
-                {{-- ... (Your existing 'Upload Successful' content) ... --}}
+                {{-- RESULT CARD --}}
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"> Upload Successful</h2>
@@ -34,11 +34,18 @@
                             </div>
                         @endif
                         {{-- Show captured location --}}
-                        @if(!empty($latitude) && !empty($longitude))
+                        @if(!empty($foundLocation))
                             <div>
                                 <h3 class="form-label"><i class="fa-solid fa-location-dot"></i> Location Captured</h3>
                                 <div class="ai-description-box" style="display: block; font-size: 0.9rem; background-color: #f4f4f4;">
-                                    <p>Your location has been saved with this item.</p>
+                                    <p><strong>Address:</strong> {{ $foundLocation }}</p>
+                                </div>
+                            </div>
+                        @elseif(!empty($latitude) && !empty($longitude))
+                             <div>
+                                <h3 class="form-label"><i class="fa-solid fa-location-dot"></i> Location Captured</h3>
+                                <div class="ai-description-box" style="display: block; font-size: 0.9rem; background-color: #f4f4f4;">
+                                    <p>Coordinates: {{ $latitude }}, {{ $longitude }}</p>
                                 </div>
                             </div>
                         @endif
@@ -53,16 +60,16 @@
                 </div>
 
             @else
+                {{-- UPLOAD FORM --}}
                 <div class="page-header">
                     <h1> Report a Found Item</h1>
                     <p>Upload a photo to get an AI-generated description.</p>
                 </div>
 
-                {{-- ADD ID TO THE FORM --}}
                 <form id="found-form" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
-                    {{-- ADD HIDDEN LOCATION FIELDS --}}
+                    {{-- HIDDEN LOCATION FIELDS --}}
                     <input type="hidden" name="latitude" id="latitude">
                     <input type="hidden" name="longitude" id="longitude">
 
@@ -130,9 +137,9 @@
                             uploadDescription.style.fontWeight = '500';
                         }
 
-                        // ** GET LOCATION **
+                        // ** GET LOCATION (Updated to match Report page logic) **
                         if (navigator.geolocation) {
-                            if (locationStatus) locationStatus.textContent = 'Getting location...';
+                            if (locationStatus) locationStatus.textContent = 'Acquiring location...';
                             navigator.geolocation.getCurrentPosition(
                                 function(position) {
                                     // Success
@@ -148,7 +155,7 @@
                                     console.error("Error getting location: " + error.message);
                                     if (locationStatus) {
                                         locationStatus.textContent = 'Could not get location. Please allow location access.';
-                                        locationStatus.style.color = 'red';
+                                        locationStatus.style.color = '#ef4444'; // Red
                                     }
                                 }
                             );
@@ -156,7 +163,7 @@
                             // Geolocation not supported
                             if (locationStatus) {
                                 locationStatus.textContent = 'Geolocation is not supported by your browser.';
-                                locationStatus.style.color = 'red';
+                                locationStatus.style.color = '#ef4444';
                             }
                         }
                     }
