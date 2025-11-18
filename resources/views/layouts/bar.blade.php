@@ -1,7 +1,7 @@
 <nav>
     <div class="logo">
         <button class="menu-btn" id="menu-btn" onclick="toggleDrawer()"><i class="fa fa-navicon"></i></button>
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 35px; margin-left: 15px;">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 30px; margin-left: 15px;">
         <a href="/">
             Help-Me-Find
         </a>
