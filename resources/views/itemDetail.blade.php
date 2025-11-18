@@ -65,7 +65,7 @@
               </div>
             </div>
 
-            {{-- *** MODIFIED LOCATION BLOCK *** --}}
+            {{-- *** MODIFIED LOCATION BLOCK (START OF CHANGES) *** --}}
             {{-- Check if text location OR map location exists --}}
             @if(!empty($item['Location']) || (!empty($item['Latitude']) && !empty($item['Longitude'])))
               <div class="separator-small"></div>
@@ -74,21 +74,24 @@
                 <div class="info-text">
                   <p class="info-label">Location</p>
 
-                  {{-- Check if latitude and longitude exist (using JSON keys) --}}
+                  {{-- 1. Always display text location if it exists --}}
+                  @if(!empty($item['Location']))
+                    <p><b>{{ $item['Location'] }}</b></p>
+                  @endif
+
+                  {{-- 2. Display map button if coordinates exist --}}
                   @if(!empty($item['Latitude']) && !empty($item['Longitude']))
                     {{-- Create a link to the new map route, using the $id (JSON key) --}}
                     <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
                         {{-- <i class="fa fa-map"></i>  --}}
                         View on Map
                     </a>
-
-                  @else
-                    {{-- Fallback if no map data but text location exists --}}
-                    <p>{{ $item['Location'] }}</p>
                   @endif
+
                 </div>
               </div>
             @endif
+            {{-- *** (END OF CHANGES) *** --}}
 
 
             {{-- Finder Info Block (from your logic) --}}

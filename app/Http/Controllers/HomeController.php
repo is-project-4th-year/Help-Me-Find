@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Http; // <-- Make sure Http is imported
 use Carbon\Carbon;
 use App\Models\FoundItem; // <== NEW: Import the new model
 
@@ -66,6 +66,10 @@ class HomeController extends Controller
             $latitude = $request->input('latitude');
             $longitude = $request->input('longitude');
 
+            $locationName = $this->getLocationName($latitude, $longitude);
+
+            $finalLocation = $locationName ?? $request->input('found_location');
+
             // Prepare data array for both storage types
             $dataToSave = [
                 'image_name' => $newFilename,
@@ -77,11 +81,14 @@ class HomeController extends Controller
                 'found_date' => $now->toDateTimeString(),
                 'latitude' => $latitude,
                 'longitude' => $longitude,
-                'found_location' => $request->input('found_location', 'Location captured') // Optional text location
+
+                // *** MODIFIED ***
+                'found_location' => $finalLocation // Use the new location name
             ];
 
 
             // === 1. Save to MySQL Database using Eloquent ===
+            // This will save $finalLocation to the 'found_location' column
             FoundItem::create($dataToSave);
 
 
@@ -93,7 +100,10 @@ class HomeController extends Controller
                 'ImageName' => $newFilename,
                 'Description' => $description,
                 'DateTime' => $now->toDateTimeString(),
-                'Location' => '', // You can use this for a text-based location if you add one
+
+                // *** MODIFIED ***
+                'Location' => $finalLocation, // Use the new location name
+
                 // ** NEW: Add location to JSON array **
                 'Latitude' => $latitude,
                 'Longitude' => $longitude,
@@ -117,24 +127,7 @@ class HomeController extends Controller
     }
 
     // ------------------ LOST ITEMS ------------------ //
-    // public function lostItems()
-    // {
-    //     $data = $this->loadData();
-    //     return view('lostItems', ['items' => $data]);
-    // }
-
-    // ------------------ ITEM DETAIL ------------------ //
-    // public function itemDetail($id)
-    // {
-    //     $data = $this->loadData();
-    //     $item = $data[$id] ?? null;
-
-    //     if (!$item) {
-    //         abort(404, 'Item not found');
-    //     }
-
-    //     return view('itemDetail', compact('item', 'id'));
-    // }
+    // ... (rest of your controller methods) ...
 
     // ------------------ HELPER FUNCTIONS ------------------ //
 
@@ -199,6 +192,53 @@ class HomeController extends Controller
             return $json['candidates'][0]['content']['parts'][0]['text'] ?? 'Automatic description failed.';
         } catch (\Exception $e) {
             return 'Automatic description failed.';
+        }
+    }
+
+    // *** NEW HELPER FUNCTION ***
+    /**
+     * Get a human-readable location name from coordinates using Nominatim (OpenStreetMap).
+     *
+     * @param float|null $latitude
+     * @param float|null $longitude
+     * @return string|null
+     */
+    private function getLocationName($latitude, $longitude)
+    {
+        // Don't run if coordinates are missing
+        if (empty($latitude) || empty($longitude)) {
+            return null;
+        }
+
+        // The free Nominatim API endpoint
+        $url = "https://nominatim.openstreetmap.org/reverse";
+
+        try {
+            $response = Http::withHeaders([
+                // Nominatim requires a descriptive User-Agent
+                'User-Agent' => 'Help-Me-Find App (Contact: your-email@example.com)'
+            ])->get($url, [
+                'format' => 'jsonv2', // Simple JSON format
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'zoom' => 18, // 18 is street/building level
+                'addressdetails' => 0 // We only need the 'display_name'
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                // 'display_name' is the full, human-readable address
+                // e.g., "Block 12, Addis Ababa University, Yek'a, Addis Ababa, ..."
+                return $data['display_name'] ?? null;
+            }
+
+            // API call failed or returned an error
+            return null;
+
+        } catch (\Exception $e) {
+            // Log::error('Nominatim reverse geocoding failed: ' . $e->getMessage());
+            return null;
         }
     }
 
