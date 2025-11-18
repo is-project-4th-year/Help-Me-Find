@@ -1,36 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
-{{-- We replace the include with a local head to add the report.css --}}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>Report Found Item - Help Me Find</title>
-
-    {{-- Include existing Vite assets --}}
-    @vite(['resources/css/style.css'])
-    @vite(['resources/css/grid.css'])
-    @vite(['resources/js/script.js'])
-    @vite(['resources/js/app.js'])
-
-    {{-- ADD THE NEW STYLESHEET --}}
-    @vite(['resources/css/report.css'])
-
-    {{-- Fallback links from original header --}}
-    <link href="{{ asset('build/assets/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('build/assets/grid.css') }}" rel="stylesheet">
-    {{-- Add new report.css fallback --}}
-    <link href="{{ asset('build/assets/report.css') }}" rel="stylesheet">
-    <script src="{{ asset('build/assets/script.js') }}" defer></script>
-
-    <link rel="icon" href="{{ asset('images/bookLogo.png') }}" type="image/png">
-    {{-- Use FontAwesome 6 for new icons --}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-</head>
-
+@include('layouts.header')
 <body>
+    @vite(['resources/css/report.css'])
     @include('layouts.bar')
 
     <main class="main-content">
