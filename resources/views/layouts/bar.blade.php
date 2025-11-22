@@ -20,7 +20,7 @@
 
         <li><a href="{{ route('found') }}"><i class="fa fa-bullhorn fa-fw"></i> Report Found Items</a></li>
         <li><a href="{{ route('lostItems') }}"><i class="fa fa-search fa-fw"></i> Browse Lost Items</a></li>
-        <li><a href="{{ route('chat.index') }}"><i class="fa fa-comments fa-fw"></i> Chats</a></li>
+        <li><a href="{{ route('chat.index') }}"><i class="fa fa-comments fa-fw"></i> Messages</a></li>
 
         {{-- This block has been uncommented and updated --}}
         {{-- <li>

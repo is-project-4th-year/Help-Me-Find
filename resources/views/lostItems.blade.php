@@ -38,7 +38,15 @@
     {{-- Items Grid --}}
     @if(isset($items) && count($items) > 0)
       <div class="items-grid">
-        @foreach($items as $id => $item)
+        {{-- UPDATED: Conditional Sorting --}}
+        {{-- If a search query exists (RAG Search), use items as-is. Otherwise, sort by Date. --}}
+        @php
+            $gridItems = request('query')
+                ? $items
+                : collect($items)->sortByDesc(fn($item) => \Carbon\Carbon::parse(data_get($item, 'DateTime')));
+        @endphp
+
+        @foreach($gridItems as $id => $item)
           <a href="{{ route('itemDetail', ['id' => $id]) }}" class="card item-card">
             <div>
               {{-- Image Section --}}
@@ -54,7 +62,6 @@
               <div class="card-header">
                 @if(!empty(data_get($item, 'Description')))
                   {{-- Create a "title" from the description --}}
-                  {{-- <h3 class="item-card-title">{{ Str::limit(data_get($item, 'Description'), 50) }}</h3> --}}
                   <p class="item-card-description">
                       {{ Str::limit(data_get($item, 'Description'), 160) }}
                   </p>
@@ -67,15 +74,21 @@
               </div>
             </div>
 
-            {{-- Card Content: Date --}}
+            {{-- Card Content: Date & Location --}}
             <div class="card-content" style="padding-top: 1rem;">
+              {{-- Date --}}
               <div class="item-info-line">
                   <i class="fa fa-calendar icon"></i>
                   <span><strong>Found:</strong> {{ \Carbon\Carbon::parse(data_get($item, 'DateTime'))->format('F j, Y') }}</span>
               </div>
 
-              {{-- REMOVED BUTTON --}}
-
+              {{-- Location (From previous request) --}}
+              @if(!empty(data_get($item, 'Location')))
+                  <div class="item-info-line" style="margin-top: 0.5rem;">
+                      <i class="fa fa-map-marker icon"></i>
+                      <span><strong>Location:</strong> {{ Str::limit(data_get($item, 'Location'), 40) }}</span>
+                  </div>
+              @endif
             </div>
           </a>
         @endforeach

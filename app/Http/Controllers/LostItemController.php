@@ -41,25 +41,35 @@ class LostItemController extends Controller
         $items = $this->loadData();
         $dataUpdated = false;
 
-        // 1. INDEXING (Check for missing embeddings)
+        // 1. INDEXING
         foreach ($items as $key => &$item) {
-            // Check if embedding is missing OR if it's the wrong size (Gemini = 768)
-            $needsEmbedding = !isset($item['embedding']) || count($item['embedding']) !== 768;
+            // We check for 'embedding_v2'. This forces the system to re-index
+            // existing items so they include the new Location and Date data.
+            if (!isset($item['embedding_v2'])) {
 
-            if ($needsEmbedding) {
-                $textToEmbed = "Description: " . ($item['Description'] ?? '') .
-                               " Found Date: " . ($item['DateTime'] ?? '');
+                // ** UPDATED: We now include Location and Date in the text string **
+                $textToEmbed = "Item Description: " . ($item['Description'] ?? '') .
+                               ". Location Found: " . ($item['Location'] ?? 'Unknown') .
+                               ". Date Found: " . ($item['DateTime'] ?? '');
 
+                // Generate the new vector
                 $embedding = $ragService->getEmbedding($textToEmbed);
 
                 if (!empty($embedding)) {
-                    $item['embedding'] = $embedding;
+                    $item['embedding_v2'] = $embedding; // Save to new v2 key
+
+                    // Optional: Remove the old 'embedding' key to keep file size down
+                    if (isset($item['embedding'])) {
+                        unset($item['embedding']);
+                    }
+
                     $dataUpdated = true;
                 }
             }
         }
-        unset($item);
+        unset($item); // Break reference
 
+        // Save changes back to uploads.json
         if ($dataUpdated) {
             File::put($this->jsonFile, json_encode($items, JSON_PRETTY_PRINT));
         }
@@ -67,20 +77,22 @@ class LostItemController extends Controller
         // 2. SEARCHING
         $queryEmbedding = $ragService->getEmbedding($query);
 
-        // 3. RANKING & LIMITING
+        // 3. RANKING
         $results = collect($items)->map(function ($item) use ($queryEmbedding, $ragService) {
             $score = 0;
-            if (isset($item['embedding']) && !empty($queryEmbedding)) {
-                $score = $ragService->cosineSimilarity($queryEmbedding, $item['embedding']);
+            // Compare query against the new 'embedding_v2'
+            if (isset($item['embedding_v2']) && !empty($queryEmbedding)) {
+                $score = $ragService->cosineSimilarity($queryEmbedding, $item['embedding_v2']);
             }
             $item['similarity_score'] = $score;
             return $item;
         })
         ->filter(function ($item) {
-            return $item['similarity_score'] > 0.35; // Filter low relevance
+            // Slightly lower threshold to allow for location/date fuzzy matches
+            return $item['similarity_score'] > 0.30;
         })
         ->sortByDesc('similarity_score')
-        ->take(6); // <--- LIMITS RESULTS TO TOP 6
+        ->take(6);
 
         return view('lostItems', ['items' => $results]);
     }
