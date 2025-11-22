@@ -1,7 +1,10 @@
 <nav>
     <div class="logo">
         <button class="menu-btn" id="menu-btn" onclick="toggleDrawer()"><i class="fa fa-navicon"></i></button>
-        <a href="/">Help-Me-Find</a>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 30px; margin-left: 15px;">
+        <a href="/">
+            Help-Me-Find
+        </a>
     </div>
     <ul class="options">
         {{-- TODO: Create a notification module that shows who is texting you. When pressing the notification, take the user to the chat page.--}}
@@ -15,8 +18,8 @@
     <ul class="options">
         <hr style="border: 0.5px solid rgba(167, 124, 67, 0.2); width: 90%; margin: 10px;">
 
-        <li><a href="{{ route('found') }}"><i class="fa fa-bullhorn fa-fw"></i> Report Found</a></li>
-        <li><a href="{{ route('lostItems') }}"><i class="fa fa-search fa-fw"></i> Lost Items</a></li>
+        <li><a href="{{ route('found') }}"><i class="fa fa-bullhorn fa-fw"></i> Report Found Items</a></li>
+        <li><a href="{{ route('lostItems') }}"><i class="fa fa-search fa-fw"></i> Browse Lost Items</a></li>
         <li><a href="{{ route('chat.index') }}"><i class="fa fa-comments fa-fw"></i> Chats</a></li>
 
         {{-- This block has been uncommented and updated --}}

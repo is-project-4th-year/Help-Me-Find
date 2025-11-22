@@ -4,27 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
-use App\Models\FoundItem; // <== NEW: Import the new model
+use App\Models\FoundItem;
 
 class HomeController extends Controller
 {
-    // The method that retrieves and displays members
-    public function viewPage() {
-        $owner = auth()->user();
-        $link = route('finder.report', $owner->qr_code_token);
-        $qrCode = QrCode::size(200)->generate($link);
-
-        return view('home', compact('qrCode', 'link'));
-    }
-
-    // --------------------- //
-
     private $uploadDir = 'uploads';
     private $jsonFile = 'uploads.json';
+
+    public function viewPage() {
+        $owner = auth()->user();
+        // Ensure the user is authenticated before accessing properties
+        if ($owner) {
+            $link = route('finder.report', $owner->qr_code_token);
+            $qrCode = QrCode::size(200)->generate($link);
+            return view('home', compact('qrCode', 'link'));
+        }
+        return redirect()->route('login');
+    }
 
     public function home()
     {
@@ -36,13 +35,17 @@ class HomeController extends Controller
     {
         $imageUrl = '';
         $description = '';
-        $now = Carbon::now();
+        $latitude = null;
+        $longitude = null;
+        $foundLocation = null; // Variable to hold the address name
 
         if ($request->isMethod('post')) {
 
-            if (!$request->hasFile('file')) {
-                return view('found', ['error' => 'No file selected']);
-            }
+            $request->validate([
+                'file' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+                'latitude' => 'nullable|numeric',
+                'longitude' => 'nullable|numeric',
+            ]);
 
             $file = $request->file('file');
             $ext = $file->getClientOriginalExtension() ?: 'jpg';
@@ -51,13 +54,20 @@ class HomeController extends Controller
             $file->move(public_path($this->uploadDir), $newFilename);
             $filepath = public_path("{$this->uploadDir}/{$newFilename}");
 
-            // Generate AI description
+            // 1. Generate AI description
             $description = $this->generateDescriptionWithAI($filepath);
 
-            // Get the currently authenticated user (the finder)
-            $finder = auth()->user();
+            // 2. Get Location Coordinates
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
 
-            // Prepare data array for both storage types
+            // 3. Get Human-Readable Location Name (Same logic as Report)
+            $foundLocation = $this->getLocationName($latitude, $longitude);
+
+            $finder = auth()->user();
+            $now = Carbon::now();
+
+            // 4. Prepare Data
             $dataToSave = [
                 'image_name' => $newFilename,
                 'description' => $description,
@@ -65,14 +75,15 @@ class HomeController extends Controller
                 'finder_last_name' => $finder->lastName,
                 'finder_email' => $finder->email,
                 'found_date' => $now->toDateTimeString(),
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'found_location' => $foundLocation // Save the name here
             ];
 
-
-            // === 1. Save to MySQL Database using Eloquent ===
+            // 5. Save to MySQL
             FoundItem::create($dataToSave);
 
-
-            // === 2. Save to JSON File (keeping the original functionality) ===
+            // 6. Save to JSON (Legacy support)
             $data = $this->loadData();
             $nextId = empty($data) ? 1 : (max(array_map('intval', array_keys($data))) + 1);
 
@@ -80,13 +91,13 @@ class HomeController extends Controller
                 'ImageName' => $newFilename,
                 'Description' => $description,
                 'DateTime' => $now->toDateTimeString(),
-                'Location' => '',
+                'Location' => $foundLocation, // Save name to JSON
+                'Latitude' => $latitude,
+                'Longitude' => $longitude,
+                'FinderId' => $finder->id,
                 'FinderFirstName' => $finder->firstName,
                 'FinderLastName' => $finder->lastName,
                 'FinderEmail' => $finder->email,
-                'OwnerFirstName' => "",
-                'OwnerLastName' => "",
-                'OwnerEmail' => "",
             ];
 
             $this->saveData($data);
@@ -94,33 +105,18 @@ class HomeController extends Controller
             $imageUrl = asset("uploads/{$newFilename}");
         }
 
-        return view('found', compact('imageUrl', 'description'));
+        // Pass the location name to the view so the user can see it
+        return view('found', compact('imageUrl', 'description', 'latitude', 'longitude', 'foundLocation'));
     }
-
-    // ------------------ LOST ITEMS ------------------ //
-    // public function lostItems()
-    // {
-    //     $data = $this->loadData();
-    //     return view('lostItems', ['items' => $data]);
-    // }
-
-    // ------------------ ITEM DETAIL ------------------ //
-    // public function itemDetail($id)
-    // {
-    //     $data = $this->loadData();
-    //     $item = $data[$id] ?? null;
-
-    //     if (!$item) {
-    //         abort(404, 'Item not found');
-    //     }
-
-    //     return view('itemDetail', compact('item', 'id'));
-    // }
 
     // ------------------ HELPER FUNCTIONS ------------------ //
 
     private function getNextFilename($extension = 'jpg')
     {
+        if (!File::exists(public_path($this->uploadDir))) {
+            File::makeDirectory(public_path($this->uploadDir), 0755, true);
+        }
+
         $files = File::files(public_path($this->uploadDir));
         $numbers = [];
 
@@ -140,7 +136,6 @@ class HomeController extends Controller
         if (!File::exists($this->jsonFile)) {
             return [];
         }
-
         $json = File::get($this->jsonFile);
         return json_decode($json, true) ?? [];
     }
@@ -182,4 +177,35 @@ class HomeController extends Controller
         }
     }
 
+    /**
+     * Get a human-readable location name from coordinates using Nominatim.
+     */
+    private function getLocationName($latitude, $longitude)
+    {
+        if (empty($latitude) || empty($longitude)) {
+            return null;
+        }
+
+        $url = "https://nominatim.openstreetmap.org/reverse";
+
+        try {
+            $response = Http::withHeaders([
+                'User-Agent' => 'Help-Me-Find App'
+            ])->get($url, [
+                'format' => 'jsonv2',
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'zoom' => 18,
+                'addressdetails' => 0
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data['display_name'] ?? null;
+            }
+            return null;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
 }

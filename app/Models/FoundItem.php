@@ -24,5 +24,9 @@ class FoundItem extends Model
         'owner_email',
         'found_date',
         'found_location',
+
+        // ** ADD THESE TWO LINES **
+        'latitude',
+        'longitude',
     ];
 }

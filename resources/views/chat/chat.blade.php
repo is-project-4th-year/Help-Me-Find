@@ -12,9 +12,6 @@
         <div class="chat-header">
             <div class="chat-header-content">
                 <div class="chat-header-user">
-                    {{-- <a href="{{ route('chat.list') }}" class="btn-icon" style="text-decoration: none;">
-                        <i class="fa fa-arrow-left"></i>
-                    </a> --}}
                     <div class="chat-avatar-fallback">
                         {{ strtoupper(substr($other->firstName, 0, 1) . substr($other->lastName, 0, 1)) }}
                     </div>
@@ -33,7 +30,10 @@
                 @endphp
                 <div class="message-bubble {{ $isMe ? 'sender-me' : 'sender-other' }}">
                     <div class="message-content {{ $isMe ? 'sender-me' : 'sender-other' }}">
-                        <p>{{ $m->body }}</p>
+
+                        {{-- ** CHANGED: Render Body as HTML ** --}}
+                        <div>{!! $m->body !!}</div>
+
                         <p class="message-timestamp {{ $isMe ? 'sender-me' : 'sender-other' }}">
                             {{ $m->created_at->format('h:i A') }}
                         </p>
@@ -43,9 +43,15 @@
         </div>
 
         <div class="chat-input-form">
-            {{--
-              UPDATED: Added data-* attributes to pass values to chat.js
-            --}}
+
+            {{-- ** Image Preview Area (Hidden by JS after send) ** --}}
+            @if(!empty($defaultImage))
+                <div id="image-preview-area" style="padding: 10px; background: #f0f0f0; border-top: 1px solid #ddd; display: flex; align-items: center; gap: 10px;">
+                    <img src="{{ asset($defaultImage) }}" style="height: 50px; width: 50px; object-fit: cover; border-radius: 5px;">
+                    <span style="font-size: 0.8rem; color: #666;">Image will be embedded in message...</span>
+                </div>
+            @endif
+
             <form id="message-form"
                   class="flex"
                   onsubmit="return false;"
@@ -57,7 +63,15 @@
                 <input type="hidden" id="receiver_id" value="{{ $other->id }}">
                 <input type="hidden" id="chatId" value="{{ $chatId }}">
 
-                <input id="body" class="input-field" placeholder="Type a message..." autocomplete="off" />
+                {{-- ** Hidden Image Path Input ** --}}
+                <input type="hidden" id="image_path" value="{{ $defaultImage ?? '' }}">
+
+                <input id="body"
+                       class="input-field"
+                       placeholder="Type a message..."
+                       autocomplete="off"
+                       value="{{ $defaultMessage ?? '' }}"
+                />
 
                 <button id="sendBtn" class="btn-icon-send">
                     <i class="fa fa-paper-plane"></i>
@@ -65,13 +79,5 @@
             </form>
         </div>
     </div>
-
-    {{-- REMOVED: Inline script block is gone --}}
-
-    {{--
-      ADDED: Load the new external chat.js file.
-      The 'defer' attribute ensures it runs after the HTML is parsed.
-    --}}
-    {{-- <script src="{{ asset('js/chat.js') }}" defer></script> --}}
 </body>
 </html>

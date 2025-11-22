@@ -69,4 +69,27 @@ class LostItemController extends Controller
 
         return view('itemDetail', compact('item', 'id'));
     }
+    /**
+     * Show the map page for a single item.
+     */
+    public function showItemMap($id)
+    {
+        $data = $this->loadData();
+        $item = $data[$id] ?? null;
+
+        if (!$item) {
+            abort(404, 'Item not found');
+        }
+
+        // Check for the location data (using JSON keys: 'Latitude', 'Longitude')
+        // These keys come from your HomeController's save-to-JSON logic
+        if (empty($item['Latitude']) || empty($item['Longitude'])) {
+            // No location, redirect back to the detail page with an error
+            return redirect()->route('itemDetail', $id)
+                             ->with('error', 'No location data available for this item.');
+        }
+
+        // We have a location, show the map view
+        return view('itemMap', compact('item', 'id'));
+    }
 }

@@ -2,6 +2,9 @@
 <html lang="en">
 @include('layouts.header')
 
+{{-- Add jsPDF Library for PDF generation --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <body>
   @include('layouts.bar')
 
@@ -10,17 +13,14 @@
 
         <div class="text-center space-y-2" style="margin-bottom: 2.5rem;">
             <h1 style="color: black;"> Welcome Back, <span class="text-primary">{{ auth()->user()->firstName }}</span> </h1>
-            {{-- <p class="text-muted-foreground" style="font-size: 1.1rem; max-width: 550px; margin: 0 auto;">
-                Your personal QR code for lost item recovery.
-            </p> --}}
         </div>
 
-        {{-- NEW: Main Grid Layout --}}
+        {{-- Main Grid Layout --}}
         <div class="home-grid-container">
 
             {{-- Column 1: QR Code --}}
             <div class="grid-col-main">
-                <div class="card qr-card" style="margin-bottom: 0;"> {{-- Remove card's default margin --}}
+                <div class="card qr-card" style="margin-bottom: 0;">
                     <div class="card-header text-center">
                         <h2 class="card-title" style="justify-content: center; margin-bottom: 0;">
                             <i class="fa fa-qrcode"></i>
@@ -33,10 +33,13 @@
                     <div class="card-content space-y-4">
                         <div class="qr-image-wrapper">
                             <div class="qr-code-inner-box">
+                                <p class="qr-text top-text">Did you find this lost item?</p>
                                 {!! $qrCode !!}
+                                <p class="qr-text bottom-text">Help me find my belonging</p>
                             </div>
                         </div>
 
+                        {{-- Button now triggers the PDF download logic in script.js --}}
                         <button onclick="handleDownload()" class="btn btn-outline w-full" style="margin: 0;">
                             <i class="fa fa-download icon"></i>
                             Download QR Code
@@ -53,10 +56,10 @@
             </div>
 
             {{-- Column 2: Other Cards --}}
-            <div class="grid-col-sidebar space-y-6"> {{-- space-y-6 handles gap between cards --}}
+            <div class="grid-col-sidebar space-y-6">
 
                 {{-- How It Works Card --}}
-                <div class="card" style="margin-bottom: 0;"> {{-- Remove card's default margin --}}
+                <div class="card" style="margin-bottom: 0;">
                     <div class="card-header">
                         <h3 class="card-title" style="margin-bottom: 10px;"><i class="fa fa-info-circle fa-fw"></i> How It Works</h3>
                     </div>
@@ -77,7 +80,7 @@
                 </div>
 
                 {{-- Quick Actions Card --}}
-                <div class="card" style="margin-bottom: 0;"> {{-- Remove card's default margin --}}
+                <div class="card" style="margin-bottom: 0;">
                     <div class="card-header">
                         <h3 class="card-title" style="margin-bottom: 10px;"><i class="fa fa-bolt fa-fw"></i> Quick Actions</h3>
                     </div>
@@ -89,16 +92,14 @@
                             Lost something? Browse through found items or search for your lost item.
                         </p>
                          <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                            {{-- UPDATED --}}
                             <a href="{{ route('found') }}" class="btn" style="margin: 0;"><i class="fa fa-bullhorn"></i> Report Found Item</a>
-                            {{-- UPDATED --}}
                             <a href="{{ route('lostItems') }}" class="btn btn-secondary" style="margin: 0;"><i class="fa fa-search"></i> Browse Lost Items</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div> {{-- End home-grid-container --}}
+        </div>
 
     </div>
   </div>
@@ -106,31 +107,6 @@
   <footer>
     &copy; {{ now()->year }} Help-Me-Find | Designed with ❤ by Bethelhem
   </footer>
-
-  {{-- Script to handle SVG download (no changes) --}}
-  <script>
-    function handleDownload() {
-        try {
-            const qrCodeSvg = document.querySelector('.qr-code-inner-box svg');
-            if (!qrCodeSvg) {
-                console.error('QR Code SVG element not found.');
-                alert('Error: Could not find QR Code to download.');
-                return;
-            }
-            const svgData = new XMLSerializer().serializeToString(qrCodeSvg);
-            const svgUrl = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
-            const link = document.createElement("a");
-            link.href = svgUrl;
-            link.download = "help-me-find-qr-code.svg";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (e) {
-            console.error('Error during download:', e);
-            alert('An error occurred while trying to download the QR code.');
-        }
-    }
-  </script>
 
 </body>
 </html>
