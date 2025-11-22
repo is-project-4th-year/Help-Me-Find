@@ -5,7 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    protected $fillable = ['sender_id','receiver_id','body'];
+    // Added 'image_path' to fillable
+    protected $fillable = ['sender_id','receiver_id','body', 'image_path'];
 
     public function sender() {
         return $this->belongsTo(User::class, 'sender_id');

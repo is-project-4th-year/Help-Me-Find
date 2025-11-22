@@ -87,8 +87,12 @@
                 <div class="contact-buttons">
                     @if(isset($item['FinderId']) && $item['FinderId'] != auth()->id())
 
-                        {{-- UPDATED: Pass the 'message' parameter here --}}
-                        <a href="{{ route('chat.with', ['user' => $item['FinderId'], 'message' => 'Hello, this is my item that you found.']) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
+                        {{-- UPDATED: Pass the 'message' AND 'image' parameters here --}}
+                        <a href="{{ route('chat.with', [
+                            'user' => $item['FinderId'],
+                            'message' => 'Hello, this is my item that you found.',
+                            'image' => 'uploads/' . $item['ImageName']
+                        ]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
                             Chat with Finder
                         </a>
 

@@ -74,7 +74,7 @@ class FinderReportController extends Controller
         // 7. Save to MySQL Database
         FoundItem::create($dataToSave);
 
-        // 8. Save to JSON
+        // 8. Save to JSON (Legacy)
         $data = $this->loadData();
         $nextId = empty($data) ? 1 : (max(array_map('intval', array_keys($data))) + 1);
 
@@ -99,10 +99,12 @@ class FinderReportController extends Controller
 
         $this->saveData($data);
 
-        // 9. Redirect to Chat with Owner - UPDATED with message
+        // 9. Redirect to Chat with Owner
+        // ** UPDATED: Includes pre-filled message and image path **
         return redirect()->route('chat.with', [
             'user' => $owner->id,
-            'message' => 'Hello. I found this item of yours.'
+            'message' => 'Hello. I found this item of yours.',
+            'image' => 'uploads/' . $newFilename
         ]);
     }
 

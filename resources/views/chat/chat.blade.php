@@ -30,7 +30,10 @@
                 @endphp
                 <div class="message-bubble {{ $isMe ? 'sender-me' : 'sender-other' }}">
                     <div class="message-content {{ $isMe ? 'sender-me' : 'sender-other' }}">
-                        <p>{{ $m->body }}</p>
+
+                        {{-- ** CHANGED: Render Body as HTML ** --}}
+                        <div>{!! $m->body !!}</div>
+
                         <p class="message-timestamp {{ $isMe ? 'sender-me' : 'sender-other' }}">
                             {{ $m->created_at->format('h:i A') }}
                         </p>
@@ -40,6 +43,15 @@
         </div>
 
         <div class="chat-input-form">
+
+            {{-- ** Image Preview Area (Hidden by JS after send) ** --}}
+            @if(!empty($defaultImage))
+                <div id="image-preview-area" style="padding: 10px; background: #f0f0f0; border-top: 1px solid #ddd; display: flex; align-items: center; gap: 10px;">
+                    <img src="{{ asset($defaultImage) }}" style="height: 50px; width: 50px; object-fit: cover; border-radius: 5px;">
+                    <span style="font-size: 0.8rem; color: #666;">Image will be embedded in message...</span>
+                </div>
+            @endif
+
             <form id="message-form"
                   class="flex"
                   onsubmit="return false;"
@@ -51,7 +63,9 @@
                 <input type="hidden" id="receiver_id" value="{{ $other->id }}">
                 <input type="hidden" id="chatId" value="{{ $chatId }}">
 
-                {{-- UPDATED: Added value attribute to pre-fill message --}}
+                {{-- ** Hidden Image Path Input ** --}}
+                <input type="hidden" id="image_path" value="{{ $defaultImage ?? '' }}">
+
                 <input id="body"
                        class="input-field"
                        placeholder="Type a message..."
