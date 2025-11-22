@@ -2,6 +2,9 @@
 <html lang="en">
 @include('layouts.header')
 
+{{-- Add jsPDF Library for PDF generation --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <body>
   @include('layouts.bar')
 
@@ -29,7 +32,6 @@
                     </div>
                     <div class="card-content space-y-4">
                         <div class="qr-image-wrapper">
-                            {{-- Text matches CSS and Script logic --}}
                             <div class="qr-code-inner-box">
                                 <p class="qr-text top-text">Did you find this lost item?</p>
                                 {!! $qrCode !!}
@@ -37,6 +39,7 @@
                             </div>
                         </div>
 
+                        {{-- Button now triggers the PDF download logic in script.js --}}
                         <button onclick="handleDownload()" class="btn btn-outline w-full" style="margin: 0;">
                             <i class="fa fa-download icon"></i>
                             Download QR Code

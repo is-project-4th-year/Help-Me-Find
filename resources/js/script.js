@@ -104,65 +104,59 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /**
- * Handles the download of the QR code with Top and Bottom text + Padding + Square Border.
+ * Handles the download of the QR code as a PDF.
+ * Includes Top/Bottom text, Padding, and a 1px Square Border.
  */
 window.handleDownload = function() {
     try {
-        const qrContainer = document.querySelector('.qr-code-inner-box');
-
-        if (!qrContainer) {
-            console.error('QR Code container not found.');
+        // 1. Check dependencies
+        if (!window.jspdf) {
+            alert('PDF Library is not loaded yet. Please check your internet connection.');
             return;
         }
+
+        // 2. Get DOM elements
+        const qrContainer = document.querySelector('.qr-code-inner-box');
+        if (!qrContainer) return;
 
         const originalSvg = qrContainer.querySelector('svg');
         const topTextElement = qrContainer.querySelector('.top-text');
         const bottomTextElement = qrContainer.querySelector('.bottom-text');
 
         if (!originalSvg) {
-            console.error('QR Code SVG element not found.');
             alert('Error: Could not find QR Code to download.');
             return;
         }
 
-        // Get computed style for Primary Color
+        // 3. Get Styles & Dimensions
         const rootStyles = getComputedStyle(document.documentElement);
         const primaryColor = rootStyles.getPropertyValue('--primary').trim() || '#000000';
 
-        // Get original dimensions
         const width = parseInt(originalSvg.getAttribute('width') || 200);
         const height = parseInt(originalSvg.getAttribute('height') || 200);
 
-        // Define settings
-        const padding = 2; // Minimum padding
+        // Settings for layout
+        const padding = 2;
         const topTextHeight = 35;
         const bottomTextHeight = 35;
 
-        // Calculate Content Dimensions (Text + QR)
+        // Determine Square Dimensions
         const contentWidth = width;
         const contentHeight = height + topTextHeight + bottomTextHeight;
-
-        // Determine Square Size
-        // We take the larger of the width or height to ensure nothing is cropped,
-        // and add padding to create the square box.
         const maxContentDimension = Math.max(contentWidth, contentHeight);
         const totalDimension = maxContentDimension + (padding * 2);
 
-        // Final SVG Dimensions (Square)
         const totalWidth = totalDimension;
         const totalHeight = totalDimension;
 
-        // Calculate Centering Offsets
-        // This centers the content block (QR + Text) within the square canvas
+        // Center offsets
         const xOffset = (totalWidth - width) / 2;
         const yOffset = (totalHeight - contentHeight) / 2;
 
-        // Extract content
-        const innerContent = originalSvg.innerHTML;
         const topText = topTextElement ? topTextElement.innerText : "Did you find this lost item?";
         const bottomText = bottomTextElement ? bottomTextElement.innerText : "Help me find my belonging";
 
-        // Create new SVG string
+        // 4. Construct SVG String
         const newSvg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}">
             <rect width="100%" height="100%" fill="white"/>
@@ -174,7 +168,7 @@ window.handleDownload = function() {
             </text>
 
             <g transform="translate(${xOffset}, ${yOffset + topTextHeight})">
-                ${innerContent}
+                ${originalSvg.innerHTML}
             </g>
 
             <text x="50%" y="${yOffset + topTextHeight + height + bottomTextHeight - 10}" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="${primaryColor}">
@@ -183,19 +177,44 @@ window.handleDownload = function() {
         </svg>
         `;
 
-        // Create blob and download link
-        const blob = new Blob([newSvg], {type: 'image/svg+xml'});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "help-me-find-qr-code.svg";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        // 5. Convert SVG -> Canvas -> PDF
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+
+        // Use a multiplier for better PDF resolution (optional, but good for text)
+        const scale = 2;
+        canvas.width = totalWidth * scale;
+        canvas.height = totalHeight * scale;
+        ctx.scale(scale, scale);
+
+        const svgBlob = new Blob([newSvg], {type: 'image/svg+xml;charset=utf-8'});
+        const url = URL.createObjectURL(svgBlob);
+
+        img.onload = function() {
+            ctx.drawImage(img, 0, 0);
+
+            const { jsPDF } = window.jspdf;
+            // Create PDF with the exact square dimensions
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [totalWidth, totalHeight]
+            });
+
+            // Add image to PDF
+            const imgData = canvas.toDataURL('image/png');
+            doc.addImage(imgData, 'PNG', 0, 0, totalWidth, totalHeight);
+
+            doc.save("help-me-find-qr-code.pdf");
+
+            URL.revokeObjectURL(url);
+        };
+
+        img.src = url;
 
     } catch (e) {
         console.error('Error during download:', e);
-        alert('An error occurred while trying to download the QR code.');
+        alert('An error occurred while trying to generate the PDF.');
     }
 }
