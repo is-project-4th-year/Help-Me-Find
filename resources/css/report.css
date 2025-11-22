@@ -217,3 +217,85 @@
     font-size: 0.9rem;
     line-height: 1.5;
 }
+
+/* ===== Helper Classes ===== */
+.mb-2 { margin-bottom: 2rem; }
+.text-primary-color { color: var(--primary); }
+.text-dark { color: #333; }
+
+.location-box {
+    display: block;
+    font-size: 0.9rem;
+    background-color: #f4f4f4;
+}
+
+.image-preview-wrapper {
+    display: block;
+    margin-bottom: 0;
+    border: 1px solid rgb(172, 172, 172);
+}
+
+.ai-description-box {
+    display: block;
+}
+
+.action-buttons-wrapper {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.location-status-text {
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+    color: #555;
+}
+
+.submit-btn-custom {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.125rem;
+    margin: 10px 0px;
+}
+
+/* Result Flex Wrapper (Desktop) */
+.result-flex-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(90vh - 100px);
+}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        padding-bottom: 80px; /* Space for footer */
+    }
+
+    .page-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .upload-zone {
+        padding: 2rem 1rem;
+    }
+
+    /* Make inputs tap-friendly */
+    .btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .action-buttons-wrapper {
+        flex-direction: column;
+    }
+
+    /* Reset min-height on mobile to avoid gaps */
+    .result-flex-wrapper {
+        min-height: auto;
+    }
+}

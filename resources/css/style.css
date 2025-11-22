@@ -661,3 +661,89 @@ footer {
     /* grid-col-main properties from tablet are fine */
     /* card.qr-card properties from tablet are fine */
 }
+
+/* ===== HELPER CLASSES (Replaces Inline Styles) ===== */
+.no-margin { margin: 0 !important; }
+.no-margin-bottom { margin-bottom: 0 !important; }
+.justify-center { justify-content: center; }
+.btn-no-margin { margin: 0 !important; }
+
+.home-container {
+    max-width: 1280px;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    text-align: left;
+    padding-bottom: 0;
+}
+
+.welcome-header-wrapper {
+    margin-bottom: 2.5rem;
+}
+
+.qr-link-text {
+    color: var(--primary);
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quick-actions-wrapper {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* ... [Existing Card & QR Styles - Keep as is] ... */
+
+/* ===== MOBILE RESPONSIVENESS OVERRIDES ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        margin: 20px auto;
+    }
+
+    .home-container {
+        padding-bottom: 60px; /* Space for footer */
+    }
+
+    /* Header adjustments */
+    h1 {
+        font-size: 1.75rem;
+    }
+    .welcome-header-wrapper {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Card Adjustments */
+    .card-header {
+        padding: 1rem;
+    }
+    .card-content {
+        padding: 1rem;
+    }
+    .card-title {
+        font-size: 1.25rem;
+    }
+
+    /* QR Card */
+    .qr-code-inner-box svg {
+        width: 180px;
+        height: 180px;
+    }
+    .qr-text {
+        font-size: 16px;
+    }
+
+    /* Quick Actions */
+    .quick-actions-wrapper {
+        flex-direction: column;
+    }
+    .quick-actions-wrapper .btn {
+        width: 100%;
+        text-align: center;
+    }
+}

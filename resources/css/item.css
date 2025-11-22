@@ -227,3 +227,60 @@ body {
   margin: 0;
   font-size: 0.875rem;
 }
+
+.error-card {
+    background-color: #ffcccc;
+    color: #a00;
+    border: 1px solid #a00;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.action-btn {
+    margin-top: 5px;
+    width: 120px;
+    display: inline-block;
+    text-align: center;
+}
+
+/* ... [Existing Styles] ... */
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+    .item-detail-container {
+        margin: 1rem auto;
+        padding: 1rem;
+        margin-bottom: 60px;
+    }
+
+    .details-section .item-title {
+        font-size: 1.5rem;
+    }
+
+    .image-card {
+        /* Allow image to be rectangular on mobile if needed, or keep square but smaller */
+        max-height: 300px;
+    }
+
+    .info-block {
+        flex-direction: column;
+    }
+
+    .info-icon {
+        margin-bottom: 5px;
+    }
+
+    .info-text {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .contact-buttons {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .action-btn {
+        width: 100%; /* Full width button on mobile */
+    }
+}

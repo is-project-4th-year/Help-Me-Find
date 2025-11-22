@@ -14,7 +14,7 @@
     </a>
 
     @if(session('error'))
-        <div class="card" style="background-color: #ffcccc; color: #a00; border: 1px solid #a00; margin-bottom: 1rem; padding: 1rem;">
+        <div class="card error-card">
             {{ session('error') }}
         </div>
     @endif
@@ -65,7 +65,8 @@
                   @endif
 
                   @if(!empty($item['Latitude']) && !empty($item['Longitude']))
-                    <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
+                    {{-- UPDATED CLASS --}}
+                    <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-secondary btn-sm action-btn">
                         View on Map
                     </a>
                   @endif
@@ -86,13 +87,12 @@
                 <p class="info-label">Found by: <br> <b>{{ !empty($finderName) ? $finderName : 'Anonymous Finder' }}</b></p>
                 <div class="contact-buttons">
                     @if(isset($item['FinderId']) && $item['FinderId'] != auth()->id())
-
-                        {{-- UPDATED: Pass the 'message' AND 'image' parameters here --}}
+                        {{-- UPDATED CLASS --}}
                         <a href="{{ route('chat.with', [
                             'user' => $item['FinderId'],
                             'message' => 'Hello, this is my item that you found.',
                             'image' => 'uploads/' . $item['ImageName']
-                        ]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
+                        ]) }}" class="btn btn-secondary btn-sm action-btn">
                             Chat with Finder
                         </a>
 
@@ -115,35 +115,36 @@
       </div>
     </div>
 
+    {{-- ... Steps Card (No changes needed) ... --}}
     <div class="card steps-card">
-      <div class="card-header">
-        <h3 class="card-title">What to do next?</h3>
-        <p class="text-muted card-description">Steps to safely recover this item</p>
+        <div class="card-header">
+          <h3 class="card-title">What to do next?</h3>
+          <p class="text-muted card-description">Steps to safely recover this item</p>
+        </div>
+        <div class="card-content">
+          <div class="step-block">
+            <div class="step-number">1</div>
+            <div class="step-text">
+              <h4>Contact the finder</h4>
+              <p class="text-muted">Use the messaging feature to discuss details and arrange a meetup.</p>
+            </div>
+          </div>
+          <div class="step-block">
+            <div class="step-number">2</div>
+            <div class="step-text">
+              <h4>Verify ownership</h4>
+              <p class="text-muted">Be prepared to answer specific questions to confirm the item is yours.</p>
+            </div>
+          </div>
+          <div class="step-block">
+            <div class="step-number">3</div>
+            <div class="step-text">
+              <h4>Arrange a safe meetup</h4>
+              <p class="text-muted">Meet in a public place during the daytime for a safe exchange.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card-content">
-        <div class="step-block">
-          <div class="step-number">1</div>
-          <div class="step-text">
-            <h4>Contact the finder</h4>
-            <p class="text-muted">Use the messaging feature to discuss details and arrange a meetup.</p>
-          </div>
-        </div>
-        <div class="step-block">
-          <div class="step-number">2</div>
-          <div class="step-text">
-            <h4>Verify ownership</h4>
-            <p class="text-muted">Be prepared to answer specific questions to confirm the item is yours.</p>
-          </div>
-        </div>
-        <div class="step-block">
-          <div class="step-number">3</div>
-          <div class="step-text">
-            <h4>Arrange a safe meetup</h4>
-            <p class="text-muted">Meet in a public place during the daytime for a safe exchange.</p>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </div>
 

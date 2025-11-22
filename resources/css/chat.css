@@ -189,3 +189,35 @@
 .chat-input-form .btn-icon-send:hover {
     opacity: 0.9;
 }
+
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+    .chat-container {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        /* Use viewport height unit for mobile browsers */
+        height: calc(100dvh - 60px); /* Subtract nav height approx */
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .chat-messages {
+        padding: 0.5rem;
+    }
+
+    .message-content {
+        max-width: 85%; /* Wider bubbles on mobile */
+        padding: 0.5rem 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .chat-input-form {
+        padding: 0.5rem;
+    }
+
+    .chat-input-form .input-field {
+        padding: 0.6rem;
+    }
+}

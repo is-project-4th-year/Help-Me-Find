@@ -186,3 +186,27 @@
 .chat-list-empty-card p {
     margin: 0.25rem 0 0 0;
 }
+
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+    .chat-page-container {
+        margin: 0;
+        padding: 1rem;
+        padding-bottom: 80px; /* Space for footer */
+    }
+
+    .chat-list-header h1 {
+        font-size: 1.25rem;
+    }
+
+    .chat-list-card {
+        padding: 0.75rem;
+    }
+
+    .chat-list-avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+}

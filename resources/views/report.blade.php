@@ -2,7 +2,6 @@
 <html lang="en">
 @include('layouts.header')
 <body>
-    {{-- Reuse the report CSS from found.blade.php --}}
     @vite(['resources/css/report.css'])
     @include('layouts.bar')
 
@@ -10,11 +9,11 @@
         <div class="container">
 
             {{-- Owner Info Card --}}
-            <div class="card" style="margin-bottom: 2rem;">
+            <div class="card mb-2">
                 <div class="card-header">
-                    <h2 class="card-title" style="color: var(--primary);"><i class="fa fa-user-circle-o fa-fw"></i> Owner Identified</h2>
+                    <h2 class="card-title text-primary-color"><i class="fa fa-user-circle-o fa-fw"></i> Owner Identified</h2>
                     <p class="card-description">
-                        This item belongs to <strong style="color: #333;">{{ $owner->firstName }} {{ $owner->lastName }}</strong>.
+                        This item belongs to <strong class="text-dark">{{ $owner->firstName }} {{ $owner->lastName }}</strong>.
                     </p>
                 </div>
             </div>
@@ -22,8 +21,6 @@
             {{-- Report Form --}}
             <form id="report-form" method="POST" action="{{ route('finder.submit', $owner->qr_code_token) }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
-
-                {{-- Hidden Location Fields --}}
                 <input type="hidden" name="latitude" id="latitude">
                 <input type="hidden" name="longitude" id="longitude">
 
@@ -36,7 +33,6 @@
                     </div>
 
                     <div class="card-content">
-                        {{-- Image Upload Zone --}}
                         <div class="upload-zone">
                             <i class="fa-solid fa-upload upload-icon"></i>
                             <br>
@@ -44,13 +40,11 @@
                             <p class="card-description" style="margin-top: 0.5rem;">PNG, JPG, or WEBP</p>
                             <input id="image-upload" name="image" type="file" accept="image/*" class="upload-input" required>
                         </div>
-
-                        {{-- Location Status Message --}}
-                        <div id="location-status" style="text-align: center; margin-top: 1rem; font-style: italic; color: #555;"></div>
+                        <div id="location-status" class="location-status-text"></div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-full" style="padding-top: 1rem; padding-bottom: 1rem; font-size: 1.125rem; margin: 10px 0px;">
+                <button type="submit" class="btn btn-primary w-full submit-btn-custom">
                     <i class="fa fa-paper-plane"></i> Analyze, Save & Chat
                 </button>
             </form>
