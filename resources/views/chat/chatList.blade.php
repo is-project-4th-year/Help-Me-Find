@@ -35,13 +35,11 @@
                         <div class="chat-list-header-row">
                             <h4>{{ $u->firstName }} {{ $u->lastName }}</h4>
                             <span class="timestamp">
-                                {{-- $u->lastMessageTime ?? '1d ago' --}}
-                                1d ago
+                                {{ $u->lastMessageTime }}
                             </span>
                         </div>
                         <p class="chat-list-message">
-                            {{-- $u->lastMessageSnippet ?? $u->email --}}
-                            This is a placeholder for the last message...
+                            {{ $u->lastMessageSnippet }}
                         </p>
                     </div>
 

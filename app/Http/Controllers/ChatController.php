@@ -6,13 +6,42 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ChatController extends Controller
 {
     public function index()
     {
-        $users = User::where('id', '!=', Auth::id())->get(['id','firstName','lastName','email']);
-        return view('chat.ChatList', compact('users'));
+        $me = Auth::id();
+
+        // Get all users except the current user
+        $users = User::where('id', '!=', $me)->get();
+
+        // Map over users to attach the last message details
+        $conversations = $users->map(function($user) use ($me) {
+            // Query the latest message between the authenticated user and this user
+            $lastMessage = Message::where(function($q) use ($me, $user) {
+                $q->where('sender_id', $me)->where('receiver_id', $user->id);
+            })->orWhere(function($q) use ($me, $user) {
+                $q->where('sender_id', $user->id)->where('receiver_id', $me);
+            })->latest()->first();
+
+            // If there is no message history, return null to filter this user out later
+            if (!$lastMessage) {
+                return null;
+            }
+
+            // Add custom properties for the view
+            $user->lastMessageSnippet = Str::limit(strip_tags($lastMessage->body), 40);
+            $user->lastMessageTime = $lastMessage->created_at->diffForHumans();
+            $user->lastMessageRaw = $lastMessage->created_at; // Used for sorting
+
+            return $user;
+        })
+        ->filter() // Remove users with no messages (null values)
+        ->sortByDesc('lastMessageRaw'); // Sort by newest message first
+
+        return view('chat.chatList', ['users' => $conversations]);
     }
 
     public function withUser(Request $request, User $user)
