@@ -560,7 +560,10 @@ footer {
      background-color: #ffffff;
      border-radius: var(--radius-lg);
      box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* shadow-md */
-     display: inline-block; /* To fit content */
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     width: fit-content;
 }
 
 .qr-code-inner-box svg {
@@ -568,6 +571,17 @@ footer {
     height: 225px; /* h-64 */
     display: block;
 }
+
+/* UPDATED Text Styles */
+.qr-text {
+    margin: 7px 0;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--primary);
+    text-align: center;
+    /* font-family: Arial, sans-serif; */
+}
+
 
 .btn.btn-outline {
     background-color: transparent;
