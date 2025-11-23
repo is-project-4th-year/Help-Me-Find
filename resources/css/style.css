@@ -344,16 +344,6 @@ tr:hover {
     }
 }
 
-/* Desktop-sized and up */
-@media (min-width: 1024px) {
-    .home-grid-container {
-        /* 2 equal columns on desktop */
-        grid-template-columns: 1fr 1fr;
-    }
-
-    /* grid-col-main properties from tablet are fine */
-    /* card.qr-card properties from tablet are fine */
-}
 
 
 /* ===== Mobile Responsive Updates ===== */
@@ -407,8 +397,13 @@ tr:hover {
         height: auto;
     }
 
+    .grid-col-sidebar {
+        padding-top: 1.5rem; /* Reduce padding for mobile */
+    }
+
     /* Reduce gap in grid layout for mobile */
     .home-grid-container {
         gap: 1rem;
+        display:contents;
     }
 }
