@@ -58,14 +58,10 @@
               <div class="info-block">
                 <i class="fa fa-map-marker fa-fw info-icon"></i>
                 <div class="info-text">
-                  <p class="info-label">Location</p>
-
-                  @if(!empty($item['Location']))
-                    <p><b>{{ $item['Location'] }}</b></p>
-                  @endif
+                    <p class="info-label">Found by: <br> <b>{{ !empty($item['Location']) ? $item['Location'] : 'Location Unknown' }}</b></p>
 
                   @if(!empty($item['Latitude']) && !empty($item['Longitude']))
-                    <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
+                    <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-sm" style="margin-top: 5px; width: 140px;">
                         View on Map
                     </a>
                   @endif
@@ -92,7 +88,7 @@
                             'user' => $item['FinderId'],
                             'message' => 'Hello, this is my item that you found.',
                             'image' => 'uploads/' . $item['ImageName']
-                        ]) }}" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 120px;">
+                        ]) }}" class="btn btn-sm" style="margin-top: 5px; width: 140px;">
                             Chat with Finder
                         </a>
 

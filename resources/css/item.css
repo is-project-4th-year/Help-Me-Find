@@ -159,7 +159,8 @@ body {
   line-height: 1.5;
 }
 .info-label {
-  /* width: 260px; */
+  max-width: calc(100% - 250px);
+  /* padding-right: 150px; */
   font-size: 0.875rem; /* 14px */
   color: var(--muted-foreground);
   font-weight: var(--font-weight-normal);

@@ -12,9 +12,9 @@
             {{-- Owner Info Card --}}
             <div class="card" style="margin-bottom: 2rem;">
                 <div class="card-header">
-                    <h2 class="card-title" style="color: var(--primary);"><i class="fa fa-user-circle-o fa-fw"></i> Owner Identified</h2>
+                    <h2 class="card-title" style="color: var(--primary);"><i class="fa fa-user-circle-o fa-fw"></i> This item belongs to <b>{{ $owner->firstName }} {{ $owner->lastName }}</b></h2>
                     <p class="card-description">
-                        This item belongs to <strong style="color: #333;">{{ $owner->firstName }} {{ $owner->lastName }}</strong>.
+                        {{-- This item belongs to <strong style="color: #333;"></strong>. --}}
                     </p>
                 </div>
             </div>
