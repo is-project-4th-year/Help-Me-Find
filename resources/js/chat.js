@@ -2,6 +2,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageForm = document.getElementById('message-form');
     if (!messageForm) return;
 
+    // ---------------------------------------------------------
+    // ** NEW CODE: Clean URL query params immediately on load **
+    // ---------------------------------------------------------
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('message') || urlParams.has('image')) {
+        // This replaces the current history entry with the clean pathname
+        // e.g., "/chat/2?message=..." becomes "/chat/2"
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    // ---------------------------------------------------------
+
     const messageBody = document.getElementById('body');
     const messagesEl = document.getElementById('messages');
     const sendBtn = document.getElementById('sendBtn');

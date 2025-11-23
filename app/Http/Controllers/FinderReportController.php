@@ -155,7 +155,7 @@ class FinderReportController extends Controller
             'contents' => [
                 [
                     'parts' => [
-                        ['text' => 'Describe exactly what the item in this image is in 50 words or less. Be concise and neutral.'],
+                        ['text' => 'Describe exactly what the item in this image is in 50 words or less. Be concise and neutral. But keep in mind the following points: 1) describe its physical traits (color, shape, material, condition). 2) Describe the brand is possible 3) Do not describe background elements. 4) Do not describe the what the screen displays. 5) Do not use introductory phrases like "The image shows". 6) Use a minimum of 80 words.'],
                         [
                             'inline_data' => [
                                 'mime_type' => 'image/jpeg',
