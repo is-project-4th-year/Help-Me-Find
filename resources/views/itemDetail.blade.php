@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('layouts.header')
+<link href="{{ asset('build/assets/item.css') }}" rel="stylesheet">
 @vite(['resources/css/item.css'])
 
 <body>

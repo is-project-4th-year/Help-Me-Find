@@ -3,6 +3,7 @@
 @include('layouts.header')
 <body>
     {{-- Reuse the report CSS from found.blade.php --}}
+    <link href="{{ asset('build/assets/report.css') }}" rel="stylesheet">
     @vite(['resources/css/report.css'])
     @include('layouts.bar')
 

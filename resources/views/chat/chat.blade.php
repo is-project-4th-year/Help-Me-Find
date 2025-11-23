@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('layouts.header')
+<link href="{{ asset('build/assets/message.css') }}" rel="stylesheet">
 @vite(['resources/css/message.css'])
-@vite(['resources/js/message.js'])
+
+<script src="{{ asset('build/assets/messages.js') }}"></script>
+@vite(['resources/js/messages.js'])
 
 <body style="background-color: var(--background);">
     @include('layouts.bar')

@@ -2,7 +2,9 @@
 <html lang="en">
 @include('layouts.header')
 <body>
+    <link href="{{ asset('build/assets/report.css') }}" rel="stylesheet">
     @vite(['resources/css/report.css'])
+
     @include('layouts.bar')
 
     <main class="main-content">

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('layouts.header')
+<link href="{{ asset('build/assets/messageList.css') }}" rel="stylesheet">
 @vite(['resources/css/messageList.css'])
 
 <body style="background-color: var(--background);">

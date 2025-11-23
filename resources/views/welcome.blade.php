@@ -7,6 +7,10 @@
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link href="{{ asset('build/assets/welcome.css') }}" rel="stylesheet">
+    <link href="{{ asset('build/assets/bar.css') }}" rel="stylesheet">
+
     @vite(['resources/css/welcome.css'])
     @vite(['resources/css/bar.css'])
 

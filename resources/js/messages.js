@@ -76,14 +76,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Sending embedded HTML body:', finalBody);
 
-        axios.post(sendUrl, {
-            _token: csrfToken,
-            receiver_id: receiverId,
-            body: finalBody,
-            chatId: chatId
+        // ---------------------------------------------------------
+        // ** REPLACED AXIOS WITH NATIVE FETCH **
+        // ---------------------------------------------------------
+        fetch(sendUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                _token: csrfToken,
+                receiver_id: receiverId,
+                body: finalBody,
+                chatId: chatId
+            })
         })
         .then(response => {
-            appendMessage(response.data.message, true);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            appendMessage(data.message, true);
         })
         .catch(error => {
             console.error('Error sending message:', error);
@@ -93,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (imagePreviewArea && currentImagePath) imagePreviewArea.style.display = 'flex';
             alert('Error sending message.');
         });
+        // ---------------------------------------------------------
     };
 
     messageForm.addEventListener('submit', (e) => e.preventDefault());
