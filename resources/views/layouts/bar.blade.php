@@ -41,6 +41,14 @@
             <img src="{{ asset('images/profile.png') }}" alt="Profile Picture" class="profile-img">
             <h3>{{ auth()->user()->firstName }} {{ auth()->user()->lastName }}</h3>
             {{-- <p>{{ '@'.auth()->user()->username }}</p> --}}
+
+            {{-- NEW: View Profile Button --}}
+            <a href="{{ route('profile') }}" style="text-decoration: none; width: 100%; display: flex; justify-content: center;">
+                 <button type="button" style="margin-bottom: 10px;">
+                    <i class="fa fa-id-card"></i> View Profile
+                </button>
+            </a>
+
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit">

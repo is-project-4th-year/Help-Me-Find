@@ -34,6 +34,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'viewPage'])->name('home');
     Route::get('/home', [HomeController::class, 'viewPage'])->name('home');
 
+    // ** NEW ROUTE: Profile Page **
+    Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
+
     Route::match(['get', 'post'], '/found', [HomeController::class, 'found'])->name('found');
 
     Route::get('/lostItems', [LostItemController::class, 'lostItems'])->name('lostItems');
@@ -46,9 +49,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/report/{token}', [FinderReportController::class, 'showReportForm'])->name('finder.report');
     Route::post('/report/{token}', [FinderReportController::class, 'submitReport'])->name('finder.submit');
 
-    Route::get('/chat/item/{item_id}', [ChatController::class, 'showChat'])->name('chat.show');
-    Route::get('/chat/{chat}/messages', [ChatController::class, 'getMessages'])->name('chat.messages.get');
-    Route::post('/chat/{chat}/send', [ChatController::class, 'sendMessage'])->name('chat.messages.send');
+    // Route::get('/chat/item/{item_id}', [ChatController::class, 'showChat'])->name('chat.show');
+    // Route::get('/chat/{chat}/messages', [ChatController::class, 'getMessages'])->name('chat.messages.get');
+    // Route::post('/chat/{chat}/send', [ChatController::class, 'sendMessage'])->name('chat.messages.send');
 
     Broadcast::routes(['middleware' => ['auth']]);
 

@@ -30,6 +30,13 @@ class HomeController extends Controller
         return view('home');
     }
 
+    // ** NEW METHOD: Profile Page **
+    public function profile()
+    {
+        $user = auth()->user();
+        return view('profile', compact('user'));
+    }
+
     // ------------------ FOUND PAGE ------------------ //
     public function found(Request $request)
     {
