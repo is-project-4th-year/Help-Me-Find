@@ -5,11 +5,44 @@
 
 /* Layout */
 .container {
-    max-width: 900px; /* Max-w-3xl from figma */
+    max-width: 1000px; /* Increased slightly for the side-by-side layout */
     margin-left: auto;
     margin-right: auto;
-    padding: 1rem 1rem 4rem 1rem; /* Added bottom padding */
+    padding: 1rem 1rem 4rem 1rem;
 }
+
+/* == DESKTOP STYLES FOR RESULT PAGE == */
+.found-result-mode {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(90vh - 100px);
+}
+
+/* Grid Layout for Desktop Results */
+.result-grid {
+    display: grid;
+    grid-template-columns: 40% 1fr; /* Image takes 40%, Info takes rest */
+    gap: 2rem;
+    align-items: start; /* Aligns top */
+}
+
+/* Specific styles for the Result Image Wrapper on Desktop */
+.result-image-col .image-preview-wrapper {
+    margin-top: 30px;
+    height: 100%;
+    min-height: 300px; /* Ensure decent height on desktop */
+    display: block;
+    margin-bottom: 0;
+    border: 1px solid rgb(172, 172, 172);
+    aspect-ratio: auto; /* Override general aspect ratio for this specific layout */
+}
+
+.result-image-col .image-preview {
+    height: 100%;
+    object-fit: cover; /* Fill the area on desktop */
+}
+
+/* =================================== */
 
 @media (min-width: 640px) {
     .container {
@@ -192,7 +225,7 @@
     display: none;
 }
 
-/* Image Preview */
+/* Image Preview (General style) */
 .image-preview-wrapper {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -216,4 +249,81 @@
     color: var(--muted-foreground);
     font-size: 0.9rem;
     line-height: 1.5;
+}
+
+/* ============================ */
+/* MOBILE RESPONSIVE       */
+/* ============================ */
+@media (max-width: 780px) {
+
+    /* Reset the container to block to prevent vertical misalignment */
+    .found-result-mode {
+        display: block;
+        min-height: auto;
+    }
+
+    /* Ensure container uses full available width on mobile */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        max-width: 100%;
+    }
+
+    /* SWITCH GRID TO FLEX COLUMN for Mobile */
+    .result-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* == KEY FIX FOR MOBILE CROPPING == */
+    /* Reset image wrapper height constraints so it wraps the image naturally */
+    .result-image-col .image-preview-wrapper {
+        min-height: auto;
+        height: auto;
+        aspect-ratio: auto; /* Remove 16/9 forcing */
+        border: none; /* Clean look on mobile */
+    }
+
+    /* Allow the image to show fully (contain) rather than crop (cover) */
+    .result-image-col .image-preview {
+        height: auto;
+        width: 100%;
+        object-fit: contain;
+        max-height: 500px; /* Prevents super tall images from taking up whole screen */
+    }
+    /* ================================= */
+
+    /* Stack buttons vertically on mobile */
+    .result-actions {
+        margin-top: 1.5rem;
+        flex-direction: column;
+    }
+
+    /* Make buttons full width for easier tapping */
+    .btn, button[type="submit"] {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Adjust font sizes for headers */
+    .page-header h1 {
+        font-size: 1.75rem;
+        word-wrap: break-word; /* Prevent long words breaking layout */
+    }
+
+    .page-header p {
+        font-size: 1rem;
+    }
+
+    /* Adjust Card Padding */
+    .card-header,
+    .card-content {
+        padding: 1.25rem;
+    }
+
+    /* Adjust image preview ratio if needed */
+    .image-preview-wrapper {
+        margin-bottom: 1rem;
+    }
 }

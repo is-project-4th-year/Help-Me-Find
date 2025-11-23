@@ -190,25 +190,6 @@ tr:hover {
     background: var(--accent);
 }
 
-/* ===== Mobile Responsive ===== */
-@media (max-width: 780px) {
-    /* Removed nav, drawer, profile-popup, body padding styles as they are in bar.css */
-
-    .container {
-        margin: 20px;
-        padding: 15px;
-    }
-
-    input[type="submit"], .btn, button[type="submit"] {
-        width: 100%;
-    }
-
-    table, th, td {
-        font-size: 13px;
-    }
-}
-
-
 /* ===== NEW STYLES (Inspired by Figma & welcome.css) ===== */
 /* These styles were already using the variables */
 
@@ -372,4 +353,62 @@ tr:hover {
 
     /* grid-col-main properties from tablet are fine */
     /* card.qr-card properties from tablet are fine */
+}
+
+
+/* ===== Mobile Responsive Updates ===== */
+@media (max-width: 780px) {
+    /* Removed nav, drawer, profile-popup, body padding styles as they are in bar.css */
+
+    /* KEY FIX: Switch to block display to fix vertical alignment issues on mobile */
+    .container {
+        display: block;
+        width: auto;
+        margin: 20px 15px; /* Adjust margin */
+        padding: 0; /* Remove extra padding */
+        padding-bottom: 20px;
+    }
+
+    /* Ensure content wrapper uses full width */
+    .container > div {
+        width: 100%;
+    }
+
+    /* Adjust Header for mobile */
+    h1 {
+        font-size: 1.75rem;
+        word-wrap: break-word;
+    }
+
+    /* Buttons take full width on mobile for easier tapping */
+    input[type="submit"], .btn, button[type="submit"] {
+        width: 100%;
+        margin: 10px 0; /* Stack them nicely */
+    }
+
+    /* Fix table font size if tables are present */
+    table, th, td {
+        font-size: 13px;
+    }
+
+    /* Allow QR Card to fill the screen width instead of being restricted */
+    .card.qr-card {
+        max-width: 100%;
+    }
+
+    /* Ensure QR code inner box doesn't overflow */
+    .qr-code-inner-box {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .qr-code-inner-box svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Reduce gap in grid layout for mobile */
+    .home-grid-container {
+        gap: 1rem;
+    }
 }
