@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('layouts.header')
-@vite(['resources/css/chatList.css'])
+@vite(['resources/css/messageList.css'])
 
 <body style="background-color: var(--background);">
     @include('layouts.bar')

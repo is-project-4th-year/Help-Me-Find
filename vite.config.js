@@ -6,14 +6,14 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/css/chat.css',
-                'resources/css/chat-list.css',
+                'resources/css/message.css',
+                'resources/css/messageList.css',
                 'resources/css/list.css',
                 'resources/css/style.css',
                 'resources/css/welcome.css',
                 'resources/js/app.js',
                 'resources/js/script.js',
-                'resources/js/chat.js'
+                'resources/js/message.js'
             ],
             refresh: true,
         }),

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('layouts.header')
-@vite(['resources/css/chat.css'])
-@vite(['resources/js/chat.js'])
+@vite(['resources/css/message.css'])
+@vite(['resources/js/message.js'])
 
 <body style="background-color: var(--background);">
     @include('layouts.bar')

@@ -55,8 +55,8 @@ Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth']]);
 
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::get('/chat/{user}', [ChatController::class, 'withUser'])->name('chat.with');
-    Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+    Route::get('/messages', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/message/{user}', [ChatController::class, 'withUser'])->name('chat.with');
+    Route::post('/message/send', [ChatController::class, 'send'])->name('chat.send');
 
 });
