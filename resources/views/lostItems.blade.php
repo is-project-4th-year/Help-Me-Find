@@ -112,9 +112,7 @@
     </div>
 
   </div>
-  <footer>
-    &copy; {{ date('Y') }} Help-Me-Find | Designed with ❤ by Bethelhem
-  </footer>
+  @include('layouts.footer')
 
 </body>
 </html>

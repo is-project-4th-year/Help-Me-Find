@@ -143,9 +143,7 @@
 
   </div>
 
-  <footer>
-    &copy; {{ now()->year }} Help-Me-Find | Designed with ❤ by Bethelhem
-  </footer>
+  @include('layouts.footer')
 
 </body>
 </html>

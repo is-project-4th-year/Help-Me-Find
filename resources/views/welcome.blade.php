@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Help Me Find</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     @vite(['resources/css/welcome.css'])
     @vite(['resources/css/bar.css'])
@@ -181,8 +183,6 @@
         </div> --}}
     </div>
 
-    <footer>
-        &copy; {{ date('Y') }} Help-Me-Find | Designed with ❤ by Bethelhem
-    </footer>
+    @include('layouts.footer')
 </body>
 </html>

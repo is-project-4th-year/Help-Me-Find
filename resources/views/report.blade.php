@@ -58,9 +58,7 @@
         </div>
     </main>
 
-    <footer>
-        &copy; {{ now()->year }} Help-Me-Find | Designed with ❤ by Bethelhem
-    </footer>
+    @include('layouts.footer')
 
     {{-- JavaScript for file input preview and Geolocation --}}
     <script>
