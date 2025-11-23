@@ -33,6 +33,12 @@ nav .logo {
     flex-direction: row;
 }
 
+nav .logo img {
+    height: 30px;
+    margin-left: 15px;
+
+}
+
 nav a {
     text-decoration: none;
     color: var(--card-foreground);
@@ -262,37 +268,52 @@ footer {
 /* ===== Mobile Responsive ===== */
 @media (max-width: 780px) {
     nav {
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: center;
-        gap: 10px;
+        /* Keep row layout for mobile to align logo and profile horizontally */
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        padding: 10px 0;
+        gap: 0;
+    }
+
+    nav .logo {
+        margin: 0 15px; /* Reduce margin */
+        font-size: 18px; /* Slightly smaller text */
+    }
+
+    nav .logo img {
+        height: 24px;
+        margin-left: 10px;
+    }
+
+    nav .menu-btn {
+        margin-right: 15px; /* Reduce gap between menu icon and logo */
+    }
+
+    nav .options {
+        margin: 0 15px; /* Reduce margin */
     }
 
     nav ul {
-        flex-direction: column;
+        flex-direction: row; /* Keep profile button horizontal */
         gap: 10px;
-        margin-top: 10px;
+        margin-top: 0;
     }
 
-    body {
-        padding-top: 110px; /* taller nav on mobile */
-    }
 
-    .drawer{
-        width: 150px;
-    }
 
-    .profile-popup{
-        width: 230px;
-        height: 300px;
+    .profile-popup {
+        width: 250px;
+        top: -400px; /* Hidden state */
         padding: 20px;
         box-shadow: 0 4px 6px -1px #000000, 0 2px 4px -2px #000000;
         transition: top 0.3s;
     }
 
     .profile-header img {
-        width: 55px;
-        height: 55px;
+        width: 60px;
+        height: 60px;
     }
 
     .container {

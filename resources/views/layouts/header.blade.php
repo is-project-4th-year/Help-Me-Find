@@ -17,9 +17,11 @@
     {{-- END DARK MODE SCRIPT --}}
 
     <link href="{{ asset('build/assets/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('build/assets/bar.css') }}" rel="stylesheet">
     <link href="{{ asset('build/assets/list.css') }}" rel="stylesheet">
 
     @vite(['resources/css/style.css'])
+    @vite(['resources/css/bar.css'])
     @vite(['resources/css/list.css'])
 
     <script src="{{ asset('build/assets/script.js') }}"></script>
