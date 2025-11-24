@@ -4,6 +4,9 @@
 @import url("app.css");
 
 /* General Body Styles */
+body {
+    padding: 0px;
+}
 
 
 /* Auth Page Container */
@@ -12,7 +15,6 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 1rem;
     background-image: linear-gradient(to bottom, rgba(109, 76, 65, 0.05), var(--background));
 }
 

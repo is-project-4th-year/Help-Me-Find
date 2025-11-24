@@ -105,11 +105,6 @@
     @endif
 
     {{-- Home Button --}}
-    <div style="text-align: center; margin-top: 2.5rem;">
-      <a href="{{ route('home') }}" class="btn btn-primary" style="min-width: 150px;">
-          <i class="fa fa-home icon"></i> Go to Home
-      </a>
-    </div>
 
   </div>
   @include('layouts.footer')

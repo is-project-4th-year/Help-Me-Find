@@ -1,0 +1,62 @@
+{
+    "1": {
+        "ImageName": "1.jpg",
+        "Description": "Gray Asus laptop, angled slightly towards the viewer. The screen displays the Windows operating system. The keyboard and trackpad are visible.  Ports are located on the side.",
+        "DateTime": "2025-11-10 07:35:21",
+        "Location": "Strathmore University, Langata Road, Siwaka Estate, Nairobi West ward, Langata, Nairobi, 00202, Kenya",
+        "Latitude": "-1.31025007",
+        "Longitude": "36.81312192",
+        "FinderId": 1,
+        "FinderFirstName": "Bethelhem",
+        "FinderLastName": "Haileselassie",
+        "FinderEmail": "bethelhemtesfaye95@gmail.com",
+        "OwnerFirstName": "",
+        "OwnerLastName": "",
+        "OwnerEmail": ""
+    },
+    "2": {
+        "ImageName": "2.jpg",
+        "Description": "Wired computer mouse. It is dark gray with the Dell logo printed on its top surface. It has a standard two-button design with a scroll wheel located between the buttons. The cable is black and bundled together.\n",
+        "DateTime": "2025-11-12 07:35:45",
+        "Location": "Zahra Heights Apartments, Ngong Road, Nairobi, Kenya",
+        "Latitude": "-1.2950852",
+        "Longitude": "36.7839056",
+        "FinderId": 1,
+        "FinderFirstName": "Bethelhem",
+        "FinderLastName": "Haileselassie",
+        "FinderEmail": "bethelhemtesfaye95@gmail.com",
+        "OwnerFirstName": "",
+        "OwnerLastName": "",
+        "OwnerEmail": ""
+    },
+    "3": {
+        "ImageName": "3.jpg",
+        "Description": "Black and silver smartphone. The touchscreen display features colorful app icons over a background with water droplets. The phone also has three touch-sensitive buttons at the bottom of the screen.",
+        "DateTime": "2025-11-13 07:36:30",
+        "Location": "Sarit Center, Westlands, Nairobi, Kenya",
+        "Latitude": "-1.2609951",
+        "Longitude": "36.8020759",
+        "FinderId": 1,
+        "FinderFirstName": "Bethelhem",
+        "FinderLastName": "Haileselassie",
+        "FinderEmail": "bethelhemtesfaye95@gmail.com",
+        "OwnerFirstName": "",
+        "OwnerLastName": "",
+        "OwnerEmail": ""
+    },
+    "4": {
+        "ImageName": "4.jpg",
+        "Description": "Small, rectangular harmonica with a silver and blue color scheme. It has a black cord attached to it, ending in a silver-colored lobster clasp for attachment to keys or other items.",
+        "DateTime": "2025-11-18 07:46:23",
+        "Location": "Strathmore University, Langata Road, Siwaka Estate, Nairobi West ward, Langata, Nairobi, 00202, Kenya",
+        "Latitude": "-1.31025007",
+        "Longitude": "36.81312192",
+        "FinderId": 2,
+        "FinderFirstName": "Nelly",
+        "FinderLastName": "Joyd",
+        "FinderEmail": "nellyjoyd77@gmail.com",
+        "OwnerFirstName": "",
+        "OwnerLastName": "",
+        "OwnerEmail": ""
+    }
+}

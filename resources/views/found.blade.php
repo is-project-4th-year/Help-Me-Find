@@ -12,6 +12,18 @@
         {{-- Container --}}
         <div class="container @if(!empty($imageUrl) || !empty($description)) found-result-mode @endif">
 
+            {{-- ADDED: Error Message Display --}}
+            @if ($errors->any())
+                <div style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                    <strong style="display: block; margin-bottom: 0.5rem;">Please fix the following errors:</strong>
+                    <ul style="list-style-type: disc; padding-left: 1.5rem;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @if(!empty($imageUrl) || !empty($description))
                 {{-- RESULT CARD --}}
                 <div class="card">

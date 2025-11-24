@@ -18,8 +18,8 @@
     <ul class="options">
         <hr style="border: 0.5px solid rgba(167, 124, 67, 0.2); width: 90%; margin: 10px;">
 
-        <li><a href="{{ route('found') }}"><i class="fa fa-bullhorn fa-fw"></i> Report Found Items</a></li>
         <li><a href="{{ route('lostItems') }}"><i class="fa fa-search fa-fw"></i> Browse Lost Items</a></li>
+        <li><a href="{{ route('found') }}"><i class="fa fa-bullhorn fa-fw"></i> Report Found Items</a></li>
         <li><a href="{{ route('chat.index') }}"><i class="fa fa-comments fa-fw"></i> Messages</a></li>
 
         {{-- This block has been uncommented and updated --}}
@@ -41,20 +41,22 @@
             <img src="{{ asset('images/profile.png') }}" alt="Profile Picture" class="profile-img">
             <h3>{{ auth()->user()->firstName }} {{ auth()->user()->lastName }}</h3>
             {{-- <p>{{ '@'.auth()->user()->username }}</p> --}}
-
+            <hr style="border: 0.5px solid rgba(167, 124, 67, 0.2); width: 90%; margin: 10px;">
             {{-- NEW: View Profile Button --}}
             <a href="{{ route('profile') }}" style="text-decoration: none; width: 100%; display: flex; justify-content: center;">
-                 <button type="button" style="margin-bottom: 10px;">
+                 <button class=profile-selection" type="button" style="margin-bottom: 10px;">
                     <i class="fa fa-id-card"></i> View Profile
                 </button>
             </a>
 
-            <form action="{{ route('logout') }}" method="POST">
+            {{-- <a href="{{ route('logout') }}" style="text-decoration: none; width: 100%; display: flex; justify-content: center;"> --}}
+            <form action="{{ route('logout') }}" method="POST" style="text-decoration: none; width: 100%; display: flex; justify-content: center;">
                 @csrf
-                <button type="submit">
+                <button class=profile-selection" type="submit" style="margin-bottom: 10px; width: 80px;">
                     <i class="fa fa-sign-out"></i> Logout
                 </button>
             </form>
+            </a>
         </div>
     </div>
 </aside>

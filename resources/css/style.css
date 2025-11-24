@@ -344,6 +344,16 @@ tr:hover {
     }
 }
 
+/* Desktop-sized and up */
+@media (min-width: 1024px) {
+    .home-grid-container {
+        /* 2 equal columns on desktop */
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* grid-col-main properties from tablet are fine */
+    /* card.qr-card properties from tablet are fine */
+}
 
 
 /* ===== Mobile Responsive Updates ===== */

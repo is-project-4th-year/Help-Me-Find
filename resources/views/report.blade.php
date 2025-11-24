@@ -10,10 +10,22 @@
     <main class="main-content">
         <div class="container">
 
+            {{-- ADDED: Error Message Display --}}
+            @if ($errors->any())
+                <div style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                    <strong style="display: block; margin-bottom: 0.5rem;">Please fix the following errors:</strong>
+                    <ul style="list-style-type: disc; padding-left: 1.5rem;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             {{-- Owner Info Card --}}
             <div class="card" style="margin-bottom: 2rem;">
                 <div class="card-header">
-                    <h2 class="card-title" style="color: var(--primary);"><i class="fa fa-user-circle-o fa-fw"></i> This item belongs to <b>{{ $owner->firstName }} {{ $owner->lastName }}</b></h2>
+                    <h2 class="card-title" style="color: var(--primary);"><i class="fa fa-user-circle-o fa-fw"></i> This item belongs to {{ $owner->firstName }} {{ $owner->lastName }}</h2>
                     <p class="card-description">
                         {{-- This item belongs to <strong style="color: #333;"></strong>. --}}
                     </p>
