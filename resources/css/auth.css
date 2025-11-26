@@ -4,6 +4,9 @@
 @import url("app.css");
 
 /* General Body Styles */
+body {
+    padding: 0px;
+}
 
 
 /* Auth Page Container */
@@ -12,7 +15,6 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 1rem;
     background-image: linear-gradient(to bottom, rgba(109, 76, 65, 0.05), var(--background));
 }
 
@@ -147,4 +149,48 @@
 .alert-danger p {
     margin: 0;
     font-size: 0.875rem;
+}
+
+/* ========================================= */
+/* MOBILE RESPONSIVE FIXES                   */
+/* ========================================= */
+
+@media (max-width: 640px) {
+    /* Align items to start prevents the form from being cut off at the top
+       when the keyboard opens on small screens. */
+    .auth-container {
+        align-items: flex-start;
+        padding: 1rem;
+        padding-top: 2rem; /* Add space at top */
+    }
+
+    /* Allow the card to take up full width with minimal margin */
+    .auth-card {
+        max-width: 100%;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-radius: var(--radius);
+        /* Optional: Remove border/shadow for a cleaner mobile look if desired,
+           but keeping it consistent usually looks better. */
+    }
+
+    /* Adjust font sizes for mobile */
+    .auth-title {
+        font-size: 1.5rem; /* Slightly smaller title */
+    }
+
+    .auth-description {
+        font-size: 0.9rem;
+    }
+
+    /* Ensure inputs are easy to tap */
+    .form-input {
+        padding: 0.875rem 1rem; /* Slightly larger touch target */
+        font-size: 16px; /* Prevents iOS from zooming in on focus */
+    }
+
+    .btn {
+        padding: 0.875rem 1.5rem; /* Larger button touch target */
+        font-size: 1rem;
+    }
 }

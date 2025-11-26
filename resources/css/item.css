@@ -1,4 +1,4 @@
-/* resources/css/item-detail.css */
+/* resources/css/item.css */
 
 /* Use the variables from app.css */
 body {
@@ -227,4 +227,64 @@ body {
 .step-text p {
   margin: 0;
   font-size: 0.875rem;
+}
+
+/* ========================================= */
+/* MOBILE RESPONSIVE FIXES                   */
+/* ========================================= */
+
+@media (max-width: 768px) {
+  .item-detail-container {
+    margin: 1rem auto;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  /* Font adjustments for mobile */
+  .details-section .item-title {
+    font-size: 1.5rem;
+  }
+
+  .card-header {
+      padding: 1rem;
+  }
+
+  .card-content {
+      padding: 1rem;
+  }
+
+  /* Adjust Image Card Ratio to be less tall */
+  .image-card {
+    aspect-ratio: 4/3;
+  }
+
+  /* Fix Misalignment in Info Blocks: Stack components vertically */
+  .info-text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  /* Remove the desktop constraint */
+  .info-label {
+    max-width: 100%;
+    padding-right: 0;
+  }
+
+  /* Make Buttons Full Width and Override Inline Widths from Blade */
+  .info-text .btn,
+  .contact-buttons,
+  .contact-buttons .btn {
+    width: 100% !important; /* Force full width on mobile */
+    margin-left: 0;
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Ensure proper spacing for the map button */
+  .info-text a.btn {
+      margin-top: 0.5rem !important;
+  }
 }

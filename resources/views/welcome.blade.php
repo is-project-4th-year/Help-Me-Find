@@ -18,7 +18,10 @@
 <body>
     <nav>
     <div class="logo">
-        <a href="/">Help-Me-Find</a>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <a href="/">
+            Help-Me-Find
+        </a>
     </div>
     <ul class="options">
         <a href="{{ route('login') }}"> Login </a>

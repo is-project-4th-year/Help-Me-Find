@@ -1,4 +1,3 @@
-
 /* Use variables from app.css */
 :root {
     --background: #F5F1EC;
@@ -58,7 +57,7 @@ h1 {
     padding-bottom: 0;
 }
 
-/* Search Form */
+/* Search Form (Desktop Styles) */
 .search-wrapper {
     position: relative;
     flex-grow: 1;
@@ -233,4 +232,47 @@ h1 {
 .no-items-card h3 {
     font-size: 1.25rem;
     font-weight: 600;
+}
+
+/* =========================================
+   Mobile Responsive Updates (Max-width 640px)
+   ========================================= */
+@media (max-width: 640px) {
+
+    /* 1. HIDE THE SEARCH ICON - Using !important for certainty */
+    .search-icon {
+        display: none !important;
+    }
+
+    /* 2. Reset Input Styles (Since icon is gone) */
+    .search-wrapper input {
+        margin-left: 4px;        /* Remove the left margin reserved for icon (40px) */
+        width: 100%;           /* Make input take full width */
+        margin-bottom: 0;
+    }
+    .search-input {
+        padding-left: 1rem;    /* Reset padding from 2.75rem (pl-10) to normal 1rem */
+    }
+
+    /* 3. Layout: Align Input and Button side-by-side */
+    .search-form-flex {
+        flex-direction: row;   /* Force row instead of column (default mobile was column) */
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* 4. Compact "Icon-Only" Search Button (Hides "Search" text) */
+    .search-form-flex .btn {
+        font-size: 0;          /* Hides the text "Search" */
+        padding: 0.85rem;      /* Square-ish padding for icon */
+        width: auto;
+        min-width: auto;
+        margin: 0;
+    }
+
+    /* Ensure the button's icon remains visible and centered */
+    .search-form-flex .btn .icon {
+        font-size: 1.25rem;
+        margin-right: 0;
+    }
 }

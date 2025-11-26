@@ -9,7 +9,20 @@
 
     <main class="main-content">
 
-        <div class="container" @if(!empty($imageUrl) || !empty($description)) style="display: flex; flex-direction: column; min-height: calc(90vh - 100px);" @endif>
+        {{-- Container --}}
+        <div class="container @if(!empty($imageUrl) || !empty($description)) found-result-mode @endif">
+
+            {{-- ADDED: Error Message Display --}}
+            @if ($errors->any())
+                <div style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                    <strong style="display: block; margin-bottom: 0.5rem;">Please fix the following errors:</strong>
+                    <ul style="list-style-type: disc; padding-left: 1.5rem;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             @if(!empty($imageUrl) || !empty($description))
                 {{-- RESULT CARD --}}
@@ -19,46 +32,57 @@
                         <p class="card-description">Here is the result of your upload.</p>
                     </div>
 
-                    <div class="card-content space-y-6">
-                        @if(!empty($imageUrl))
-                            <div>
-                                <div class="image-preview-wrapper" style="display: block; margin-bottom: 0; border: 1px solid rgb(172, 172, 172);">
+                    {{-- UPDATED: Grid Layout for Content --}}
+                    <div class="card-content result-grid">
+
+                        {{-- LEFT COLUMN: Image --}}
+                        <div class="result-image-col">
+                            @if(!empty($imageUrl))
+                                {{-- Removed inline styles, now handled in report.css --}}
+                                <div class="image-preview-wrapper result-image-wrapper">
                                     <img src="{{ $imageUrl }}" alt="Uploaded Image" class="image-preview">
                                  </div>
-                            </div>
-                        @endif
-                        @if(!empty($description))
-                            <div>
-                                <h3 class="form-label"><i class="fa-solid fa-wand-magic-sparkles"></i> AI-Generated Description</h3>
-                                <div class="ai-description-box" style="display: block;">
-                                    <p>{{ $description }}</p>
-                                </div>
-                            </div>
-                        @endif
-                        {{-- Show captured location --}}
-                        @if(!empty($foundLocation))
-                            <div>
-                                <h3 class="form-label"><i class="fa-solid fa-location-dot"></i> Location Captured</h3>
-                                <div class="ai-description-box" style="display: block; font-size: 0.9rem; background-color: #f4f4f4;">
-                                    <p><strong>Address:</strong> {{ $foundLocation }}</p>
-                                </div>
-                            </div>
-                        @elseif(!empty($latitude) && !empty($longitude))
-                             <div>
-                                <h3 class="form-label"><i class="fa-solid fa-location-dot"></i> Location Captured</h3>
-                                <div class="ai-description-box" style="display: block; font-size: 0.9rem; background-color: #f4f4f4;">
-                                    <p>Coordinates: {{ $latitude }}, {{ $longitude }}</p>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
+                            @endif
+                        </div>
 
-                <div style="margin-top: auto; padding-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                    <a href="{{ route('found') }}" class="btn btn-primary">
-                        <i class="fa-solid fa-plus icon"></i>
-                        Report Another Found Item
-                    </a>
+                        {{-- RIGHT COLUMN: Info & Buttons --}}
+                        <div class="result-info-col space-y-6">
+                            @if(!empty($description))
+                                <div>
+                                    <h3 class="form-label"><i class="fa-solid fa-wand-magic-sparkles"></i> AI-Generated Description</h3>
+                                    <div class="ai-description-box" style="display: block;">
+                                        <p>{{ $description }}</p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Show captured location --}}
+                            @if(!empty($foundLocation))
+                                <div>
+                                    <h3 class="form-label"><i class="fa-solid fa-location-dot"></i> Location Captured</h3>
+                                    <div class="ai-description-box" style="display: block; font-size: 0.9rem; background-color: #f4f4f4;">
+                                        <p><strong>Address:</strong> {{ $foundLocation }}</p>
+                                    </div>
+                                </div>
+                            @elseif(!empty($latitude) && !empty($longitude))
+                                 <div>
+                                    <h3 class="form-label"><i class="fa-solid fa-location-dot"></i> Location Captured</h3>
+                                    <div class="ai-description-box" style="display: block; font-size: 0.9rem; background-color: #f4f4f4;">
+                                        <p>Coordinates: {{ $latitude }}, {{ $longitude }}</p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Buttons moved inside the Right Column --}}
+                            <div class="result-actions-internal" style="margin-top: 2rem;">
+                                <a href="{{ route('found') }}" class="btn btn-primary w-full">
+                                    <i class="fa-solid fa-plus icon"></i>
+                                    Report Another Found Item
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
             @else

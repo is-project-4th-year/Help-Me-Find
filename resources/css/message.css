@@ -1,11 +1,15 @@
 @import url("app.css");
 
+/* ========================================= */
+/* DESKTOP / DEFAULT STYLES                  */
+/* ========================================= */
 
 .chat-container {
     max-width: 900px; /* Equivalent to max-w-4xl */
     margin: 0 auto;
-    /* Height minus 4rem (for the top bar) */
+    /* Use dvh (dynamic viewport height) for modern browsers, fallback to vh */
     height: calc(100vh - 5rem);
+    height: calc(100dvh - 5rem);
     display: flex;
     flex-direction: column;
     background-color: var(--background);
@@ -20,6 +24,7 @@
     background-color: var(--card);
     border-bottom: 1px solid var(--border);
     padding: 1rem; /* p-4 */
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .chat-header-content {
@@ -93,6 +98,10 @@
     display: flex;
     flex-direction: column;
     gap: 1rem; /* space-y-4 */
+
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Momentum scrolling on iOS */
 }
 
 .message-bubble {
@@ -114,12 +123,14 @@
     border-radius: var(--radius); /* rounded-lg */
     padding: 0.5rem 1rem; /* px-4 py-2 */
     word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 /* My messages */
 .message-content.sender-me {
     background-color: var(--primary);
     color: var(--primary-foreground);
+    border-bottom-right-radius: 0; /* Slight visual flair */
 }
 
 /* Other's messages */
@@ -127,6 +138,7 @@
     background-color: var(--card);
     border: 1px solid var(--border);
     color: var(--card-foreground);
+    border-bottom-left-radius: 0; /* Slight visual flair */
 }
 
 .message-content p {
@@ -136,11 +148,12 @@
 .message-timestamp {
     font-size: 0.75rem; /* text-xs */
     margin-top: 0.25rem; /* mt-1 */
+    text-align: right;
 }
 
 .message-timestamp.sender-me {
     color: var(--primary-foreground);
-    opacity: 0.7; /* text-primary-foreground/70 */
+    opacity: 0.8;
 }
 
 .message-timestamp.sender-other {
@@ -153,11 +166,13 @@
     background-color: var(--card);
     border-top: 1px solid var(--border);
     padding: 1rem; /* p-4 */
+    flex-shrink: 0; /* Prevent input from shrinking */
 }
 
 .chat-input-form form {
     display: flex;
     gap: 0.5rem; /* gap-2 */
+    align-items: center;
 }
 
 .chat-input-form .input-field {
@@ -166,7 +181,13 @@
     background-color: var(--input-background);
     color: var(--foreground);
     padding: 0.75rem;
-    border-radius: var(--radius-md);
+    border-radius: 24px; /* More pill-shaped for chat input */
+    transition: border-color 0.2s;
+}
+
+.chat-input-form .input-field:focus {
+    outline: none;
+    border-color: var(--primary);
 }
 
 .chat-input-form .input-field::placeholder {
@@ -178,14 +199,96 @@
     color: var(--primary-foreground);
     border: none;
     cursor: pointer;
-    padding: 0.75rem;
-    border-radius: var(--radius-md);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* Circular send button */
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.1rem;
+    transition: background-color 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .chat-input-form .btn-icon-send:hover {
     opacity: 0.9;
+    transform: scale(1.05);
+}
+
+/* ========================================= */
+/* MOBILE RESPONSIVE STYLES                  */
+/* ========================================= */
+@media (max-width: 768px) {
+    /* Fix the container to the viewport.
+       This handles the virtual keyboard much better than relative positioning
+       because the 'bottom: 0' anchor moves up automatically with the keyboard
+       in most modern mobile browsers.
+    */
+    .chat-container {
+        position: fixed;
+        top: 60px; /* Matches the Navbar Height (adjust if navbar size changes) */
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        /* Reset desktop specific sizing */
+        width: 100%;
+        max-width: 100%;
+        height: auto; /* Let top/bottom determine height */
+        margin: 0;
+        border-radius: 0;
+        border: none;
+
+        /* Ensure it's above page content but below navbar dropdowns */
+        z-index: 90;
+    }
+
+    .chat-messages {
+        padding: 0.75rem;
+    }
+
+    .message-content {
+        max-width: 85%; /* Wider messages on small screens */
+    }
+
+    /* Compact Header for Mobile */
+    .chat-header {
+        padding: 0.75rem;
+    }
+
+    .chat-avatar-fallback {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .chat-user-info h4 {
+        font-size: 1rem;
+    }
+
+    .chat-user-info p {
+        font-size: 0.75rem;
+    }
+
+    /* Input Area Tweaks */
+    .chat-input-form {
+        padding: 0.75rem;
+        /* Safe area for iPhone Home Bar */
+        padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    }
+
+    /* PREVENT IOS ZOOM:
+       Inputs must be at least 16px font-size to prevent iOS Safari
+       from zooming in when the field is focused.
+    */
+    .chat-input-form .input-field {
+        font-size: 16px;
+        padding: 0.6rem 1rem;
+    }
+
+    .chat-input-form .btn-icon-send {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
 }

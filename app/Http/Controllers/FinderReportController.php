@@ -27,8 +27,9 @@ class FinderReportController extends Controller
         $finder = Auth::user();
 
         // 2. Validate Request
+        // CHANGED: Increased max image size from 2048 (2MB) to 20480 (20MB) to support mobile cameras
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:20480',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
         ]);

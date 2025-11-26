@@ -48,8 +48,9 @@ class HomeController extends Controller
 
         if ($request->isMethod('post')) {
 
+            // CHANGED: Increased max image size from 2048 (2MB) to 20480 (20MB)
             $request->validate([
-                'file' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+                'file' => 'required|image|mimes:jpeg,png,jpg,webp|max:20480',
                 'latitude' => 'nullable|numeric',
                 'longitude' => 'nullable|numeric',
             ]);

@@ -61,11 +61,14 @@
                 <div class="info-text">
                     <p class="info-label">Found by: <br> <b>{{ !empty($item['Location']) ? $item['Location'] : 'Location Unknown' }}</b></p>
 
+                <div class="contact-buttons">
+
                   @if(!empty($item['Latitude']) && !empty($item['Longitude']))
                     <a href="{{ route('item.map', ['id' => $id]) }}" class="btn btn-sm" style="margin-top: 5px; width: 140px;">
                         View on Map
                     </a>
                   @endif
+                  </div>
 
                 </div>
               </div>
